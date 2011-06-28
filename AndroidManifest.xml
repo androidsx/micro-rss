@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.androidsx.microrss"
+    android:versionName="2.3.2" android:versionCode="18">
+
+    <uses-sdk android:minSdkVersion="3" />
+
+    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:description="@string/app_descrip">
+
+        <provider android:name="com.androidsx.microrss.db.AnyRssContentProvider" android:authorities="com.androidsx.microrss" />
+        <service android:name="com.androidsx.microrss.UpdateService" />
+
+        <receiver android:name="com.androidsx.microrss.MedAppWidget" android:label="@string/label_med">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.androidsx.microrss.UPDATE_FEED"/>
+                <action android:name="com.androidsx.microrss.SHOW_NEXT_ITEM"/>
+                <action android:name="com.androidsx.microrss.SHOW_PREV_ITEM"/>
+                <action android:name="com.androidsx.microrss.SHOW_PREV_ITEM_ALARM"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_med" />
+        </receiver>
+        
+        <receiver android:name="com.androidsx.microrss.TinyAppWidget" android:label="@string/label_tiny">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.androidsx.microrss.tiny.UPDATE_FEED"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_tiny" />
+        </receiver>
+        
+        <!-- Just comment not to enable large widget 
+        <receiver android:name="com.androidsx.microrss.LargeAppWidget" android:label="@string/label_large">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.androidsx.microrss.large.UPDATE_FEED"/>
+                <action android:name="com.androidsx.microrss.large.SHOW_NEXT_ITEM"/>
+                <action android:name="com.androidsx.microrss.large.SHOW_PREV_ITEM"/>
+                <action android:name="com.androidsx.microrss.SHOW_PREV_ITEM_ALARM"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_large" />
+        </receiver>
+         -->
+
+        <activity
+            android:name="com.androidsx.microrss.InfoActivity"
+            android:label="@string/title_info"
+            android:theme="@android:style/Theme.Dialog">
+        </activity>
+       
+
+        
+        <activity
+            android:name="com.androidsx.microrss.configure.SettingsActivity"
+            android:label="@string/settings_title">
+        </activity>
+        
+        <!-- new activities since huge refactoring -->
+        <activity android:name="com.androidsx.microrss.RetrieveRssItemsActivity"> 
+                   
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        
+        
+        </activity>
+		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppListModeActivity"/>
+		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppItemModeActivity"/>
+        
+        <activity
+            android:name="com.androidsx.microrss.configure.ConfigureActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Original AnyRSS extended view activities -->
+        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssItemModeActivity"/>
+        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssListModeActivity"/>
+        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssExpandableModeActivity"/>
+        
+        <!-- activity that dispatches to one of the extended view activities -->
+        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.DetailsViewChooser"/>
+        
+        <!-- Mobclix application ID -->
+        <meta-data android:name="com.mobclix.APPLICATION_ID" android:value="cdf3868e-16b2-4611-ae83-4c6736400c50"/>
+        <activity android:name="com.mobclix.android.sdk.MobclixBrowserActivity"/> 
+        
+        
+        <!-- library project application info -->
+		<activity android:name="com.androidsx.commons.appinfo.HelpActivity"/>
+		<activity android:name="com.androidsx.commons.appinfo.AboutUsActivity" />
+		<activity android:name="com.androidsx.commons.appinfo.BlogActivity" />
+		<activity android:name="com.androidsx.commons.appinfo.AppInfoActivity" />
+		<activity android:name="com.androidsx.commons.appinfo.ChangelogActivity" />     
+    </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+	<!-- Required by Mobclix -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>

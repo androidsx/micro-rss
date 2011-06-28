@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 Jeff Sharkey, http://jsharkey.org/
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="WidgetBackground">
+        <item name="android:background">@drawable/widget_bg</item>
+        <!-- 
+        <item name="android:paddingLeft">6dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingTop">9dip</item>
+        <item name="android:paddingBottom">9dip</item>
+        <item name="android:layout_marginTop">12dip</item>
+        <item name="android:layout_marginBottom">1dip</item>
+         -->
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+  <style name="WidgetBackgroundTiny">
+        <item name="android:background">@drawable/widget_bg</item>
+        <item name="android:paddingLeft">6dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingTop">9dip</item>
+        <item name="android:paddingBottom">9dip</item>
+        <item name="android:layout_marginTop">12dip</item>
+        <item name="android:layout_marginBottom">1dip</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+
+    <style name="Text">
+    </style>
+
+    <style name="Text.SpinnerNormalItem">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Text.SpinnerSeparator">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="Text.SpinnerTitle">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="Text.Loading">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/semi_white</item>
+    </style>
+    
+    <style name="Text.FeedTitleTiny">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginRight">10dip</item>
+    </style>
+
+    <style name="Text.TimestampTiny">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">#c7c7c7</item>
+        <item name="android:layout_margin">0dip</item>
+    </style>
+
+    <style name="Text.Location">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginLeft">3dip</item>
+        <item name="android:layout_marginRight">30dip</item>
+        <item name="android:layout_marginTop">1dip</item>
+        
+    </style>
+
+    <style name="Text.FeedTitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">#c7c7c7</item>
+        <item name="android:layout_marginTop">6dip</item>
+    </style>
+
+    <style name="Text.FeedTitleLand" parent="Text.FeedTitle">
+        <item name="android:layout_marginTop">9dip</item>
+        <item name="android:layout_marginRight">45dip</item>
+    </style>
+
+    <style name="Text.Day">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/semi_white</item>
+    </style>
+
+    <style name="Text.Conditions">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginLeft">1dip</item>
+        <item name="android:layout_marginTop">0dip</item>
+<!-- 
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+      -->   
+        <item name="android:layout_marginRight">27dip</item>
+        <item name="android:maxLines">4</item> 
+        <item name="android:fadingEdge">vertical</item>
+    </style>
+
+    <style name="Text.High">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text.Low">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/semi_white</item>
+    </style>
+
+
+    <style name="Text.Timestamp">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+
+    <style name="Text.Location.Light">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Text.Day.Light">
+        <item name="android:textColor">@color/semi_black</item>
+    </style>
+
+    <style name="Text.Conditions.Light">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Text.High.Light">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Text.Low.Light">
+        <item name="android:textColor">@color/semi_black</item>
+    </style>
+
+
+    <style name="DetailsListView" parent="@android:style/Widget.ListView.White">
+        <item name="android:background">@color/white</item>
+        <item name="android:cacheColorHint">@color/white</item>
+    </style>
+
+    <style name="DetailsEmpty">
+        <item name="android:padding">20dip</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+<!-- App Widget styles -->
+    <style name="BackgroundWidget">
+        <item name="android:background">@drawable/widget_bg</item>
+        <item name="android:focusable">true</item>
+    </style>
+    
+    <style name="ImageWidget">
+        <item name="android:layout_marginTop">0dip</item>
+        <item name="android:layout_marginBottom">0dip</item>
+        <item name="android:layout_marginLeft">0dip</item>
+
+    </style>
+    
+    <style name="ImageWidgetMed">
+        <item name="android:layout_marginTop">0dip</item>
+        <item name="android:layout_marginBottom">36dip</item>
+        <item name="android:layout_marginLeft">0dip</item>
+
+    </style>
+    
+      <style name="ImageWidgetTiny">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    
+    <style name="TitleWidget">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        
+        <item name="android:paddingLeft">6dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingTop">9dip</item>
+        <item name="android:paddingBottom">9dip</item>
+        
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dip</item>
+        <item name="android:layout_marginBottom">1dip</item>
+        
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:maxLines">3</item> 
+        <item name="android:fadingEdge">vertical</item>
+    </style>  
+    
+    <!-- Item mode styles -->
+    <style name="TitleItemMode">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+        <!-- 
+        <item name="android:paddingLeft">6dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingTop">9dip</item>
+        <item name="android:paddingBottom">9dip</item>
+         -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>  
+    
+   <style name="TimestampItemMode">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">6dip</item>
+
+    </style>  
+    
+    <!-- List mode styles -->
+    <style name="ThemeListMode" parent="android:Theme.Light">  
+         <item name="android:background">@android:color/background_light</item>
+    </style>  
+   
+    <style name="ListViewListMode" parent="@android:style/Widget.ListView">  
+      <item name="android:cacheColorHint">#00000000</item>
+
+      <!--  Background set on each row layout     
+      <item name="android:divider">@drawable/temp_gradient</item>
+      <item name="android:dividerHeight">2sp</item>
+      
+      <item name="android:listSelector">@drawable/list_mode_selector</item>
+      -->
+     </style>
+     
+     <style name="TitleRowListViewLisMode">
+      <item name="android:textStyle">bold</item>
+      <item name="android:textSize">14sp</item>
+      <item name="android:textColor">#706c6c</item>
+      
+      <item name="android:layout_marginTop">1dip</item>
+      <item name="android:layout_marginBottom">2dip</item>
+      <item name="android:layout_marginLeft">3dip</item>
+    </style>  
+    
+     <style name="DescriptionRowListViewLisMode">
+      <!-- <item name="android:textColor">#989898</item>-->
+      <item name="android:textColor">#706c6c</item>
+      
+      <item name="android:textSize">13.5sp</item>
+        
+      <item name="android:layout_marginBottom">2dip</item>
+      <item name="android:layout_marginLeft">3dip</item>
+    </style>  
+    
+     <style name="TimestampRowListViewLisMode">
+      <item name="android:textColor">#b0b0b0</item>
+      <item name="android:textStyle">bold</item>
+      <item name="android:textSize">9sp</item>
+        
+      <item name="android:layout_marginRight">6dip</item>
+    </style> 
+    
+    <!-- Expandable mode styles -->
+    <style name="ThemeExpandableMode" parent="android:Theme.Light">  
+         <item name="android:background">@android:color/background_light</item>
+    </style>  
+   
+    <style name="ListViewExpandableMode" parent="@android:style/Widget.ExpandableListView">  
+      <item name="android:cacheColorHint">#00000000</item>
+       <item name="android:divider">@drawable/grey_to_white_gradient</item>
+      <item name="android:dividerHeight">2sp</item>
+     </style>
+     
+     <style name="TitleGroupExpandableMode" parent="TitleRowListViewLisMode">
+    </style>  
+
+    
+     <style name="TimestampGroupExpandableMode" parent="TimestampRowListViewLisMode">
+           <item name="android:textStyle">normal</item>
+           <item name="android:textSize">10sp</item>
+     </style> 
+
+</resources>

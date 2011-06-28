@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:fillViewport="true" >
+
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TextView 
+                android:text="@string/info_title"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:textAppearance="?android:attr/textAppearanceLarge"
+		        android:layout_marginLeft="5dip"
+		        android:layout_marginBottom="0dip" />
+		        
+		     <TextView 
+                android:text="@string/info_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textAppearance="?android:attr/textAppearanceSmall"   
+		        android:layout_marginRight="5dip" />
+		        
+		    <View android:layout_width="wrap_content" android:layout_height="20dip" />
+		    
+            <TextView 
+                android:text="@string/info_how_to_use_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"   
+                android:layout_margin="1dip" />
+                
+            <TextView 
+                android:text="@string/info_how_to_use_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textAppearance="?android:attr/textAppearanceMedium"   
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip" />
+                
+            <View android:layout_width="wrap_content" android:layout_height="15dip" />
+			<TextView 
+				android:text="@string/info_doesnt_refresh_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:textAppearance="?android:attr/textAppearanceMedium"   
+				android:layout_margin="1dip" />
+		        
+			<TextView 
+				android:text="@string/info_doesnt_refresh_content"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="left"
+				android:textAppearance="?android:attr/textAppearanceMedium"   
+				android:layout_marginLeft="5dip"
+				android:layout_marginRight="5dip" />
+     
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+				android:src="@drawable/tfln_info_refresh_button"/>
+
+		    <View android:layout_width="wrap_content" android:layout_height="15dip" />
+		    <TextView 
+                android:text="@string/info_more_items_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"   
+                android:layout_margin="1dip" />
+                
+            <TextView 
+                android:text="@string/info_more_items_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textAppearance="?android:attr/textAppearanceMedium"   
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip" />
+        </LinearLayout>
+    </ScrollView> 
+    
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="0"
+	    android:orientation="horizontal"
+	    style="@android:style/ButtonBar">
+		<Button
+			android:id="@+id/info_our_apps"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:text="@string/info_our_apps"
+		    android:enabled="false"
+		    android:textAppearance="?android:attr/textAppearanceButton" />
+		<Button
+		    android:id="@+id/info_done"
+		    android:layout_width="0dip"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:text="@string/info_done"
+		    android:enabled="false"
+		    android:textAppearance="?android:attr/textAppearanceButton" />
+    </LinearLayout> 
+</LinearLayout>

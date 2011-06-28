@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">    
+    <string name="template_user_agent">"%1$s/%2$s (Linux; Android)"</string>
+
+    <string name="widget_loading">Loading data\u2026</string>
+    <string name="widget_error">Error</string>
+
+    <string name="label_med">Texts From Last Night</string>
+    <string name="label_tiny">Texts From Last Night tiny</string>
+    <string name="label_large">Texts From Last Night large</string>
+
+    <string name="app_name">Texts From Last Night</string>
+    <string name="app_descrip">Remember that text you shouldn\'t have sent last night? We do.</string>
+
+	<!-- anyrss -->
+    <string name="conf_title">Title for this widget:</string>
+    <string name="conf_manual_settings">Manual settings</string>
+    <string name="conf_enter_rss_url">URL of the RSS you like:</string>
+    <string name="conf_auto_settings">Automatic settings</string>
+    <string name="conf_unsure">Or, if unsure, try one of these cool feeds:</string>
+    <string name="conf_spinner_prompt">Choose a feed URL</string>
+	<!-- anyrss -->
+
+    <string name="settings_title">Configuration</string>
+    <string name="conf_save">Save</string>
+    <string name="conf_update_time">Update the widget every</string>
+    <string name="conf_update_time_units">hours:</string>
+    <string name="conf_default_update_time">2</string>
+    
+    <string name="conf_num_items_saved">Number of items to store in the memory:</string>
+    <string name="conf_default_num_items_saved">100</string>
+    <string name="max_num_items_saved_prefs_name">MaxNumItemsSaved-%d</string>
+    
+        <string name="list_mode_options_title">Options</string>
+    <string name="list_mode_options_open_item_mode">Open item</string>
+
+    <string name="title_info">
+   Texts From Last Night
+    </string>
+    
+    <string name="info_inserting_title">
+    Inserting widgets
+    </string>
+    
+    <string name="info_inserting">
+    If you want to see more TFLN stories, add the widget to your homescreen. At the beginning you will have few entries, but it will update often and you will not miss any TFLN!\n\n
+    
+    
+    To add this widget to your home screen: long-press in an empty area, select \"Widgets\" and tap on \"Texts From Last Night\".
+    </string>
+    
+    <string name="info_changelog_title">
+    Changelog
+    </string>
+    
+    <string name="info_about_us_title">
+    About us
+    </string>
+    <string name="info_about_us">
+    We are two developers, Omar Pera Mira and Pablo Pera Mira, with some spare time to spend on having fun with the Android platform. Find us on http://www.androidsx.com or send us an e-mail to android.sx@gmail.com!
+    </string>
+
+    <string name="info_credits_title">
+    Credits and disclaimer
+    </string>
+    <string name="info_credits">
+    This application is licensed under the Apache 2.0 license.\n\nWe have borrowed a lot of knowledge, and also code licensed under Apache 2.0 from Jeff Sharkey great blog, http://jsharkey.org/.\n\nNone of the content that this widget fetches from RSS feeds is under our responsibility.
+    </string>
+    
+    <string name="info_done">
+    OK
+    </string>
+    
+    <string name="info_our_apps">
+    Our apps
+    </string>
+    
+    <!-- URL of the feed -->
+    <string name="feed_url">
+    http://feeds.feedburner.com/tfln
+    </string>
+    
+    <!-- Name of the feed -->
+    <string name="feed_name">
+    Texts From Last Night
+    </string>
+    
+    <!-- Loading dialog -->
+    <string name="dialog_loading_title">
+     Loading ...
+    </string>
+    
+    <string name="dialog_loading_description">
+    Downloading the content ...
+    </string>
+
+    <!-- Text for res_layout_item_mode -->
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_go_to_url">Open URL</string>
+
+    <string name="item_list_position">item_list_extra_position</string>
+    <string name="widget_manual_update">widget_manual_update</string>
+
+    <!-- The details view (any of them) does not find any items in the DB -->
+    <string name="details_no_data_error_html">
+      &lt;p&gt;Oops! We have lost the data :( 
+      &lt;p&gt;Try refreshing the widget, it will most likely solve the problem 
+      &lt;p&gt;If you just reinstalled the application, you have to add new widgets. The ones in the screen now can\'t work anymore. Yes, it is a pain, but the DB has changed and we have to reload the widgets. 
+      &lt;p&gt;Feel free to send us your angry comments to android.sx@gmail.com, we\'ll reply as soon as possible.
+      &lt;p&gt;Sorry about that! 
+    </string>
+    <string name="details_no_data_error">
+      Oops! We have lost the data :(\n
+      Try refreshing the widget, it will most likely solve the problem\n
+      If you just reinstalled the application, you have to add new widgets. The ones in the screen now can\'t work anymore. Yes, it is a pain, but the DB has changed and we have to reload the widgets.\n 
+      Feel free to send us your angry comments to android.sx@gmail.com, we\'ll reply as soon as possible.\n
+      Sorry about that!\n
+    </string>
+    
+    <!-- Dialogs and menu options -->
+    <string name="menu_share">Share link</string>
+    <string name="menu_go_to_url">Go to URL</string>
+    <string name="menu_change_view">Change view</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_about">Help/About</string>
+    
+    <!-- added in refactoring view -->
+    <string name="menu_copy">Copy</string>
+    <string name="menu_share_content">Share text</string>
+    <string name="menu_changelog">Changelog</string>
+    
+    
+    <string name="menu_submit">Submit text</string>
+    
+    <string name="menu_list_mode">List of items</string>
+    <string name="menu_single_mode">Single item</string>
+    <string name="menu_expandable_mode">Expandable items</string>
+    
+    <!-- anyrss: Spinner titles -->
+    <string name="spinner_title">Feed Examples</string>
+    <string name="news">News</string>
+    <string name="tech">Tech</string>
+    <string name="sports">Sports</string>
+    <string name="finance">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="other">Others</string>
+    <!-- anyrss: Spinner titles -->
+    
+    
+    
+    <!-- Resource to override on the application -->
+	
+    <string name="lp_application_name">Texts From Last Night</string>
+    
+    <!-- For the icon: res/drawable/lp_icon -->
+    
+    <string name="lp_changelog_tab_info">
+v2.3 (21.01.2011, current version)\n
+- Little FAQ at startup\n 
+- Increase maximum number of stories per request\n
+\n          
+v2.2.1 (19.11.2010)\n
+- Performance improvement for slow of overloaded devices\n
+\n          
+v2.2 (30.10.2010)\n
+- Fix bug in list view\n
+- Add about module\n
+\n          
+v2.1 (21.05.2010)\n
+- Full texts in list view\n
+\n       
+v2.0 (20.04.2010)\n
+- Open as an application! (but in widget more items are saved!)\n
+- More robust and stable\n
+- Share text, copy\n
+\n     
+v1.9 (24.03.2010, current version)\n
+- Set how many stories will be stored in memory (50 default)\n
+\n        
+v1.8 (05.03.2010)\n
+- Stores up to 50 stories\n
+- Improve update inverval selection view\n
+- Minor improvements for the error handling\n
+\n       
+v1.7 (12.02.2010)\n
+- Submit TFLN texts (press menu when browsing texts)\n
+\n       
+v1.6 (5.02.2010)\n
+- Added options when user clicks an item in list view: go to url, share and go to item mode\n
+\n        
+v1.5 (29.01.2010)\n
+- Details view loads faster\n
+- Disable auto-scroll (will be restored with a battery-saving mechanism)\n
+- Preferred view style is remembered after restart\n
+\n
+v1.4 (19.01.2010)\n
+- New size: 2x4\n
+- Autoscroll for the widget view\n
+- Open URL button is easier to find\n
+    </string>
+    
+    <!-- The text to filter email: e.g. android.sx  ->  +spellchecker2.3   <- @gmail.com -->
+    <string name="lp_aboutus_button_feedback_email_id">+tfln</string>
+    
+    <string name="lp_package_application">com.androidsx.tfln</string>
+    
+    <!-- \Resource to override on the application -->
+    <string name="info_limitation_10_items">Important</string>
+    
+    <string name="info_title">Come on, read this!</string>
+    <string name="info_subtitle">Or at least the stuff in <b>bold</b></string>
+    <string name="info_how_to_use_title"><b>How to use this?</b></string>
+    <string name="info_how_to_use_content">This app is a <b>widget</b>, so add it to your home screen.</string>
+    <string name="info_doesnt_refresh_title"><b>It doesn\'t refresh or what?</b></string>
+    <string name="info_doesnt_refresh_content">The widget updates <b>every two hours</b>. We don\'t want to waste battery! To refresh at any time:</string>
+    <string name="info_more_items_title"><b>I want more items</b></string>
+    <string name="info_more_items_content">We\'ll keep <b>100 items</b> in the SD card. Wait a few hours to have them all downloaded.</string>
+    
+</resources>
