@@ -5,11 +5,11 @@
     <string name="widget_loading">Loading data\u2026</string>
     <string name="widget_error">Error</string>
 
-    <string name="label_med">Texts From Last Night</string>
-    <string name="label_tiny">Texts From Last Night tiny</string>
-    <string name="label_large">Texts From Last Night large</string>
+    <string name="label_med">Micro RSS med</string>
+    <string name="label_tiny">Micro RSS tiny</string>
+    <string name="label_large">Micro RSS large</string>
 
-    <string name="app_name">Texts From Last Night</string>
+    <string name="app_name">Micro RSS</string>
     <string name="app_descrip">Remember that text you shouldn\'t have sent last night? We do.</string>
 
 	<!-- anyrss -->
@@ -35,7 +35,7 @@
     <string name="list_mode_options_open_item_mode">Open item</string>
 
     <string name="title_info">
-   Texts From Last Night
+   Micro RSS
     </string>
     
     <string name="info_inserting_title">
@@ -82,7 +82,7 @@
     
     <!-- Name of the feed -->
     <string name="feed_name">
-    Texts From Last Night
+    Micro RSS (feed name)
     </string>
     
     <!-- Loading dialog -->
@@ -151,7 +151,7 @@
     
     <!-- Resource to override on the application -->
 	
-    <string name="lp_application_name">Texts From Last Night</string>
+    <string name="lp_application_name">Micro RSS</string>
     
     <!-- For the icon: res/drawable/lp_icon -->
     
