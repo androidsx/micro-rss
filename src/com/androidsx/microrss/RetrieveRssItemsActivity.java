@@ -33,11 +33,14 @@ import android.util.Log;
 import android.view.Window;
 
 import com.androidsx.anyrss.ItemList;
+import com.androidsx.anyrss.WimmTemporaryConstants;
 import com.androidsx.anyrss.configure.UpdateTaskStatus;
+import com.androidsx.anyrss.db.SqLiteRssItemsDao;
 import com.androidsx.anyrss.webservice.FeedProcessingException;
 import com.androidsx.anyrss.webservice.WebserviceHelper;
-import com.androidsx.microrss.R;
+import com.androidsx.microrss.configure.ConfigureActivity;
 import com.androidsx.microrss.configure.DoConfigureThread;
+import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
 
 /**
@@ -97,46 +100,53 @@ public class RetrieveRssItemsActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.d(TAG, "onCreate configure activity");
+    Log.d(TAG, "onCreate retrieve items activity");
 
+    Log.w("WIMM", "Main activity: force update the update of the fake widget. Is this necessary?");
+    new MedAppWidget().updateFeedAction(this, WimmTemporaryConstants.widgetId);
+    Log.w("WIMM", "Main activity: call the configure activity, by launching the activity");
+    Intent intent = new Intent(this, ConfigureActivity.class);
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WimmTemporaryConstants.widgetId);
+    startActivityForResult(intent, 0);
+  }
+  
+  // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    Log.i("WIMM", "Continue with the normal execution of the activity");
+    
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     
     // Retrieve the info extras, if not check resources
-    String rssUrl;
-    String rssName;
-    try {
-      Bundle extras = getIntent().getExtras();
-      if (extras == null) {
-        throw new DataFormatException();
-      }
-
-      rssUrl = extras.getString("rssUrl");
-      rssName = extras.getString("rssName");
-      
-      if(rssUrl == null || rssName == null) {
-        throw new DataFormatException();
-      }
-       
-    } catch (Exception e) { // We can't let the activity crash, so we catch any exception
-      Log.w(TAG, "No extra data with rssUrl and rssName passed, checking resources", e);
-      rssUrl = getResources().getString(R.string.feed_url);
-      rssName = getResources().getString(R.string.feed_name);
-    }
-
+    String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
+    String rssName = getResources().getString(R.string.feed_name);
+    
     Log.d(TAG, "Show loading dialog for feed " + rssName + " : " + rssUrl);
     loadingDialog = ProgressDialog.show(this, getResources().getString(
-        R.string.dialog_loading_title), getResources().getString(
-        R.string.dialog_loading_description), true, // indeterminate
-        false); // hmm it is not cancelable ...
-
-    Log.d(TAG, "Start a thread to retrieve the list of items from " + rssUrl);
-    new Thread(new RetrieveRssItems(rssName, rssUrl)).start();
+            R.string.dialog_loading_title), getResources().getString(
+                    R.string.dialog_loading_description), true, // indeterminate
+                    false); // hmm it is not cancelable ...
+    
+    Log.d(TAG, "Start a thread to retrieve the list of items from " + rssUrl + ": WIMM-canceled");
+    //new Thread(new RetrieveRssItems(rssName, rssUrl)).start();
+    
+    Log.w("WIMM", "Main activity: grab the items from the database (instead of the internet)");
+    itemList = new SqLiteRssItemsDao(ContentProviderAuthority.AUTHORITY).getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
+    
+    // Let's just mock-notify that this is done
+    Message statusMessage = Message.obtain();
+    statusMessage.obj = UpdateTaskStatus.OK;
+    endOfOperationHandler.sendMessage(statusMessage);
+    
+    Log.w("WIMM", itemList.getNumberOfItems() + " items were fetched. We just told the handler that we are done here");
   }
 
   private void startIntentToDisplayItems() {
     Intent detailIntent = new Intent(this, AnyRssAppListModeActivity.class);
     detailIntent.putExtra("appWidgetId", 0);
     detailIntent.putExtra("itemList", itemList);
+    Log.w("WIMM", "Start AnyRssAppListModeActivity, passing the list of " + itemList.getNumberOfItems() + " items");
     startActivity(detailIntent);
 
     Log.i(TAG, "End of the anyrss activity");
