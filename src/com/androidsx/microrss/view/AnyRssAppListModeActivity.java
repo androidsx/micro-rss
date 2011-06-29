@@ -222,16 +222,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity im
   }
 
   @Override
-  protected Class<? extends AbstractAnyRssExpandableModeActivity> getExpandableModeActivityClass() {
-    return AnyRssExpandableModeActivity.class;
-  }
-
-  @Override
-  protected Class<? extends AbstractAnyRssItemModeActivity> getItemModeActivityClass() {
-    return AnyRssAppItemModeActivity.class;
-  }
-
-  @Override
   protected Class<? extends AbstractAnyRssListModeActivity> getListModeActivityClass() {
     return AnyRssAppListModeActivity.class;
   }

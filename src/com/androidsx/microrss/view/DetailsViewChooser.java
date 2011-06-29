@@ -27,16 +27,6 @@ public class DetailsViewChooser extends AbstractDetailsViewChooser {
   }
   
   @Override
-  protected Class<? extends AbstractAnyRssExpandableModeActivity> getExpandableModeActivityClass() {
-    return AnyRssExpandableModeActivity.class;
-  }
-
-  @Override
-  protected Class<? extends AbstractAnyRssItemModeActivity> getItemModeActivityClass() {
-    return AnyRssItemModeActivity.class;
-  }
-
-  @Override
   protected Class<? extends AbstractAnyRssListModeActivity> getListModeActivityClass() {
     return AnyRssListModeActivity.class;
   }
