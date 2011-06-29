@@ -28,7 +28,7 @@
     <string name="conf_default_update_time">2</string>
     
     <string name="conf_num_items_saved">Number of items to store in the memory:</string>
-    <string name="conf_default_num_items_saved">100</string>
+    <string name="conf_default_num_items_saved">3</string>
     <string name="max_num_items_saved_prefs_name">MaxNumItemsSaved-%d</string>
     
         <string name="list_mode_options_title">Options</string>
@@ -215,6 +215,7 @@ v1.4 (19.01.2010)\n
     <string name="info_doesnt_refresh_title"><b>It doesn\'t refresh or what?</b></string>
     <string name="info_doesnt_refresh_content">The widget updates <b>every two hours</b>. We don\'t want to waste battery! To refresh at any time:</string>
     <string name="info_more_items_title"><b>I want more items</b></string>
+    <!-- TODO(WIMM): 100: not any more -->
     <string name="info_more_items_content">We\'ll keep <b>100 items</b> in the SD card. Wait a few hours to have them all downloaded.</string>
     
 </resources>
