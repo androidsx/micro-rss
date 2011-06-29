@@ -34,11 +34,11 @@ import android.view.Window;
 
 import com.androidsx.anyrss.ItemList;
 import com.androidsx.anyrss.WimmTemporaryConstants;
+import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.anyrss.configure.UpdateTaskStatus;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
 import com.androidsx.anyrss.webservice.FeedProcessingException;
 import com.androidsx.anyrss.webservice.WebserviceHelper;
-import com.androidsx.microrss.configure.ConfigureActivity;
 import com.androidsx.microrss.configure.DoConfigureThread;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
@@ -96,27 +96,84 @@ public class RetrieveRssItemsActivity extends Activity {
     }
 
   };
+  
+  /**
+   * Handler that receives the status message from {@link DoConfigureThread}, so it knows whether
+   * the feed was correctly loaded or not, and acts accordingly.
+   */
+  private Handler endOfConfigureThreadHandler = new Handler() {
+    private static final String TAG = "EndOfOperationHandler";
+
+    @Override
+    public void handleMessage(Message msg) {
+        
+        
+      UpdateTaskStatus result = (UpdateTaskStatus) msg.obj;
+      Log.v(TAG, "Message is " + result);
+
+      if (result == UpdateTaskStatus.OK) {
+        //successfullyConfigured = true;
+          Log.w("WIMM", "Return from the configure thread, which finished OK");
+        onConfigureThreadFinishesSuccessfully();
+      } else if (result == UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL
+              || result == UpdateTaskStatus.UNKNOWN_ERROR) {
+        //successfullyConfigured = false;
+        // TODO(pablo): should read this from strings.xml
+        dialogErrorMessage = "Oops it failed: " + result.getMsg();
+        Log.w(TAG, "Can't configure! Message for the user (with NO email): "
+                + dialogErrorMessage);
+        showDialog(DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY);
+      } else {
+        //successfullyConfigured = false;
+        // TODO(pablo): should read this from strings.xml
+        dialogErrorMessage = "Oops it failed: " + result.getMsg();
+        Log.w(TAG, "Can't configure! Message for the user (with email): "
+                + dialogErrorMessage);
+        showDialog(DIALOG_ERROR_MESSAGE_KEY);
+      }
+    }
+
+  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate retrieve items activity");
 
-    Log.w("WIMM", "Main activity: force update the update of the fake widget. Is this necessary?");
-    new MedAppWidget().updateFeedAction(this, WimmTemporaryConstants.widgetId);
-    Log.w("WIMM", "Main activity: call the configure activity, by launching the activity");
+    //Log.w("WIMM", "Main activity: force update the update of the fake widget. This starts up the update service grr");
+    //new MedAppWidget().updateFeedAction(this, WimmTemporaryConstants.widgetId);
+    
+    Log.w("WIMM", "Start the update service, and request the first update");
+    
+    UpdateService.requestUpdate(new int[] { WimmTemporaryConstants.widgetId });
+    UpdateService.forceUpdate();
+    startService(new Intent(this, UpdateService.class)); // if already started, does nothing
+    
+    /*Log.w("WIMM", "Main activity: call the configure activity, by launching the activity. important to save the config");
     Intent intent = new Intent(this, ConfigureActivity.class);
     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WimmTemporaryConstants.widgetId);
-    startActivityForResult(intent, 0);
+    startActivityForResult(intent, 0);*/
+    
+
+    
+    Log.w("WIMM", "Start the doConfigure thread, we are still in the main activity");
+    String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
+    String rssName = getResources().getString(R.string.feed_name);
+    int maxNumItemsSaved = new DefaultMaxNumItemsSaved(
+            R.string.conf_default_num_items_saved,
+            R.string.max_num_items_saved_prefs_name).getDefaultMaxNumItemsSaved(this);
+    new DoConfigureThread(this, endOfConfigureThreadHandler, WimmTemporaryConstants.widgetId, rssName,
+            rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS, maxNumItemsSaved).start();
   }
   
+  private static final int PREFS_AUTO_SCROLL_RATE_SECONDS = 0;
+  private static final int UPDATE_INTERVAL_HOURS = 2;
+  
   // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
+  private void onConfigureThreadFinishesSuccessfully() {
     Log.i("WIMM", "Continue with the normal execution of the activity");
     
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    //requestWindowFeature(Window.FEATURE_NO_TITLE);
     
     // Retrieve the info extras, if not check resources
     String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
