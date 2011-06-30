@@ -53,16 +53,6 @@
 		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppListModeActivity"/>
 		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppItemModeActivity"/>
         
-        <activity
-            android:name="com.androidsx.microrss.configure.ConfigureActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
-
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
         <!-- Original AnyRSS extended view activities -->
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssItemModeActivity"/>
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssListModeActivity"/>

@@ -3,25 +3,22 @@ package com.androidsx.microrss;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.appwidget.AppWidgetHost;
-import android.appwidget.AppWidgetManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.androidsx.anyrss.ItemList;
 import com.androidsx.anyrss.WimmTemporaryConstants;
-import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
-import com.androidsx.anyrss.configure.UpdateTaskStatus;
+import com.androidsx.anyrss.db.AppWidgets;
+import com.androidsx.anyrss.db.AppWidgetsColumns;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
-import com.androidsx.microrss.configure.DoConfigureThread;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
-
-import dalvik.system.TemporaryDirectory;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
@@ -33,46 +30,6 @@ public class RetrieveRssItemsActivity extends Activity {
   private static final int DIALOG_ERROR_MESSAGE_KEY = 0;
   String dialogErrorMessage = "";
   private static final int DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY = 2;
-
-  private ItemList itemList;
-  
-  /**
-   * Handler that receives the status message from {@link DoConfigureThread}, so it knows whether
-   * the feed was correctly loaded or not, and acts accordingly.
-   */
-  private Handler endOfConfigureThreadHandler = new Handler() {
-    private static final String TAG = "EndOfOperationHandler";
-
-    @Override
-    public void handleMessage(Message msg) {
-        
-        
-      UpdateTaskStatus result = (UpdateTaskStatus) msg.obj;
-      Log.v(TAG, "Message is " + result);
-
-      if (result == UpdateTaskStatus.OK || result == UpdateTaskStatus.DONT_KNOW) {
-        //successfullyConfigured = true;
-          Log.w("WIMM", "Return from the configure thread, which finished OK (but we don't know...)");
-        onConfigureThreadFinishesSuccessfully();
-      } else if (result == UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL
-              || result == UpdateTaskStatus.UNKNOWN_ERROR) {
-        //successfullyConfigured = false;
-        // TODO(pablo): should read this from strings.xml
-        dialogErrorMessage = "Oops it failed: " + result.getMsg();
-        Log.w(TAG, "Can't configure! Message for the user (with NO email): "
-                + dialogErrorMessage);
-        showDialog(DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY);
-      } else {
-        //successfullyConfigured = false;
-        // TODO(pablo): should read this from strings.xml
-        dialogErrorMessage = "Oops it failed: " + result.getMsg();
-        Log.w(TAG, "Can't configure! Message for the user (with email): "
-                + dialogErrorMessage);
-        showDialog(DIALOG_ERROR_MESSAGE_KEY);
-      }
-    }
-
-  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -87,16 +44,10 @@ public class RetrieveRssItemsActivity extends Activity {
     Log.w("WIMM", "Start the doConfigure thread, we are still in the main activity");
     String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
     String rssName = getResources().getString(R.string.feed_name);
-    int maxNumItemsSaved = new DefaultMaxNumItemsSaved(
-            R.string.conf_default_num_items_saved,
-            R.string.max_num_items_saved_prefs_name).getDefaultMaxNumItemsSaved(this);
     
-    // FIXME, WIMM, next step is to replace this thread by an async task or something of the like
-    //Log.w("WIMM", "Write the configuration to the DB");
-    //writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS);
-    
-    new DoConfigureThread(this, endOfConfigureThreadHandler, WimmTemporaryConstants.widgetId, rssName,
-            rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS, maxNumItemsSaved).start();
+    // FIXME (WIMM): do in an async task? or is this really necessary to build the first view when there are no items?
+    writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS);
+    onConfigureThreadFinishesSuccessfully();
   }
   
   private static final int PREFS_AUTO_SCROLL_RATE_SECONDS = 0;
@@ -107,13 +58,13 @@ public class RetrieveRssItemsActivity extends Activity {
     Log.i("WIMM", "Continue with the normal execution of the activity");
     
     Log.w("WIMM", "Main activity: grab the items from the database (instead of the internet)");
-    itemList = new SqLiteRssItemsDao(ContentProviderAuthority.AUTHORITY).getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
+    ItemList itemList = new SqLiteRssItemsDao(ContentProviderAuthority.AUTHORITY).getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
     
     Log.w("WIMM", "Start the item to display the " + itemList.getNumberOfItems() + " that were just fetched from the DB");
-    startIntentToDisplayItems();
+    startIntentToDisplayItems(itemList);
   }
 
-  private void startIntentToDisplayItems() {
+  private void startIntentToDisplayItems(ItemList itemList) {
     Intent detailIntent = new Intent(this, AnyRssAppListModeActivity.class);
     detailIntent.putExtra("appWidgetId", 0);
     detailIntent.putExtra("itemList", itemList);
@@ -180,4 +131,24 @@ public class RetrieveRssItemsActivity extends Activity {
     }
     return null;
   }
+  
+  private static void writeConfigToBackend(int appWidgetId, Context context,
+          String title, String rssUrl, int updateIntervalHours, int autoScrollSeconds) {
+    Log.d(TAG, "Save to backend: widgetID " + appWidgetId + ", title " + title
+            + ", url " + rssUrl + " (" + updateIntervalHours + "h)");
+    ContentValues values = new ContentValues();
+    values.put(BaseColumns._ID, appWidgetId);
+    values.put(AppWidgetsColumns.TITLE, title);
+    values.put(AppWidgetsColumns.WEBVIEW_TYPE,
+            AppWidgetsColumns.WEBVIEW_TYPE_DEFAULT);
+    values.put(AppWidgetsColumns.LAST_UPDATED, -1);
+    values.put(AppWidgetsColumns.CURRENT_ITEM_POSITION, 0);
+    values.put(AppWidgetsColumns.UPDATE_INTERVAL, updateIntervalHours * 60);
+    values.put(AppWidgetsColumns.RSS_URL, rssUrl);
+
+    // TODO: update instead of insert if editing an existing widget
+    ContentResolver resolver = context.getContentResolver();
+    resolver.insert(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY), values);
+  }
+  
 }
