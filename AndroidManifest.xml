@@ -71,11 +71,6 @@
         <!-- activity that dispatches to one of the extended view activities -->
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.DetailsViewChooser"/>
         
-        <!-- Mobclix application ID -->
-        <meta-data android:name="com.mobclix.APPLICATION_ID" android:value="cdf3868e-16b2-4611-ae83-4c6736400c50"/>
-        <activity android:name="com.mobclix.android.sdk.MobclixBrowserActivity"/> 
-        
-        
         <!-- library project application info -->
 		<activity android:name="com.androidsx.commons.appinfo.HelpActivity"/>
 		<activity android:name="com.androidsx.commons.appinfo.AboutUsActivity" />
@@ -85,6 +80,4 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
-	<!-- Required by Mobclix -->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

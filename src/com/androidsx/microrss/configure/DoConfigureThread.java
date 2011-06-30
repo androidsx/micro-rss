@@ -53,7 +53,7 @@ public class DoConfigureThread extends Thread {
     Log.d(TAG, "Start DoConfigureThread thread (0/3)");
     Log.w("WIMM", "Start doConfigure (1/3)");
     writeConfigToBackend(appWidgetId, context, title, rssUrl, updateIntervalHours, autoScrollSeconds);
-    Log.w("WIMM", "In progress doConfigure (2/3)");
+    Log.e("WIMM", "In progress doConfigure (2/3). Now we request the first update, which we SHOULD NOT DO");
     UpdateTaskStatus status = requestFirstUpdate(appWidgetId, context, maxNumItemsSaved);
     sendMessageToHandler(endOfOperationHandler, status);
     Log.w("WIMM", "End doConfigure (3/3)");

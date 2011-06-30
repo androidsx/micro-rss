@@ -5,7 +5,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="/anyrss-core"/>
 	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
-	<classpathentry kind="lib" path="libs/mobclix.jar"/>
 	<classpathentry kind="src" path="/androidsxCommonsAndroid"/>
 	<classpathentry kind="src" path="androidsxCommonsAndroid_src"/>
 	<classpathentry kind="output" path="bin"/>

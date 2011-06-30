@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.androidsx.anyrss.view.AbstractAnyRssExpandableModeActivity;
-import com.androidsx.anyrss.view.AbstractAnyRssItemModeActivity;
 import com.androidsx.anyrss.view.AbstractAnyRssListModeActivity;
 import com.androidsx.anyrss.view.AbstractListModeViewAdapter;
 import com.androidsx.anyrss.view.AnyRSSHelper;
@@ -24,12 +22,8 @@ import com.androidsx.microrss.InfoActivity;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.SettingsActivity;
 import com.androidsx.microrss.db.ContentProviderAuthority;
-import com.mobclix.android.sdk.MobclixAdView;
-import com.mobclix.android.sdk.MobclixAdViewListener;
-import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 
-public class AnyRssListModeActivity extends AbstractAnyRssListModeActivity implements
-        MobclixAdViewListener {
+public class AnyRssListModeActivity extends AbstractAnyRssListModeActivity {
 
   private static final String TAG = "AnyRssListModeActivity";
   
@@ -91,44 +85,6 @@ public class AnyRssListModeActivity extends AbstractAnyRssListModeActivity imple
     return result;
   }
   
-  @Override
-  public void onSuccessfulLoad(MobclixAdView view) {
-      Log.v(TAG, "The ad request was successful!");
-  }
-
-  @Override
-  public void onFailedLoad(MobclixAdView view, int errorCode) {
-      Log.w(TAG, "The ad request failed with error code: " + errorCode);
-  }
-
-  public boolean shouldTouchThrough(MobclixAdView adView) {
-      return true;
-  }
-
-  @Override
-  public void onCustomAdTouchThrough(MobclixAdView adView, String string) {
-      Log.v("MobclixAdvertisingView", "The custom ad responded with '"
-              + string + "' when touched!");
-  }
-
-  /**
-   * Called when the MobclixAdView is retrieving an ad. Return a comma
-   * separated list of keyword terms describing the application if available.
-   */
-  @Override
-  public String keywords() {
-      return "android,application,app,sex,porn,night,drunk,party,game";
-  }
-
-  /**
-   * Called when the MobclixAdView is retrieving an ad. Return a comma
-   * separated list of search terms if available.
-   */
-  @Override
-  public String query() {
-      return keywords();
-  }
-
   @Override
   protected String getAnalyticsAppKey() {
     return ClientSpecificConstants.FLURRY_APP_KEY;
@@ -204,11 +160,6 @@ public class AnyRssListModeActivity extends AbstractAnyRssListModeActivity imple
   @Override
   protected int getTitleListModeId() {
     return R.id.title_list_mode;
-  }
-
-  @Override
-  protected void requestAd() {
-    ((MobclixMMABannerXLAdView) findViewById(R.id.banner_adview)).getAd();
   }
 
   @Override

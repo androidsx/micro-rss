@@ -6,8 +6,6 @@
  */
 package com.androidsx.microrss.view;
 
-import com.androidsx.anyrss.view.AbstractAnyRssExpandableModeActivity;
-import com.androidsx.anyrss.view.AbstractAnyRssItemModeActivity;
 import com.androidsx.anyrss.view.AbstractAnyRssListModeActivity;
 import com.androidsx.anyrss.view.AbstractDetailsViewChooser;
 import com.androidsx.microrss.R;

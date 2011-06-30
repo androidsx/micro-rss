@@ -34,20 +34,6 @@
     android:scaleType="fitXY"
   />
   		
-          <LinearLayout 
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-			<com.mobclix.android.sdk.MobclixMMABannerXLAdView
-				android:id="@+id/banner_adview"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			/>
-                   
-    		</LinearLayout>  
-		
   <ListView
     android:id="@+id/android:list"
     android:layout_width="fill_parent"

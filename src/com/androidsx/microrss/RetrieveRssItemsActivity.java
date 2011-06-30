@@ -1,25 +1,8 @@
-/*
- * Copyright (C) 2009 Jeff Sharkey, http://jsharkey.org/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.androidsx.microrss;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
@@ -34,16 +17,13 @@ import com.androidsx.anyrss.WimmTemporaryConstants;
 import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.anyrss.configure.UpdateTaskStatus;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
-import com.androidsx.anyrss.webservice.FeedProcessingException;
-import com.androidsx.anyrss.webservice.WebserviceHelper;
 import com.androidsx.microrss.configure.DoConfigureThread;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
 
 /**
- * Activity to configure forecast widgets. Usually launched automatically by an
- * {@link AppWidgetHost} after the {@link AppWidgetManager#EXTRA_APPWIDGET_ID}
- * has been bound to a widget.
+ * Main activity: starts the service, waits for the configuration thread to do the first update, and
+ * then gets the items from the DB, and passes them to the view activity.
  */
 public class RetrieveRssItemsActivity extends Activity {
   public static final String TAG = "RetrieveRssItemsActivity";
@@ -53,46 +33,6 @@ public class RetrieveRssItemsActivity extends Activity {
   private static final int DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY = 2;
 
   private ItemList itemList;
-
-  private static final int MAX_NUM_ITEMS_RETRIEVED = 100;
-  /**
-   * Dialog that shows the "loading" message. It is started by {@link #onClick}
-   * for the {@link #mSave} button, and closed by {@link #endOfOperationHandler}
-   */
-  private ProgressDialog loadingDialog;
-
-  /**
-   * Handler that receives the status message from {@link DoConfigureThread}, so
-   * it knows whether the feed was correctly loaded or not, and acts
-   * accordingly.
-   */
-  private Handler endOfOperationHandler = new Handler() {
-    private static final String TAG = "EndOfOperationHandler";
-
-    @Override
-    public void handleMessage(Message msg) {
-      Log.d(TAG, "Received message");
-      loadingDialog.dismiss();
-      UpdateTaskStatus result = (UpdateTaskStatus) msg.obj;
-      Log.d(TAG, "Message is " + result);
-
-      if (result == UpdateTaskStatus.OK) {
-        startIntentToDisplayItems();
-      } else if (result == UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL
-          || result == UpdateTaskStatus.UNKNOWN_ERROR) {
-        dialogErrorMessage = "Oops it failed: " + result.getMsg();
-        Log.w(TAG, "Can't configure! Message for the user (with NO email): "
-            + dialogErrorMessage);
-        showDialog(DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY);
-      } else {
-        dialogErrorMessage = "Oops it failed: " + result.getMsg();
-        Log.w(TAG, "Can't configure! Message for the user (with email): "
-            + dialogErrorMessage);
-        showDialog(DIALOG_ERROR_MESSAGE_KEY);
-      }
-    }
-
-  };
   
   /**
    * Handler that receives the status message from {@link DoConfigureThread}, so it knows whether
@@ -137,7 +77,6 @@ public class RetrieveRssItemsActivity extends Activity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate retrieve items activity");
 
-    
     Log.w("WIMM", "Start the update service, and request the first update");
     UpdateService.requestUpdate(new int[] { WimmTemporaryConstants.widgetId });
     UpdateService.forceUpdate();
@@ -160,30 +99,11 @@ public class RetrieveRssItemsActivity extends Activity {
   private void onConfigureThreadFinishesSuccessfully() {
     Log.i("WIMM", "Continue with the normal execution of the activity");
     
-    //requestWindowFeature(Window.FEATURE_NO_TITLE);
-    
-    // Retrieve the info extras, if not check resources
-    String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
-    String rssName = getResources().getString(R.string.feed_name);
-    
-    Log.d(TAG, "Show loading dialog for feed " + rssName + " : " + rssUrl);
-    loadingDialog = ProgressDialog.show(this, getResources().getString(
-            R.string.dialog_loading_title), getResources().getString(
-                    R.string.dialog_loading_description), true, // indeterminate
-                    false); // hmm it is not cancelable ...
-    
-    Log.d(TAG, "Start a thread to retrieve the list of items from " + rssUrl + ": WIMM-canceled");
-    //new Thread(new RetrieveRssItems(rssName, rssUrl)).start();
-    
     Log.w("WIMM", "Main activity: grab the items from the database (instead of the internet)");
     itemList = new SqLiteRssItemsDao(ContentProviderAuthority.AUTHORITY).getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
     
-    // Let's just mock-notify that this is done
-    Message statusMessage = Message.obtain();
-    statusMessage.obj = UpdateTaskStatus.OK;
-    endOfOperationHandler.sendMessage(statusMessage);
-    
-    Log.w("WIMM", itemList.getNumberOfItems() + " items were fetched. We just told the handler that we are done here");
+    Log.w("WIMM", "Start the item to display the " + itemList.getNumberOfItems() + " that were just fetched from the DB");
+    startIntentToDisplayItems();
   }
 
   private void startIntentToDisplayItems() {
@@ -252,37 +172,5 @@ public class RetrieveRssItemsActivity extends Activity {
     }
     }
     return null;
-  }
-
-  
-  class RetrieveRssItems implements Runnable {
-    String rssName;
-    String rssUrl;
-    
-    public RetrieveRssItems(String rssName, String rssUrl) {
-      this.rssName = rssName;
-      this.rssUrl = rssUrl;
-    }
-
-    public void run() {
-      UpdateTaskStatus statusCode = UpdateTaskStatus.OK;
-      try {
-        itemList = WebserviceHelper.getRssItems(RetrieveRssItemsActivity.this,
-            rssUrl, rssName, MAX_NUM_ITEMS_RETRIEVED);
-
-        if (itemList == null || itemList.getNumberOfItems() == 0) {
-          statusCode = UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL;
-        }
-      } catch (FeedProcessingException e) {
-        Log.w(TAG, "ParseException caught retrieving the rss items from "
-            + rssUrl, e);
-        statusCode = e.getStatus();
-        statusCode.setMsg(e.getMessage());
-      }
-
-      Message statusMessage = Message.obtain();
-      statusMessage.obj = statusCode;
-      endOfOperationHandler.sendMessage(statusMessage);
-    }
   }
 }
