@@ -16,8 +16,6 @@
 
 package com.androidsx.microrss;
 
-import java.util.zip.DataFormatException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -30,7 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Window;
 
 import com.androidsx.anyrss.ItemList;
 import com.androidsx.anyrss.WimmTemporaryConstants;
@@ -140,21 +137,11 @@ public class RetrieveRssItemsActivity extends Activity {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate retrieve items activity");
 
-    //Log.w("WIMM", "Main activity: force update the update of the fake widget. This starts up the update service grr");
-    //new MedAppWidget().updateFeedAction(this, WimmTemporaryConstants.widgetId);
     
     Log.w("WIMM", "Start the update service, and request the first update");
-    
     UpdateService.requestUpdate(new int[] { WimmTemporaryConstants.widgetId });
     UpdateService.forceUpdate();
     startService(new Intent(this, UpdateService.class)); // if already started, does nothing
-    
-    /*Log.w("WIMM", "Main activity: call the configure activity, by launching the activity. important to save the config");
-    Intent intent = new Intent(this, ConfigureActivity.class);
-    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, WimmTemporaryConstants.widgetId);
-    startActivityForResult(intent, 0);*/
-    
-
     
     Log.w("WIMM", "Start the doConfigure thread, we are still in the main activity");
     String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
