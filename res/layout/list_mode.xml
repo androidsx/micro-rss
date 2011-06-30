@@ -47,11 +47,12 @@
     android:orientation="horizontal"
     android:gravity="center">
 
+	<!-- FIXME (WIMM): this mechanism is NOT CORRECT: the fact that there are no items doesn't necessarily mean that we didn't update yet -->
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textAppearance="?android:attr/textAppearanceSmall"
-      android:text="@string/details_no_data_error" />
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="(No items yet. Did you let the update service grab them yet? Come back after a update cycle)" />
 
   </LinearLayout>
 

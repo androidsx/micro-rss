@@ -21,6 +21,8 @@ import com.androidsx.microrss.configure.DoConfigureThread;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
 
+import dalvik.system.TemporaryDirectory;
+
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
  * then gets the items from the DB, and passes them to the view activity.
@@ -48,9 +50,9 @@ public class RetrieveRssItemsActivity extends Activity {
       UpdateTaskStatus result = (UpdateTaskStatus) msg.obj;
       Log.v(TAG, "Message is " + result);
 
-      if (result == UpdateTaskStatus.OK) {
+      if (result == UpdateTaskStatus.OK || result == UpdateTaskStatus.DONT_KNOW) {
         //successfullyConfigured = true;
-          Log.w("WIMM", "Return from the configure thread, which finished OK");
+          Log.w("WIMM", "Return from the configure thread, which finished OK (but we don't know...)");
         onConfigureThreadFinishesSuccessfully();
       } else if (result == UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL
               || result == UpdateTaskStatus.UNKNOWN_ERROR) {
@@ -88,6 +90,11 @@ public class RetrieveRssItemsActivity extends Activity {
     int maxNumItemsSaved = new DefaultMaxNumItemsSaved(
             R.string.conf_default_num_items_saved,
             R.string.max_num_items_saved_prefs_name).getDefaultMaxNumItemsSaved(this);
+    
+    // FIXME, WIMM, next step is to replace this thread by an async task or something of the like
+    //Log.w("WIMM", "Write the configuration to the DB");
+    //writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS);
+    
     new DoConfigureThread(this, endOfConfigureThreadHandler, WimmTemporaryConstants.widgetId, rssName,
             rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS, maxNumItemsSaved).start();
   }

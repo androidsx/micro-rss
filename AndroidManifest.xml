@@ -42,7 +42,7 @@
         </activity>
         
         <!-- new activities since huge refactoring -->
-        <activity android:name="com.androidsx.microrss.RetrieveRssItemsActivity"> 
+        <activity android:name="com.androidsx.microrss.RetrieveRssItemsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"> 
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

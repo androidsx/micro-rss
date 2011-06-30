@@ -50,14 +50,12 @@ public class DoConfigureThread extends Thread {
 
   @Override
   public void run() {
-    Log.d(TAG, "Start DoConfigureThread thread (0/3)");
-    Log.w("WIMM", "Start doConfigure (1/3)");
+    Log.d(TAG, "Start DoConfigureThread thread (0/2)");
+    Log.w("WIMM", "Start doConfigure (1/2)");
     writeConfigToBackend(appWidgetId, context, title, rssUrl, updateIntervalHours, autoScrollSeconds);
-    Log.e("WIMM", "In progress doConfigure (2/3). Now we request the first update, which we SHOULD NOT DO");
-    UpdateTaskStatus status = requestFirstUpdate(appWidgetId, context, maxNumItemsSaved);
-    sendMessageToHandler(endOfOperationHandler, status);
-    Log.w("WIMM", "End doConfigure (3/3)");
-    Log.d(TAG, "End of DoConfigureThread thread with status " + status);
+    sendMessageToHandler(endOfOperationHandler, UpdateTaskStatus.DONT_KNOW);
+    Log.w("WIMM", "End doConfigure (2/2)");
+    Log.d(TAG, "End of DoConfigureThread thread with status... who knows");
   }
 
   private static void writeConfigToBackend(int appWidgetId, Context context,
@@ -77,35 +75,6 @@ public class DoConfigureThread extends Thread {
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();
     resolver.insert(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY), values);
-    
-//    SharedPreferencesHelper.saveIntValue(context, String.format(
-//        ConfigureActivity.PREFS_AUTO_SCROLL_FIELD_PATTERN, appWidgetId), autoScrollSeconds);
-  }
-
-  private static UpdateTaskStatus requestFirstUpdate(int appWidgetId,
-          Context context, int maxNumItemsSaved) {
-    Log.i(TAG, "Request the first update");
-    try {
-      Uri appWidgetUri = ContentUris.withAppendedId(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY),
-              appWidgetId);
-      
-    WebserviceHelper.updateForecastsAndFeeds(context,
-              appWidgetUri,
-              appWidgetId,
-              Math.max(UpdateService.MAX_ITEMS_PER_FEED, maxNumItemsSaved),
-              ContentProviderAuthority.AUTHORITY,
-              maxNumItemsSaved);
-    } catch (FeedProcessingException e) {
-      Log.w(TAG, "ParseException caught in the save button", e);
-      UpdateTaskStatus statusCode = e.getStatus();
-      statusCode.setMsg(e.getMessage()); // is this necessary? probably not
-      return statusCode;
-    } catch (Exception e) {
-      Log.w(TAG, "Unknown exception caught in the save button", e);
-      return UpdateTaskStatus.UNKNOWN_ERROR;
-    }
-    Log.i(TAG, "First update status: OK");
-    return UpdateTaskStatus.OK;
   }
 
   private static void sendMessageToHandler(Handler endOfOperationHandler,

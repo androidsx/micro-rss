@@ -102,22 +102,6 @@
     <string name="item_list_position">item_list_extra_position</string>
     <string name="widget_manual_update">widget_manual_update</string>
 
-    <!-- The details view (any of them) does not find any items in the DB -->
-    <string name="details_no_data_error_html">
-      &lt;p&gt;Oops! We have lost the data :( 
-      &lt;p&gt;Try refreshing the widget, it will most likely solve the problem 
-      &lt;p&gt;If you just reinstalled the application, you have to add new widgets. The ones in the screen now can\'t work anymore. Yes, it is a pain, but the DB has changed and we have to reload the widgets. 
-      &lt;p&gt;Feel free to send us your angry comments to android.sx@gmail.com, we\'ll reply as soon as possible.
-      &lt;p&gt;Sorry about that! 
-    </string>
-    <string name="details_no_data_error">
-      Oops! We have lost the data :(\n
-      Try refreshing the widget, it will most likely solve the problem\n
-      If you just reinstalled the application, you have to add new widgets. The ones in the screen now can\'t work anymore. Yes, it is a pain, but the DB has changed and we have to reload the widgets.\n 
-      Feel free to send us your angry comments to android.sx@gmail.com, we\'ll reply as soon as possible.\n
-      Sorry about that!\n
-    </string>
-    
     <!-- Dialogs and menu options -->
     <string name="menu_share">Share link</string>
     <string name="menu_go_to_url">Go to URL</string>
