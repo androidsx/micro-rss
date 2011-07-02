@@ -145,7 +145,7 @@ public class RetrieveRssItemsActivity extends Activity {
 
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();
-    resolver.insert(MicroRssContentProvider.getFeedContentUri(), values);
+    resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
   }
   
 }

@@ -26,16 +26,25 @@ public class MicroRssContentProvider extends ContentProvider {
     
     /** Name of the feed table, whose columns are {@link FeedColumns}. */
     public static final String TABLE_FEEDS = "feeds";
+    private static final String SINGLE_FEED = "feed";
     
     /** Name of the item table, whose columns are {@link ItemColumns}. */
     public static final String TABLE_ITEMS = "items";
+    private static final String SINGLE_ITEM = "item";
 
-    private static final int APPWIDGETS = 101;
-    private static final int APPWIDGETS_ID = 102;
-    private static final int APPWIDGETS_FORECASTS = 103;
+    /** Content provider for the feeds table. */
+    public static final Uri FEEDS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
+    
+    /** Content provider for the items table. */
+    // TODO: how come this is not used outside? hmm i think they are doing the parse themselves, jodeeeeeeer
+    private static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
+    
+    private static final int FEEDS = 101;
+    private static final int FEEDS_ID = 102;
+    private static final int FEEDS_ITEMS = 103;
 
-    private static final int FORECASTS = 201;
-    private static final int FORECASTS_ID = 202;
+    private static final int ITEMS = 201;
+    private static final int ITEMS_ID = 202;
 
     private DatabaseHelper mOpenHelper;
     
@@ -45,15 +54,6 @@ public class MicroRssContentProvider extends ContentProvider {
      */
     private UriMatcher sUriMatcher;
 
-    // TODO: fuck, rename this shit. have a look at getUriMatcher
-    public static final Uri getFeedContentUri() {
-        return Uri.parse("content://" + AUTHORITY + "/" + "appwidgets");
-    }
-    
-    private Uri constructForecastsContentUri() {
-        return Uri.parse("content://" + AUTHORITY + "/" + "anyrss");
-    }
-    
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.v(TAG, "delete() with uri=" + uri);
@@ -62,11 +62,11 @@ public class MicroRssContentProvider extends ContentProvider {
         int count = 0;
 
         switch (getUriMatcher().match(uri)) {
-            case APPWIDGETS: {
+            case FEEDS: {
                 count = db.delete(TABLE_FEEDS, selection, selectionArgs);
                 break;
             }
-            case APPWIDGETS_ID: {
+            case FEEDS_ID: {
                 // Delete a specific widget and all its forecasts
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
                 count = db.delete(TABLE_FEEDS, BaseColumns._ID + "=" + appWidgetId, null);
@@ -74,7 +74,7 @@ public class MicroRssContentProvider extends ContentProvider {
                         + appWidgetId, null);
                 break;
             }
-            case APPWIDGETS_FORECASTS: {
+            case FEEDS_ITEMS: {
                 // Delete all the forecasts for a specific widget
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
                 if (selection == null) {
@@ -86,7 +86,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 count = db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
-            case FORECASTS: {
+            case ITEMS: {
                 count = db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
@@ -99,17 +99,23 @@ public class MicroRssContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
+        final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_FEED;
+        final String FEED_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_FEED;
+        
+        final String ITEM_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_ITEM;
+        final String ITEM_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_ITEM;
+        
         switch (getUriMatcher().match(uri)) {
-            case APPWIDGETS:
-                return FeedTableHelper.CONTENT_TYPE;
-            case APPWIDGETS_ID:
-                return FeedTableHelper.CONTENT_ITEM_TYPE;
-            case APPWIDGETS_FORECASTS:
-                return ItemTableHelper.CONTENT_TYPE;
-            case FORECASTS:
-                return ItemTableHelper.CONTENT_TYPE;
-            case FORECASTS_ID:
-                return ItemTableHelper.CONTENT_ITEM_TYPE;
+            case FEEDS:
+                return FEED_CONTENT_TYPE;
+            case FEEDS_ID:
+                return FEED_CONTENT_ITEM_TYPE;
+            case FEEDS_ITEMS:
+                return ITEM_CONTENT_TYPE;
+            case ITEMS:
+                return ITEM_CONTENT_TYPE;
+            case ITEMS_ID:
+                return ITEM_CONTENT_ITEM_TYPE;
         }
         throw new IllegalStateException();
     }
@@ -121,32 +127,32 @@ public class MicroRssContentProvider extends ContentProvider {
         Uri resultUri = null;
 
         switch (getUriMatcher().match(uri)) {
-            case APPWIDGETS: {
+            case FEEDS: {
                 Log.w("WIMM", "Here, we used to insert the widget title into the table_appwidgets table");
                 try {
                     long rowId = db.insert(TABLE_FEEDS, FeedColumns.FEED_URL, values);
                     if (rowId != -1) {
-                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), rowId);
+                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, rowId);
                     }
                 } catch (SQLiteConstraintException e) {
                     Log.e("WIMM", "The widget was already created. This is expected, until we fix it in a cleaner way, since we use a constant number. This catch can NOT stay");
                 }
                 break;
             }
-            case APPWIDGETS_FORECASTS: {
+            case FEEDS_ITEMS: {
                 // Insert a feed item into a specific widget
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
                 values.put(ItemColumns.FEED_ID, appWidgetId);
                 long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), rowId);
+                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, rowId);
                 }
                 break;
             }
-            case FORECASTS: {
+            case ITEMS: {
                 long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(constructForecastsContentUri(), rowId);
+                    resultUri = ContentUris.withAppendedId(ITEMS_CONTENT_URI, rowId);
                 }
                 break;
             }
@@ -173,17 +179,17 @@ public class MicroRssContentProvider extends ContentProvider {
         String limit = null;
 
         switch (getUriMatcher().match(uri)) {
-            case APPWIDGETS: {
+            case FEEDS: {
                 qb.setTables(TABLE_FEEDS);
                 break;
             }
-            case APPWIDGETS_ID: {
+            case FEEDS_ID: {
                 String appWidgetId = uri.getPathSegments().get(1);
                 qb.setTables(TABLE_FEEDS);
                 qb.appendWhere(BaseColumns._ID + "=" + appWidgetId);
                 break;
             }
-            case APPWIDGETS_FORECASTS: {
+            case FEEDS_ITEMS: {
                 // Pick all the forecasts for given widget, sorted by insertion time
                 String appWidgetId = uri.getPathSegments().get(1);
                 qb.setTables(TABLE_ITEMS);
@@ -191,11 +197,11 @@ public class MicroRssContentProvider extends ContentProvider {
                 sortOrder = (sortOrder == null) ? BaseColumns._ID + " ASC" : sortOrder;
                 break;
             }
-            case FORECASTS: {
+            case ITEMS: {
                 qb.setTables(TABLE_ITEMS);
                 break;
             }
-            case FORECASTS_ID: {
+            case ITEMS_ID: {
                 String forecastId = uri.getPathSegments().get(1);
                 qb.setTables(TABLE_ITEMS);
                 qb.appendWhere(BaseColumns._ID + "=" + forecastId);
@@ -212,15 +218,15 @@ public class MicroRssContentProvider extends ContentProvider {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         switch (getUriMatcher().match(uri)) {
-            case APPWIDGETS: {
+            case FEEDS: {
                 return db.update(TABLE_FEEDS, values, selection, selectionArgs);
             }
-            case APPWIDGETS_ID: {
+            case FEEDS_ID: {
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
                 return db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + appWidgetId,
                         null);
             }
-            case FORECASTS: {
+            case ITEMS: {
                 return db.update(TABLE_ITEMS, values, selection, selectionArgs);
             }
         }
@@ -231,11 +237,11 @@ public class MicroRssContentProvider extends ContentProvider {
     private UriMatcher getUriMatcher() {
         if (sUriMatcher == null) {
             sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-            sUriMatcher.addURI(AUTHORITY, "appwidgets", APPWIDGETS);
-            sUriMatcher.addURI(AUTHORITY, "appwidgets/#", APPWIDGETS_ID);
-            sUriMatcher.addURI(AUTHORITY, "appwidgets/#/forecasts", APPWIDGETS_FORECASTS);
-            sUriMatcher.addURI(AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS, FORECASTS);
-            sUriMatcher.addURI(AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS + "/#", FORECASTS_ID);
+            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS, FEEDS);
+            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#", FEEDS_ID);
+            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#/" + TABLE_ITEMS, FEEDS_ITEMS); // 
+            sUriMatcher.addURI(AUTHORITY, TABLE_ITEMS, ITEMS);
+            sUriMatcher.addURI(AUTHORITY, TABLE_ITEMS + "/#", ITEMS_ID);
         }
         return sUriMatcher;
     }

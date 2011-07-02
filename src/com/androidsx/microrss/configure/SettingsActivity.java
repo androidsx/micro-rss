@@ -180,7 +180,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     ContentValues values = new ContentValues();
 
     // This Uri has the WIDGET_ID, so we only update ONE widget
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), mAppWidgetId);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, mAppWidgetId);
     values.put(FeedColumns.UPDATE_INTERVAL, updateInterval * 60);
     int updateRows = resolver.update(appWidgetUriWithId, values, null, null);
     Log.d(TAG, "Updated " + updateRows + " rows for UPDATE_INTERVAL with value " 
@@ -195,7 +195,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
    * @return
    */
   private int getCurrentUpdateInterval() {
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), mAppWidgetId);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, mAppWidgetId);
     Cursor cursor = null;
     int updateIntervalHours = UPDATE_INTERVAL_FALLBACK_HOURS;
     try {

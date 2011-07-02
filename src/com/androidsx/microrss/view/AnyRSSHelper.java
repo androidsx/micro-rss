@@ -470,7 +470,7 @@ public static Date parseDateInRfc822(String pubDateStr) {
     }
 
     public static void setWebviewType(Context context, int webviewTypeList, int appWidgetId, String authority) {
-        Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), appWidgetId);  
+        Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);  
       
         ContentResolver resolver = context.getContentResolver();
         ContentValues values = new ContentValues();

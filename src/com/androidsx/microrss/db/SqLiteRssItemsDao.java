@@ -52,7 +52,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     @Override
     public ItemList getItemList(ContentResolver resolver, int appWidgetId) {
         Uri appWidgetUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.getFeedContentUri(), appWidgetId);
+                MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
         final String feedTitle = extractFeedTitle(resolver, appWidgetUri);
         final ItemList itemList = readSortedItemsFromDb(appWidgetUri, resolver, feedTitle);
         Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the widget " + appWidgetId);
@@ -74,9 +74,10 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             ItemList itemsToInsert) {
         Log.d(TAG, "Insert " + itemsToInsert.getNumberOfItems() + " elements into the DB");
         Uri appWidgetUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.getFeedContentUri(), appWidgetId);
+                MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
+        
         final Uri appWidgetForecasts = Uri.withAppendedPath(appWidgetUri,
-                FeedTableHelper.TWIG_FEED_ITEMS);
+                MicroRssContentProvider.TABLE_ITEMS);
         
         final int maxIndex = getMaxIndex(appWidgetUri, resolver);
         
@@ -104,7 +105,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         } else {
             Log.d(TAG, "Attempting to delete the " + numItemsToDelete + " oldest items from the DB");
             final Uri appWidgetUri = ContentUris.withAppendedId(
-                    MicroRssContentProvider.getFeedContentUri(), appWidgetId);
+                    MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
             final List<Integer> sortedListOfIds = readSortedItemIdsFromDb(appWidgetUri, resolver);
             final List<Integer> idsToDelete = sortedListOfIds.subList(
                     sortedListOfIds.size() - numItemsToDelete,
@@ -186,7 +187,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     
     private Cursor queryForSortedItems(ContentResolver resolver, Uri appWidgetUri) {
         Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
-                FeedTableHelper.TWIG_FEED_ITEMS);
+                MicroRssContentProvider.TABLE_ITEMS);
 
         return resolver.query(allForecastsUri, PROJECTION_FEEDS,
                 null,
@@ -201,7 +202,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         int maxId;
         try {
             Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
-                    FeedTableHelper.TWIG_FEED_ITEMS); // content://com.androidsx.dailystuff/appwidgets/7/forecasts
+                    MicroRssContentProvider.TABLE_ITEMS); // content://com.androidsx.dailystuff/appwidgets/7/forecasts
             cursor = resolver.query(allForecastsUri, PROJECTION_FEEDS, null,
                     null, null);
             maxId = 0;
@@ -228,7 +229,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         Log.v(TAG, "WHERE clase to delete items: " + whereClause);
         
         final Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
-                FeedTableHelper.TWIG_FEED_ITEMS);
+                MicroRssContentProvider.TABLE_ITEMS);
         return resolver.delete(allForecastsUri, whereClause.toString(), null);
     }
 

@@ -166,7 +166,7 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
             Cursor cursor = null;
             boolean hasBeenUpdatedOnce = true;
 
-            Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), appWidgetId);
+            Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
             try {
                 cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGETS, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {

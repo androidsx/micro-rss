@@ -182,7 +182,7 @@ public class WebserviceHelper {
         ContentValues values2 = new ContentValues();
         long lastUpdate = System.currentTimeMillis();
         // This Uri has the WIDGET_ID, so we only update ONE widget
-        Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(),
+        Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI,
                         appWidgetId);
         values2.put(FeedColumns.LAST_UPDATED, lastUpdate);
         int updateRows = context.getContentResolver().update(appWidgetUriWithId, values2, null, null);
