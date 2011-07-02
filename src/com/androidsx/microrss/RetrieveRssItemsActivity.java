@@ -13,7 +13,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.androidsx.anyrss.WimmTemporaryConstants;
-import com.androidsx.anyrss.db.FeedDbTable;
+import com.androidsx.anyrss.db.FeedTableHelper;
 import com.androidsx.anyrss.db.FeedColumns;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
 import com.androidsx.anyrss.domain.ItemList;
@@ -132,14 +132,13 @@ public class RetrieveRssItemsActivity extends Activity {
   
   private static void writeConfigToBackend(int appWidgetId, Context context,
           String title, String rssUrl, int updateIntervalHours, int autoScrollSeconds) {
-    Log.d(TAG, "Save to backend: widgetID " + appWidgetId + ", title " + title
+    Log.d(TAG, "Save to backend: widgetID " + appWidgetId
             + ", url " + rssUrl + " (" + updateIntervalHours + "h)");
     
     Log.e(TAG, "This is gonna fail unless this is the first time the app is executed for this widget ID");
     
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
-    values.put(FeedColumns.WIDGET_TITLE, title);
     values.put(FeedColumns.WEBVIEW_TYPE,
             FeedColumns.WEBVIEW_TYPE_DEFAULT);
     values.put(FeedColumns.LAST_UPDATED, -1);
@@ -148,7 +147,7 @@ public class RetrieveRssItemsActivity extends Activity {
 
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();
-    resolver.insert(FeedDbTable.getContentUri(ContentProviderAuthority.AUTHORITY), values);
+    resolver.insert(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), values);
   }
   
 }
