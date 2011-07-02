@@ -469,6 +469,7 @@ public static Date parseDateInRfc822(String pubDateStr) {
         return secondsToString((System.currentTimeMillis() - lastUpdate) / 1000);
     }
 
+    @Deprecated
     public static void setWebviewType(Context context, int webviewTypeList, int appWidgetId, String authority) {
         Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);  
       

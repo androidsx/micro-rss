@@ -35,7 +35,12 @@ public class MicroRssContentProvider extends ContentProvider {
     public static final String TABLE_ITEMS = "items";
     private static final String SINGLE_ITEM = "item";
 
-    /** Content provider for the feeds table. */
+    /**
+     * Content provider for the feeds table.
+     * <p>
+     * Use {@code ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId)} in
+     * order to access a single feed.
+     */
     public static final Uri FEEDS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
     
     /** Content provider for the items table. */
@@ -103,31 +108,31 @@ public class MicroRssContentProvider extends ContentProvider {
         Uri resultUri = null;
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
-                // FIXME: this query is sort of... well, fucked up
-                Log.w("WIMM", "Here, we used to insert the widget title into the table_appwidgets table");
+                Log.d(TAG, "Insert a new feed");
                 try {
-                    long rowId = db.insert(TABLE_FEEDS, FeedColumns.FEED_URL, values);
-                    if (rowId != -1) {
-                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, rowId);
+                    long feedId = db.insert(TABLE_FEEDS, null, values);
+                    if (feedId != -1) {
+                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
                     }
                 } catch (SQLiteConstraintException e) {
-                    Log.e("WIMM", "The widget was already created. This is expected, until we fix it in a cleaner way, since we use a constant number. This catch can NOT stay");
+                    // FIXME: Soon...
+                    Log.e("WIMM", "This feed already exists. This is expected, until we fix it in a cleaner way, since we use a constant number. This catch can NOT stay");
                 }
                 break;
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
-                // Insert a feed item into a specific widget
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
-                
+                Log.d(TAG, "Insert a new item for the feed " + feedId + " with the values " + values);
                 values.put(ItemColumns.FEED_ID, feedId);
-                long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
+                long rowId = db.insert(TABLE_ITEMS, null, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, rowId);
+                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.ITEMS_CONTENT_URI, rowId);
                 }
                 break;
             }
             case ALL_ITEMS: {
-                long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
+                Log.d(TAG, "Insert items, just like that. Not attached to a feed? Values are " + values);
+                long rowId = db.insert(TABLE_ITEMS, null, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(ITEMS_CONTENT_URI, rowId);
                 }
@@ -212,7 +217,7 @@ public class MicroRssContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException();
         }
-        Log.v(TAG, "update() is done. " + count + " elements were update");
+        Log.v(TAG, "update() is done. " + count + " elements were updated");
         return count;
     }
     

@@ -8,11 +8,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.IBinder;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -20,7 +17,6 @@ import android.util.Log;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
 import com.flurry.android.FlurryAgent;
@@ -44,7 +40,7 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
      * <p>
      * FIXME (WIMM): See {@link DefaultMaxNumItemsSaved}, where a constant and 2 strings also define the maximum...
      */
-    public static final int MAX_ITEMS_PER_FEED = 3;
+    public static final int MAX_ITEMS_PER_FEED = 5;
     
     /**
      * Update interval. Every {@link #UPDATE_INTERVAL} milliseconds, the
@@ -161,31 +157,13 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
             areThereHumans = true; // This widget is not a zombie
             
             Log.i(TAG, "Let's update widget [" + appWidgetId + "]");
-
-            // Check if widget is configured, and if we need to update cache
-            Cursor cursor = null;
-            boolean hasBeenUpdatedOnce = true;
-
-            Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
-            try {
-                cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGETS, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                	hasBeenUpdatedOnce = (cursor.getLong(COL_LAST_UPDATED) < 0) ? false : true; 
-                  Log.d(TAG, "Has been updated minimum once this widget (" + appWidgetId + "): " + hasBeenUpdatedOnce);
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
           
             // Last update is outside throttle window, so update again
             try {
-              Log.i(TAG, "Request and update from WebserviceHelper");
+              Log.i(TAG, "Let's ask the WebserviceHelper");
               
               int maxItemsToStoreInDb = getMaxItemsToStoreInDb(appWidgetId);
               WebserviceHelper.updateForecastsAndFeeds(this,
-                      appWidgetUri,
                       appWidgetId,
                       Math.max(AbstractUpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
                       maxItemsToStoreInDb);

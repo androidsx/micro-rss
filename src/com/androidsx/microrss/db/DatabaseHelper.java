@@ -16,7 +16,7 @@ import com.flurry.android.FlurryAgent;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
-        Log.w(TAG, "Creating a new database " + DATABASE_NAME
+        Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY,"
@@ -68,7 +68,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int version = oldVersion;
         
         if (version != DATABASE_VERSION) {
-            Log.w(TAG, "Destroying old data during upgrade.");
+            Log.w(TAG, "The database version has changed from " + oldVersion + " to " + newVersion
+                    + ". We will now destroy all existing tables and recreate them");
             db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_FEEDS);
             db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_ITEMS);
             onCreate(db);

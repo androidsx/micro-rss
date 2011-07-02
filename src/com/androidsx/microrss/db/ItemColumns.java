@@ -3,7 +3,7 @@ package com.androidsx.microrss.db;
 import android.appwidget.AppWidgetManager;
 
 /**
- * Column names for the {@link #TABLE_FEED_ITEMS} table.
+ * Columns for the DB table that contains the items.
  */
 public class ItemColumns {
     

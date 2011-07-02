@@ -8,7 +8,7 @@ public class DefaultMaxNumItemsSaved implements MaxNumItemsSaved {
    * In the (unlikely) case that the resources for default num items saved fails, we just use
    * this value.
    */
-  private static final int NUM_ITEMS_SAVED_FALLBACK = 3;
+  private static final int NUM_ITEMS_SAVED_FALLBACK = 5;
 
   private final int confDefaultNumItemsSavedId;
   private final int maxNumItemsSavedPrefsNameId;

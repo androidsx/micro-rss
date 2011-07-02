@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidsx.microrss.FlurryConstants;
+import com.androidsx.microrss.configure.SettingsActivity;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
@@ -233,7 +234,7 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
       return true;
       
     case SETTINGS_MENU_ID:   
-      Intent settingsIntent = new Intent(this, getSettingsActivityClass());
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
       settingsIntent.putExtra("appWidgetId", appWidgetId);
       startActivity(settingsIntent); 
       
@@ -281,8 +282,6 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
   protected abstract int getMenuCopyStringId();
   
   protected abstract Class<? extends AbstractAnyRssListModeActivity> getListModeActivityClass();
-  protected abstract Class<? extends Activity> getSettingsActivityClass();
-  
   
   protected abstract AbstractListModeViewAdapter getListModeViewAdapter();
   

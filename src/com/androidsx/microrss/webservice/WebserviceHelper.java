@@ -145,13 +145,11 @@ public class WebserviceHelper {
      * TODO: Move to a non-static method
      *
      * @param context the activity context. TODO: This violates Demeter's law
-     * @param appWidgetUri URI to query the DB. TODO: should use the DAO instead
      * @param appWidgetId the widget ID
      * @param maxItemsToRetrieve number of items to retrieve from the feed
      * @param maxItemsToStore number of items to store in the DB
      */
     public static void updateForecastsAndFeeds(Context context,
-                    Uri appWidgetUri,
                     int appWidgetId,
                     int maxItemsToRetrieve,
                     int maxItemsToStore)
@@ -159,12 +157,12 @@ public class WebserviceHelper {
         Log.d(TAG, "Start to update feeds");
         prepareUserAgent(context);
         final ContentResolver resolver = context.getContentResolver();
-        final String rssUrl = extractRssUrl(appWidgetUri, resolver);
+        final String rssUrl = extractRssUrl(appWidgetId, resolver);
         Log.v(TAG, "Ask the RSS source to retrieve the items from " + rssUrl);
 
         final ContentValues values = new ContentValues();
             
-        insertNewItemsIntoDb(resolver, appWidgetUri, appWidgetId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
+        insertNewItemsIntoDb(resolver, appWidgetId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
         
         final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, appWidgetId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
@@ -222,7 +220,7 @@ public class WebserviceHelper {
         return itemList;
     }
     
-    private static void insertNewItemsIntoDb(ContentResolver resolver, Uri appWidgetUri, int appWidgetId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
+    private static void insertNewItemsIntoDb(ContentResolver resolver, int appWidgetId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
         final List<Item> newRssItems = new DefaultRssSource().getRssItems(rssUrl, maxNumberOfItems);
         final ItemList oldRssItemsList = dao.getItemList(resolver, appWidgetId);
         
@@ -241,11 +239,13 @@ public class WebserviceHelper {
         Log.i(TAG, "Just inserted " + itemsToInsert.getNumberOfItems() + " new items into the DB");
     }
     
-    private static String extractRssUrl(Uri appWidgetUri,
+    private static String extractRssUrl(int feedId,
             ContentResolver resolver) throws FeedProcessingException {
         Cursor cursor = null;
         try {
-            cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGET, null,
+            Uri uri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId); 
+            
+            cursor = resolver.query(uri, PROJECTION_APPWIDGET, null,
                     null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return cursor.getString(COL_RSS_URL);

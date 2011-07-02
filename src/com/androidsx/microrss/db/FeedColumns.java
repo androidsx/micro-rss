@@ -1,7 +1,7 @@
 package com.androidsx.microrss.db;
 
 /**
- * Columns for the DB table that contains 
+ * Columns for the DB table that contains the feeds.
  */
 public class FeedColumns {
     /**
@@ -14,7 +14,7 @@ public class FeedColumns {
      * defaults to {@link #WEBVIEW_TYPE_DEFAULT}.
      */
     @Deprecated
-    public static final String WEBVIEW_TYPE = "webviewType";
+    public static final String WEBVIEW_TYPE = "webviewTypeDeprecated";
     public static final int WEBVIEW_TYPE_SINGLE = 1;
     public static final int WEBVIEW_TYPE_LIST = 2;
     public static final int WEBVIEW_TYPE_EXPANDABLE = 3;

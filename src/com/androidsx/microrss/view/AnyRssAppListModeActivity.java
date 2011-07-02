@@ -187,10 +187,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
     return R.string.menu_share;
   }
 
-  @Override
-  protected Class<? extends Activity> getSettingsActivityClass() {
-    return SettingsActivity.class;
-  }
 
   @Override
   protected int getMenuCopyStringId() {

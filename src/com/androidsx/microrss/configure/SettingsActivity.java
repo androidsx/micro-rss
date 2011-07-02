@@ -94,7 +94,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
       }
   };
 
-  private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+  private int feedId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
   private static final String[] PROJECTION_APPWIDGETS = new String[] { FeedColumns.UPDATE_INTERVAL };
 
@@ -121,8 +121,8 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     mSave.setOnClickListener(this);
 
     // Read the appWidgetId to configure from the incoming intent
-    mAppWidgetId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-    if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+    feedId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, feedId);
+    if (feedId == AppWidgetManager.INVALID_APPWIDGET_ID) {
       finish();
       return;
     }
@@ -136,7 +136,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     mSeekUpdateInterval.setSecondaryProgress(updateInterval - 1);
     mUpdateInterval.setText("" + updateInterval);
     
-    int currentMaxNumItemsSaved = maxNumItemsSaved.getMaxNumItemsSaved(this, mAppWidgetId);
+    int currentMaxNumItemsSaved = maxNumItemsSaved.getMaxNumItemsSaved(this, feedId);
     mSeekNumItemsSaved.setProgress(currentMaxNumItemsSaved - 1);
     mSeekNumItemsSaved.setSecondaryProgress(currentMaxNumItemsSaved - 1);
     mNumItemsSaved.setText("" + currentMaxNumItemsSaved);
@@ -167,7 +167,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         numItemsSaved = maxNumItemsSaved.getDefaultMaxNumItemsSaved(this);
       }
 
-      maxNumItemsSaved.setMaxNumItemsSaved(this, mAppWidgetId, numItemsSaved);
+      maxNumItemsSaved.setMaxNumItemsSaved(this, feedId, numItemsSaved);
       
       finish();
       break;
@@ -180,9 +180,9 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     ContentValues values = new ContentValues();
 
     // This Uri has the WIDGET_ID, so we only update ONE widget
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, mAppWidgetId);
+    Uri singleFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
     values.put(FeedColumns.UPDATE_INTERVAL, updateInterval * 60);
-    int updateRows = resolver.update(appWidgetUriWithId, values, null, null);
+    int updateRows = resolver.update(singleFeedUri, values, null, null);
     Log.d(TAG, "Updated " + updateRows + " rows for UPDATE_INTERVAL with value " 
         + updateInterval + " (should be one and only one)");
   }
@@ -195,11 +195,11 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
    * @return
    */
   private int getCurrentUpdateInterval() {
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, mAppWidgetId);
+    Uri singleFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
     Cursor cursor = null;
     int updateIntervalHours = UPDATE_INTERVAL_FALLBACK_HOURS;
     try {
-      cursor = getContentResolver().query(appWidgetUriWithId, PROJECTION_APPWIDGETS, null, null, null);
+      cursor = getContentResolver().query(singleFeedUri, PROJECTION_APPWIDGETS, null, null, null);
       if (cursor != null && cursor.moveToFirst()) {
         final int dBUpdateIntervalMinutes = cursor.getInt(COL_UPDATE_INTERVAL);
         final int updateIntervalMinutes = dBUpdateIntervalMinutes < 60

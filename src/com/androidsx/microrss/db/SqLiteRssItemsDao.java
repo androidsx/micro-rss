@@ -68,14 +68,15 @@ public class SqLiteRssItemsDao implements RssItemsDao {
      * index</i> is bigger than the largest index that we currently have in the
      * DB. This way, we can safely sort the items in ascending date order by
      * sorting them by descending index order. All clear, right?
+     * <p>
+     * FIXME: we are inserting one by one, wtf?
      */
     @Override
     public void insertItems(ContentResolver resolver, int appWidgetId,
             ItemList itemsToInsert) {
         Log.d(TAG, "Insert " + itemsToInsert.getNumberOfItems() + " elements into the DB");
-        Uri appWidgetUri = ContentUris.withAppendedId(
+        final Uri appWidgetUri = ContentUris.withAppendedId(
                 MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
-        
         final Uri appWidgetForecasts = Uri.withAppendedPath(appWidgetUri,
                 MicroRssContentProvider.TABLE_ITEMS);
         
@@ -202,7 +203,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         int maxId;
         try {
             Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
-                    MicroRssContentProvider.TABLE_ITEMS); // content://com.androidsx.dailystuff/appwidgets/7/forecasts
+                    MicroRssContentProvider.TABLE_ITEMS);
             cursor = resolver.query(allForecastsUri, PROJECTION_FEEDS, null,
                     null, null);
             maxId = 0;
