@@ -35,14 +35,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
         Log.w(TAG, "Creating a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
-        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_APPWIDGETS + " ("
+        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                 + FeedColumns.FEED_URL + " TEXT,"
                 + FeedColumns.WEBVIEW_TYPE + " INTEGER,"
                 + FeedColumns.LAST_UPDATED + " BIGINT,"
                 + FeedColumns.UPDATE_INTERVAL + " INTEGER);");
 
-        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEED_ITEMS + " ("
+        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_ITEMS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ItemColumns.FEED_ID + " INTEGER,"
                 + ItemColumns.ITEM_INDEX + " INTEGER,"
@@ -71,8 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         
         if (version != DATABASE_VERSION) {
             Log.w(TAG, "Destroying old data during upgrade.");
-            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_APPWIDGETS);
-            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_FEED_ITEMS);
+            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_FEEDS);
+            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_ITEMS);
             onCreate(db);
         }
     }

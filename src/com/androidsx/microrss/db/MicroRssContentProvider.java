@@ -19,15 +19,16 @@ import com.androidsx.anyrss.db.ItemTableHelper;
 
 /**
  * Content provider for information about feeds and their items.
+ * TODO: consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
  */
 public class MicroRssContentProvider extends ContentProvider {
     public static final String TAG = MicroRssContentProvider.class.getSimpleName();
 
-    /** Name of the appwidgets table, whose columns are {@link FeedColumns}. */
-    public static final String TABLE_APPWIDGETS = "appwidgets";
+    /** Name of the feed table, whose columns are {@link FeedColumns}. */
+    public static final String TABLE_FEEDS = "feeds";
     
-    /** Name of the items table, whose columns are {@link ItemColumns}. */
-    public static final String TABLE_FEED_ITEMS = "items";
+    /** Name of the item table, whose columns are {@link ItemColumns}. */
+    public static final String TABLE_ITEMS = "items";
 
     private static final int APPWIDGETS = 101;
     private static final int APPWIDGETS_ID = 102;
@@ -53,14 +54,14 @@ public class MicroRssContentProvider extends ContentProvider {
 
         switch (getUriMatcher().match(uri)) {
             case APPWIDGETS: {
-                count = db.delete(TABLE_APPWIDGETS, selection, selectionArgs);
+                count = db.delete(TABLE_FEEDS, selection, selectionArgs);
                 break;
             }
             case APPWIDGETS_ID: {
                 // Delete a specific widget and all its forecasts
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                count = db.delete(TABLE_APPWIDGETS, BaseColumns._ID + "=" + appWidgetId, null);
-                count += db.delete(TABLE_FEED_ITEMS, ItemColumns.FEED_ID + "="
+                count = db.delete(TABLE_FEEDS, BaseColumns._ID + "=" + appWidgetId, null);
+                count += db.delete(TABLE_ITEMS, ItemColumns.FEED_ID + "="
                         + appWidgetId, null);
                 break;
             }
@@ -73,11 +74,11 @@ public class MicroRssContentProvider extends ContentProvider {
                     selection = "(" + selection + ") AND ";
                 }
                 selection += ItemColumns.FEED_ID + "=" + appWidgetId;
-                count = db.delete(TABLE_FEED_ITEMS, selection, selectionArgs);
+                count = db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
             case FORECASTS: {
-                count = db.delete(TABLE_FEED_ITEMS, selection, selectionArgs);
+                count = db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
             default:
@@ -114,7 +115,7 @@ public class MicroRssContentProvider extends ContentProvider {
             case APPWIDGETS: {
                 Log.w("WIMM", "Here, we used to insert the widget title into the table_appwidgets table");
                 try {
-                    long rowId = db.insert(TABLE_APPWIDGETS, FeedColumns.FEED_URL, values);
+                    long rowId = db.insert(TABLE_FEEDS, FeedColumns.FEED_URL, values);
                     if (rowId != -1) {
                         resultUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), rowId);
                     }
@@ -127,14 +128,14 @@ public class MicroRssContentProvider extends ContentProvider {
                 // Insert a feed item into a specific widget
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
                 values.put(ItemColumns.FEED_ID, appWidgetId);
-                long rowId = db.insert(TABLE_FEED_ITEMS, ItemColumns.FEED_URL, values);
+                long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), rowId);
                 }
                 break;
             }
             case FORECASTS: {
-                long rowId = db.insert(TABLE_FEED_ITEMS, ItemColumns.FEED_URL, values);
+                long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(constructForecastsContentUri(), rowId);
                 }
@@ -164,30 +165,30 @@ public class MicroRssContentProvider extends ContentProvider {
 
         switch (getUriMatcher().match(uri)) {
             case APPWIDGETS: {
-                qb.setTables(TABLE_APPWIDGETS);
+                qb.setTables(TABLE_FEEDS);
                 break;
             }
             case APPWIDGETS_ID: {
                 String appWidgetId = uri.getPathSegments().get(1);
-                qb.setTables(TABLE_APPWIDGETS);
+                qb.setTables(TABLE_FEEDS);
                 qb.appendWhere(BaseColumns._ID + "=" + appWidgetId);
                 break;
             }
             case APPWIDGETS_FORECASTS: {
                 // Pick all the forecasts for given widget, sorted by insertion time
                 String appWidgetId = uri.getPathSegments().get(1);
-                qb.setTables(TABLE_FEED_ITEMS);
+                qb.setTables(TABLE_ITEMS);
                 qb.appendWhere(ItemColumns.FEED_ID + "=" + appWidgetId);
                 sortOrder = (sortOrder == null) ? BaseColumns._ID + " ASC" : sortOrder;
                 break;
             }
             case FORECASTS: {
-                qb.setTables(TABLE_FEED_ITEMS);
+                qb.setTables(TABLE_ITEMS);
                 break;
             }
             case FORECASTS_ID: {
                 String forecastId = uri.getPathSegments().get(1);
-                qb.setTables(TABLE_FEED_ITEMS);
+                qb.setTables(TABLE_ITEMS);
                 qb.appendWhere(BaseColumns._ID + "=" + forecastId);
                 break;
             }
@@ -203,15 +204,15 @@ public class MicroRssContentProvider extends ContentProvider {
 
         switch (getUriMatcher().match(uri)) {
             case APPWIDGETS: {
-                return db.update(TABLE_APPWIDGETS, values, selection, selectionArgs);
+                return db.update(TABLE_FEEDS, values, selection, selectionArgs);
             }
             case APPWIDGETS_ID: {
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                return db.update(TABLE_APPWIDGETS, values, BaseColumns._ID + "=" + appWidgetId,
+                return db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + appWidgetId,
                         null);
             }
             case FORECASTS: {
-                return db.update(TABLE_FEED_ITEMS, values, selection, selectionArgs);
+                return db.update(TABLE_ITEMS, values, selection, selectionArgs);
             }
         }
 
