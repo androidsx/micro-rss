@@ -12,11 +12,11 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.androidsx.anyrss.ItemList;
 import com.androidsx.anyrss.WimmTemporaryConstants;
 import com.androidsx.anyrss.db.AppWidgets;
 import com.androidsx.anyrss.db.AppWidgetsColumns;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
+import com.androidsx.anyrss.domain.ItemList;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
 

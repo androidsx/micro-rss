@@ -13,12 +13,12 @@ import android.provider.BaseColumns;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.androidsx.anyrss.DefaultItem;
-import com.androidsx.anyrss.DefaultItemList;
-import com.androidsx.anyrss.ItemList;
 import com.androidsx.anyrss.db.AppWidgets;
 import com.androidsx.anyrss.db.AppWidgetsColumns;
 import com.androidsx.anyrss.db.FeedItemColumns;
+import com.androidsx.anyrss.domain.DefaultItem;
+import com.androidsx.anyrss.domain.DefaultItemList;
+import com.androidsx.anyrss.domain.ItemList;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 
 public class ExtrasEmulator {
