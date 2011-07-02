@@ -10,13 +10,13 @@ import com.androidsx.microrss.FlurryConstants;
 import com.flurry.android.FlurryAgent;
 
 /**
- * Helper to manage upgrading between versions of the forecast database.
+ * Helper to manage the database version upgrades. Works closely with the content provider,
+ * {@link MicroRssContentProvider}.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
-    private static final String DATABASE_NAME = "anyrss.db";
-
-    private static final int DATABASE_VERSION = 3;
+    private static final String DATABASE_NAME = "microrss.db";
+    private static final int DATABASE_VERSION = 1;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

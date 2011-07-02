@@ -155,7 +155,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
                 DefaultItem item = new DefaultItem(title, content, url,
                         new Date(date));
                 itemList.addItem(item);
-                Log.v(TAG, "Retrieve item #" + index + ": " + item);
+                Log.v(TAG, "Read from cursor item #" + index + ": " + item);
             }
         } finally {
             if (cursor != null) {

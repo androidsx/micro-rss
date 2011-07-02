@@ -1,5 +1,7 @@
 package com.androidsx.microrss.db;
 
+import java.util.Arrays;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,9 +14,10 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-
 /**
- * Content provider for information about feeds and their items.
+ * Content provider for information about feeds and their items. It is strongly recommended to
+ * perform the DB access operations in a separate thread.
+ * <p>
  * TODO (WIMM): consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
  * TODO (WIMM): use Activity.managedQuery instead of ContentResolver.query
  */
@@ -39,95 +42,68 @@ public class MicroRssContentProvider extends ContentProvider {
     // TODO: how come this is not used outside? hmm i think they are doing the parse themselves, jodeeeeeeer
     private static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
     
-    private static final int FEEDS = 101;
-    private static final int FEEDS_ID = 102;
-    private static final int FEEDS_ITEMS = 103;
+    private static final int ALL_FEEDS = 101;
+    private static final int A_FEED_BY_ID = 102;
+    private static final int ALL_ITEMS_FOR_A_FEED_BY_ID = 103;
+    private static final int ALL_ITEMS = 201;
+    private static final int A_ITEMS_BY_ID = 202;
 
-    private static final int ITEMS = 201;
-    private static final int ITEMS_ID = 202;
+    private DatabaseHelper databaseHelper;
+    private UriMatcher uriMatcher;
 
-    private DatabaseHelper mOpenHelper;
-    
-    /**
-     * Matcher used to filter an incoming {@link Uri}. Use
-     * {@link #getUriMatcher} to access it.
-     */
-    private UriMatcher sUriMatcher;
+    @Override
+    public boolean onCreate() {
+        databaseHelper = new DatabaseHelper(getContext());
+        return true;
+    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.v(TAG, "delete() with uri=" + uri);
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Log.v(TAG, "delete() with uri=" + uri + ", selection=" + selection + ", args=" + arrayToString(selectionArgs));
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         int count = 0;
-
         switch (getUriMatcher().match(uri)) {
-            case FEEDS: {
-                count = db.delete(TABLE_FEEDS, selection, selectionArgs);
+            case ALL_FEEDS: {
+                Log.d(TAG, "Delete all the feeds that match " + selection + " with " +  arrayToString(selectionArgs));
+                count += db.delete(TABLE_FEEDS, selection, selectionArgs);
                 break;
             }
-            case FEEDS_ID: {
-                // Delete a specific widget and all its forecasts
-                long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                count = db.delete(TABLE_FEEDS, BaseColumns._ID + "=" + appWidgetId, null);
-                count += db.delete(TABLE_ITEMS, ItemColumns.FEED_ID + "="
-                        + appWidgetId, null);
+            case A_FEED_BY_ID: {
+                long feedId = Long.parseLong(uri.getPathSegments().get(1));
+                Log.d(TAG, "Delete the feed " + feedId + " and all its items");
+                count += db.delete(TABLE_FEEDS, BaseColumns._ID + "=" + feedId, null);
+                count += db.delete(TABLE_ITEMS, ItemColumns.FEED_ID + "=" + feedId, null);
                 break;
             }
-            case FEEDS_ITEMS: {
-                // Delete all the forecasts for a specific widget
-                long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                if (selection == null) {
-                    selection = "";
-                } else {
-                    selection = "(" + selection + ") AND ";
-                }
-                selection += ItemColumns.FEED_ID + "=" + appWidgetId;
-                count = db.delete(TABLE_ITEMS, selection, selectionArgs);
+            case ALL_ITEMS_FOR_A_FEED_BY_ID: {
+                long feedId = Long.parseLong(uri.getPathSegments().get(1));
+                selection = (selection == null ? "" : "(" + selection + ") AND ") + ItemColumns.FEED_ID + "=" + feedId;
+                Log.d(TAG, "Delete the items " + arrayToString(selectionArgs) + " for the feed " + feedId);
+                count += db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
-            case ITEMS: {
-                count = db.delete(TABLE_ITEMS, selection, selectionArgs);
+            case ALL_ITEMS: {
+                Log.d(TAG, "Delete all items for all feeds that match " + selection + " with " +  arrayToString(selectionArgs));
+                count += db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
             default:
                 throw new UnsupportedOperationException();
         }
-
+        Log.v(TAG, "delete() is done. " + count + " elements were deleted");
         return count;
     }
 
     @Override
-    public String getType(Uri uri) {
-        final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_FEED;
-        final String FEED_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_FEED;
-        
-        final String ITEM_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_ITEM;
-        final String ITEM_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_ITEM;
-        
-        switch (getUriMatcher().match(uri)) {
-            case FEEDS:
-                return FEED_CONTENT_TYPE;
-            case FEEDS_ID:
-                return FEED_CONTENT_ITEM_TYPE;
-            case FEEDS_ITEMS:
-                return ITEM_CONTENT_TYPE;
-            case ITEMS:
-                return ITEM_CONTENT_TYPE;
-            case ITEMS_ID:
-                return ITEM_CONTENT_ITEM_TYPE;
-        }
-        throw new IllegalStateException();
-    }
-
-    @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Log.v(TAG, "insert() with uri=" + uri + ", values=" + values);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         Uri resultUri = null;
-
         switch (getUriMatcher().match(uri)) {
-            case FEEDS: {
+            case ALL_FEEDS: {
+                // FIXME: this query is sort of... well, fucked up
                 Log.w("WIMM", "Here, we used to insert the widget title into the table_appwidgets table");
                 try {
                     long rowId = db.insert(TABLE_FEEDS, FeedColumns.FEED_URL, values);
@@ -139,17 +115,18 @@ public class MicroRssContentProvider extends ContentProvider {
                 }
                 break;
             }
-            case FEEDS_ITEMS: {
+            case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 // Insert a feed item into a specific widget
-                long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                values.put(ItemColumns.FEED_ID, appWidgetId);
+                long feedId = Long.parseLong(uri.getPathSegments().get(1));
+                
+                values.put(ItemColumns.FEED_ID, feedId);
                 long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, rowId);
                 }
                 break;
             }
-            case ITEMS: {
+            case ALL_ITEMS: {
                 long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(ITEMS_CONTENT_URI, rowId);
@@ -160,89 +137,123 @@ public class MicroRssContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException();
         }
 
+        Log.v(TAG, "insert() is done. Results are in uri " + resultUri);
         return resultUri;
-    }
-
-    @Override
-    public boolean onCreate() {
-        mOpenHelper = new DatabaseHelper(getContext());
-        return true;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
-        Log.v(TAG, "query() with uri=" + uri);
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Log.v(TAG, "query() with uri=" + uri + ", projection=" + arrayToString(projection)
+                + ", selection=" + selection + ", selectionArgs=" + arrayToString(selectionArgs));
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        String limit = null;
-
         switch (getUriMatcher().match(uri)) {
-            case FEEDS: {
+            case ALL_FEEDS: {
+                Log.d(TAG, "Fetch all feeds");
                 qb.setTables(TABLE_FEEDS);
                 break;
             }
-            case FEEDS_ID: {
-                String appWidgetId = uri.getPathSegments().get(1);
+            case A_FEED_BY_ID: {
+                String feedId = uri.getPathSegments().get(1);
+                Log.d(TAG, "Fetch the feed with id " + feedId);
                 qb.setTables(TABLE_FEEDS);
-                qb.appendWhere(BaseColumns._ID + "=" + appWidgetId);
+                qb.appendWhere(BaseColumns._ID + "=" + feedId);
                 break;
             }
-            case FEEDS_ITEMS: {
-                // Pick all the forecasts for given widget, sorted by insertion time
-                String appWidgetId = uri.getPathSegments().get(1);
+            case ALL_ITEMS_FOR_A_FEED_BY_ID: {
+                String feedId = uri.getPathSegments().get(1);
+                Log.d(TAG, "Fetch all items for the feed " + feedId);
                 qb.setTables(TABLE_ITEMS);
-                qb.appendWhere(ItemColumns.FEED_ID + "=" + appWidgetId);
+                qb.appendWhere(ItemColumns.FEED_ID + "=" + feedId);
                 sortOrder = (sortOrder == null) ? BaseColumns._ID + " ASC" : sortOrder;
                 break;
             }
-            case ITEMS: {
+            case ALL_ITEMS: {
+                Log.d(TAG, "Fetch all items for all feeds");
                 qb.setTables(TABLE_ITEMS);
                 break;
             }
-            case ITEMS_ID: {
-                String forecastId = uri.getPathSegments().get(1);
+            case A_ITEMS_BY_ID: {
+                String itemId = uri.getPathSegments().get(1);
+                Log.d(TAG, "Fetch the item with id " + itemId);
                 qb.setTables(TABLE_ITEMS);
-                qb.appendWhere(BaseColumns._ID + "=" + forecastId);
+                qb.appendWhere(BaseColumns._ID + "=" + itemId);
                 break;
             }
         }
 
-        return qb.query(db, projection, selection, selectionArgs, null, null, sortOrder, limit);
+        return qb.query(databaseHelper.getReadableDatabase(), projection, selection, selectionArgs,
+                null, null, sortOrder, null);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.v(TAG, "update() with uri=" + uri);
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Log.v(TAG, "update() with uri=" + uri + ", values=" + values
+                + ", selection=" + selection + ", selectionArgs=" + arrayToString(selectionArgs));
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+        int count = 0;
         switch (getUriMatcher().match(uri)) {
-            case FEEDS: {
-                return db.update(TABLE_FEEDS, values, selection, selectionArgs);
+            case ALL_FEEDS: {
+                count = db.update(TABLE_FEEDS, values, selection, selectionArgs);
+                break;
             }
-            case FEEDS_ID: {
+            case A_FEED_BY_ID: {
                 long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                return db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + appWidgetId,
+                count = db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + appWidgetId,
                         null);
+                break;
             }
-            case ITEMS: {
-                return db.update(TABLE_ITEMS, values, selection, selectionArgs);
+            case ALL_ITEMS: {
+                count = db.update(TABLE_ITEMS, values, selection, selectionArgs);
+                break;
             }
+            default:
+                throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
+        Log.v(TAG, "update() is done. " + count + " elements were update");
+        return count;
+    }
+    
+    @Override
+    public String getType(Uri uri) {
+        final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_FEED;
+        final String FEED_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_FEED;
+        
+        final String ITEM_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_ITEM;
+        final String ITEM_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_ITEM;
+        
+        switch (getUriMatcher().match(uri)) {
+            case ALL_FEEDS:
+                return FEED_CONTENT_TYPE;
+            case A_FEED_BY_ID:
+                return FEED_CONTENT_ITEM_TYPE;
+            case ALL_ITEMS_FOR_A_FEED_BY_ID:
+                return ITEM_CONTENT_TYPE;
+            case ALL_ITEMS:
+                return ITEM_CONTENT_TYPE;
+            case A_ITEMS_BY_ID:
+                return ITEM_CONTENT_ITEM_TYPE;
+        }
+        throw new IllegalStateException();
     }
 
     private UriMatcher getUriMatcher() {
-        if (sUriMatcher == null) {
-            sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS, FEEDS);
-            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#", FEEDS_ID);
-            sUriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#/" + TABLE_ITEMS, FEEDS_ITEMS); // 
-            sUriMatcher.addURI(AUTHORITY, TABLE_ITEMS, ITEMS);
-            sUriMatcher.addURI(AUTHORITY, TABLE_ITEMS + "/#", ITEMS_ID);
+        if (uriMatcher == null) {
+            uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+            
+            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS,                       ALL_FEEDS);
+            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#",                A_FEED_BY_ID);
+            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#/" + TABLE_ITEMS, ALL_ITEMS_FOR_A_FEED_BY_ID);
+            
+            uriMatcher.addURI(AUTHORITY, TABLE_ITEMS,                       ALL_ITEMS);
+            uriMatcher.addURI(AUTHORITY, TABLE_ITEMS + "/#",                A_ITEMS_BY_ID);
         }
-        return sUriMatcher;
+        return uriMatcher;
+    }
+    
+    private static String arrayToString(Object[] array) {
+        return array == null ? "[]" : Arrays.asList(array).toString(); 
     }
 }
