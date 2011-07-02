@@ -17,15 +17,11 @@ import com.androidsx.commons.androidutil.ApplicationVersionHelper;
 import com.androidsx.commons.appinfo.AboutUsActivity;
 import com.androidsx.commons.appinfo.ChangelogActivity;
 import com.androidsx.microrss.ClientSpecificConstants;
-import com.androidsx.microrss.InfoActivity;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.SettingsActivity;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 
 public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
-
-  private static final String TAG = "AnyRssAppListModeActivity";
-  
   private static final int SUBMIT_MENU_ID = Menu.FIRST + 1;
   private static final int CHANGELOG_MENU_ID = Menu.FIRST + 2;
   private static final int ABOUT_MENU_ID = Menu.FIRST + 3;
@@ -51,7 +47,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
       if (ApplicationVersionHelper.isUserOpeningAppForFirstTime(this) || 
               ApplicationVersionHelper.isUserOpeningAppAfterUpdate(this)) {
           ApplicationVersionHelper.savesCurrentVersionCode(this);
-          startActivity(new Intent(this, InfoActivity.class)); 
       } 
   }
 

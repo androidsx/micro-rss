@@ -25,15 +25,14 @@ public class ExtrasEmulator {
 
   private static final String TAG = "ExtrasEmulator";
 
-  private static final String[] PROJECTION_APPWIDGETS = new String[] { AppWidgetsColumns.TITLE,
-      AppWidgetsColumns.RSS_URL, AppWidgetsColumns.LAST_UPDATED, AppWidgetsColumns.WEBVIEW_TYPE,
+  private static final String[] PROJECTION_APPWIDGETS = new String[] {
+      AppWidgetsColumns.TITLE,
+      AppWidgetsColumns.LAST_UPDATED,
       AppWidgetsColumns.CURRENT_ITEM_POSITION };
 
   private static final int COL_TITLE = 0;
-  private static final int COL_RSS_URL = 1;
-  private static final int COL_LAST_UPDATED = 2;
-  private static final int COL_WEBVIEW_TYPE = 3;
-  private static final int COL_CURRENT_ITEM_POSITION = 4;
+  private static final int COL_LAST_UPDATED = 1;
+  private static final int COL_CURRENT_ITEM_POSITION = 2;
 
   private static final String[] PROJECTION_FEEDS = new String[] { FeedItemColumns.FEED_TITLE,
       FeedItemColumns.FEED_CONTENT, FeedItemColumns.FEED_URL, FeedItemColumns.FEED_DATE, };
@@ -60,19 +59,15 @@ public class ExtrasEmulator {
     Log.d(TAG, "resources: " + res);
 
     Cursor cursor = null;
-    String rssUrl = "NOT_LOADED_WTF";
     String feedTitle = "";
     long lastUpdate = 0;
-    int webviewType = AppWidgetsColumns.WEBVIEW_TYPE_DEFAULT;
 
     // Pull out widget title and desired temperature units
     try {
       cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGETS, null, null, null);
       if (cursor != null && cursor.moveToFirst()) {
         feedTitle = cursor.getString(COL_TITLE);
-        rssUrl = cursor.getString(COL_RSS_URL);
         lastUpdate = cursor.getInt(COL_LAST_UPDATED);
-        webviewType = cursor.getInt(COL_WEBVIEW_TYPE);
         Log.d(TAG, "Reading widget title from cursor: " + feedTitle);
 
         long deltaMinutes = (System.currentTimeMillis() - lastUpdate) / DateUtils.MINUTE_IN_MILLIS;

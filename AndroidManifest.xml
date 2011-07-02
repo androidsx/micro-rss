@@ -10,46 +10,18 @@
         <provider android:name="com.androidsx.microrss.db.AnyRssContentProvider" android:authorities="com.androidsx.microrss" />
         <service android:name="com.androidsx.microrss.UpdateService" />
 
-        <receiver android:name="com.androidsx.microrss.MedAppWidget" android:label="@string/label_med">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.androidsx.microrss.UPDATE_FEED"/>
-                <action android:name="com.androidsx.microrss.SHOW_NEXT_ITEM"/>
-                <action android:name="com.androidsx.microrss.SHOW_PREV_ITEM"/>
-                <action android:name="com.androidsx.microrss.SHOW_PREV_ITEM_ALARM"/>
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_med" />
-        </receiver>
-        
-        <receiver android:name="com.androidsx.microrss.TinyAppWidget" android:label="@string/label_tiny">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.androidsx.microrss.tiny.UPDATE_FEED"/>
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_tiny" />
-        </receiver>
-        
-
-        <activity
-            android:name="com.androidsx.microrss.InfoActivity"
-            android:label="@string/title_info"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
-       
         <activity
             android:name="com.androidsx.microrss.configure.SettingsActivity"
             android:label="@string/settings_title">
         </activity>
         
-        <!-- new activities since huge refactoring -->
         <activity android:name="com.androidsx.microrss.RetrieveRssItemsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"> 
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        
         </activity>
+        
 		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppListModeActivity"/>
 		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppItemModeActivity"/>
         
