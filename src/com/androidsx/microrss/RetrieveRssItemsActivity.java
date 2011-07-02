@@ -13,8 +13,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.androidsx.anyrss.WimmTemporaryConstants;
-import com.androidsx.anyrss.db.AppWidgets;
-import com.androidsx.anyrss.db.AppWidgetsColumns;
+import com.androidsx.anyrss.db.FeedDbTable;
+import com.androidsx.anyrss.db.FeedColumns;
 import com.androidsx.anyrss.db.SqLiteRssItemsDao;
 import com.androidsx.anyrss.domain.ItemList;
 import com.androidsx.microrss.db.ContentProviderAuthority;
@@ -139,17 +139,16 @@ public class RetrieveRssItemsActivity extends Activity {
     
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
-    values.put(AppWidgetsColumns.TITLE, title);
-    values.put(AppWidgetsColumns.WEBVIEW_TYPE,
-            AppWidgetsColumns.WEBVIEW_TYPE_DEFAULT);
-    values.put(AppWidgetsColumns.LAST_UPDATED, -1);
-    values.put(AppWidgetsColumns.CURRENT_ITEM_POSITION, 0);
-    values.put(AppWidgetsColumns.UPDATE_INTERVAL, updateIntervalHours * 60);
-    values.put(AppWidgetsColumns.RSS_URL, rssUrl);
+    values.put(FeedColumns.WIDGET_TITLE, title);
+    values.put(FeedColumns.WEBVIEW_TYPE,
+            FeedColumns.WEBVIEW_TYPE_DEFAULT);
+    values.put(FeedColumns.LAST_UPDATED, -1);
+    values.put(FeedColumns.UPDATE_INTERVAL, updateIntervalHours * 60);
+    values.put(FeedColumns.FEED_URL, rssUrl);
 
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();
-    resolver.insert(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY), values);
+    resolver.insert(FeedDbTable.getContentUri(ContentProviderAuthority.AUTHORITY), values);
   }
   
 }

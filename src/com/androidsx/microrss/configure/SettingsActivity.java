@@ -33,8 +33,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.anyrss.configure.MaxNumItemsSaved;
-import com.androidsx.anyrss.db.AppWidgets;
-import com.androidsx.anyrss.db.AppWidgetsColumns;
+import com.androidsx.anyrss.db.FeedDbTable;
+import com.androidsx.anyrss.db.FeedColumns;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 
@@ -99,7 +99,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 
   private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-  private static final String[] PROJECTION_APPWIDGETS = new String[] { AppWidgetsColumns.UPDATE_INTERVAL };
+  private static final String[] PROJECTION_APPWIDGETS = new String[] { FeedColumns.UPDATE_INTERVAL };
 
   private static final int COL_UPDATE_INTERVAL = 0;
 
@@ -183,8 +183,8 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     ContentValues values = new ContentValues();
 
     // This Uri has the WIDGET_ID, so we only update ONE widget
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
-    values.put(AppWidgetsColumns.UPDATE_INTERVAL, updateInterval * 60);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(FeedDbTable.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
+    values.put(FeedColumns.UPDATE_INTERVAL, updateInterval * 60);
     int updateRows = resolver.update(appWidgetUriWithId, values, null, null);
     Log.d(TAG, "Updated " + updateRows + " rows for UPDATE_INTERVAL with value " 
         + updateInterval + " (should be one and only one)");
@@ -198,7 +198,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
    * @return
    */
   private int getCurrentUpdateInterval() {
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(AppWidgets.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(FeedDbTable.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
     Cursor cursor = null;
     int updateIntervalHours = UPDATE_INTERVAL_FALLBACK_HOURS;
     try {
