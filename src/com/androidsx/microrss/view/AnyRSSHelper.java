@@ -16,7 +16,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.FeedTableHelper;
+import com.androidsx.microrss.db.MicroRssContentProvider;
 
 /**
  * Helper class for the AnyRSS widget app.
@@ -470,7 +470,7 @@ public static Date parseDateInRfc822(String pubDateStr) {
     }
 
     public static void setWebviewType(Context context, int webviewTypeList, int appWidgetId, String authority) {
-        Uri appWidgetUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(authority), appWidgetId);  
+        Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), appWidgetId);  
       
         ContentResolver resolver = context.getContentResolver();
         ContentValues values = new ContentValues();

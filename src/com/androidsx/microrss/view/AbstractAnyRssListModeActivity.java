@@ -69,7 +69,7 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
       }
 
       appWidgetId = extras.getInt("appWidgetId");
-      itemList = retrieveItemList(extras, new SqLiteRssItemsDao(getAuthority()), appWidgetId);
+      itemList = retrieveItemList(extras, new SqLiteRssItemsDao(), appWidgetId);
       if (itemList == null) {
         throw new DataFormatException();
       }
@@ -264,8 +264,6 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
 
   protected abstract String getAnalyticsAppKey();
   
-  protected abstract String getAuthority();
-
   protected abstract int getListModeLayoutId();
   protected abstract int getItemListPositionStringId();
   protected abstract int getTitleListModeId();

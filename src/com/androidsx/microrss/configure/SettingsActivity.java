@@ -32,9 +32,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.FeedTableHelper;
+import com.androidsx.microrss.db.MicroRssContentProvider;
 
 /**
  * Activity to configure a widget after being inserted (not in configure activity). Usually launched 
@@ -181,7 +180,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     ContentValues values = new ContentValues();
 
     // This Uri has the WIDGET_ID, so we only update ONE widget
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), mAppWidgetId);
     values.put(FeedColumns.UPDATE_INTERVAL, updateInterval * 60);
     int updateRows = resolver.update(appWidgetUriWithId, values, null, null);
     Log.d(TAG, "Updated " + updateRows + " rows for UPDATE_INTERVAL with value " 
@@ -196,7 +195,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
    * @return
    */
   private int getCurrentUpdateInterval() {
-    Uri appWidgetUriWithId = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), mAppWidgetId);
+    Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), mAppWidgetId);
     Cursor cursor = null;
     int updateIntervalHours = UPDATE_INTERVAL_FALLBACK_HOURS;
     try {

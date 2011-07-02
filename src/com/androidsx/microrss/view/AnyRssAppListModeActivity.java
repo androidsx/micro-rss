@@ -17,7 +17,6 @@ import com.androidsx.commons.appinfo.ChangelogActivity;
 import com.androidsx.microrss.ClientSpecificConstants;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.SettingsActivity;
-import com.androidsx.microrss.db.ContentProviderAuthority;
 
 public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
   private static final int SUBMIT_MENU_ID = Menu.FIRST + 1;
@@ -89,11 +88,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
   @Override
   protected String getAnalyticsAppKey() {
     return ClientSpecificConstants.FLURRY_APP_KEY;
-  }
-
-  @Override
-  protected String getAuthority() {
-    return ContentProviderAuthority.AUTHORITY;
   }
 
   @Override

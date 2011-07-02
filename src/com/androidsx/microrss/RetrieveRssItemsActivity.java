@@ -12,9 +12,8 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.androidsx.microrss.db.ContentProviderAuthority;
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.FeedTableHelper;
+import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.ItemList;
 import com.androidsx.microrss.view.AnyRssAppListModeActivity;
@@ -55,7 +54,7 @@ public class RetrieveRssItemsActivity extends Activity {
     Log.i("WIMM", "Continue with the normal execution of the activity");
     
     Log.w("WIMM", "Main activity: grab the items from the database (instead of the internet)");
-    ItemList itemList = new SqLiteRssItemsDao(ContentProviderAuthority.AUTHORITY).getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
+    ItemList itemList = new SqLiteRssItemsDao().getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
     
     Log.w("WIMM", "Start the item to display the " + itemList.getNumberOfItems() + " that were just fetched from the DB");
     startIntentToDisplayItems(itemList);
@@ -146,7 +145,7 @@ public class RetrieveRssItemsActivity extends Activity {
 
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();
-    resolver.insert(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), values);
+    resolver.insert(MicroRssContentProvider.getFeedContentUri(), values);
   }
   
 }

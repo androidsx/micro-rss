@@ -49,23 +49,10 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     private static final int COL_ITEM_INDEX = 4;
     private static final int COL_ID = 5;
 
-    private final String contentProviderAuthority;
-
-    /**
-     * Constructs an SQLite-based DAO object.
-     * 
-     * @param contentProviderAuthority
-     *            typically {@code ContentProviderAuthority.AUTHORITY}.
-     */
-    public SqLiteRssItemsDao(String contentProviderAuthority) {
-        this.contentProviderAuthority = contentProviderAuthority;
-
-    }
-
     @Override
     public ItemList getItemList(ContentResolver resolver, int appWidgetId) {
-        Uri appWidgetUri = ContentUris.withAppendedId(FeedTableHelper
-                .getContentUri(contentProviderAuthority), appWidgetId);
+        Uri appWidgetUri = ContentUris.withAppendedId(
+                MicroRssContentProvider.getFeedContentUri(), appWidgetId);
         final String feedTitle = extractFeedTitle(resolver, appWidgetUri);
         final ItemList itemList = readSortedItemsFromDb(appWidgetUri, resolver, feedTitle);
         Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the widget " + appWidgetId);
@@ -86,8 +73,8 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     public void insertItems(ContentResolver resolver, int appWidgetId,
             ItemList itemsToInsert) {
         Log.d(TAG, "Insert " + itemsToInsert.getNumberOfItems() + " elements into the DB");
-        Uri appWidgetUri = ContentUris.withAppendedId(FeedTableHelper
-                .getContentUri(contentProviderAuthority), appWidgetId);
+        Uri appWidgetUri = ContentUris.withAppendedId(
+                MicroRssContentProvider.getFeedContentUri(), appWidgetId);
         final Uri appWidgetForecasts = Uri.withAppendedPath(appWidgetUri,
                 FeedTableHelper.TWIG_FEED_ITEMS);
         
@@ -116,8 +103,8 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             return 0;
         } else {
             Log.d(TAG, "Attempting to delete the " + numItemsToDelete + " oldest items from the DB");
-            final Uri appWidgetUri = ContentUris.withAppendedId(FeedTableHelper
-                    .getContentUri(contentProviderAuthority), appWidgetId);
+            final Uri appWidgetUri = ContentUris.withAppendedId(
+                    MicroRssContentProvider.getFeedContentUri(), appWidgetId);
             final List<Integer> sortedListOfIds = readSortedItemIdsFromDb(appWidgetUri, resolver);
             final List<Integer> idsToDelete = sortedListOfIds.subList(
                     sortedListOfIds.size() - numItemsToDelete,

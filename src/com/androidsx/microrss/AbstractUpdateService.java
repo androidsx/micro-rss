@@ -9,12 +9,10 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -22,7 +20,7 @@ import android.util.Log;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.FeedTableHelper;
+import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
 import com.flurry.android.FlurryAgent;
@@ -168,7 +166,7 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
             Cursor cursor = null;
             boolean hasBeenUpdatedOnce = true;
 
-            Uri appWidgetUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(getAuthority()), appWidgetId);
+            Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), appWidgetId);
             try {
                 cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGETS, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
@@ -190,7 +188,6 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
                       appWidgetUri,
                       appWidgetId,
                       Math.max(AbstractUpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
-                      getAuthority(),
                       maxItemsToStoreInDb);
             } catch (FeedProcessingException e) {
               Log.e(TAG, "Exception while processing content for the widget "
@@ -266,9 +263,6 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
       }
       return builder.toString();
     }
-
-    /** Provides the content authority identifier for this widget. */
-    protected abstract String getAuthority();
 
     /** Gets the number of items that should be stored in the phone memory. */
     protected abstract int getMaxItemsToStoreInDb(int appWidgetId);

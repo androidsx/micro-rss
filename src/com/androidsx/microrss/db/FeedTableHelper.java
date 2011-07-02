@@ -1,6 +1,5 @@
 package com.androidsx.microrss.db;
 
-import android.net.Uri;
 
 public class FeedTableHelper {
 
@@ -18,10 +17,4 @@ public class FeedTableHelper {
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/appwidget";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/appwidget";
-
-    // FIXME (WIMM): move this to the my content provider, where it fucking belongs. impossible with the core
-    public static final Uri getContentUri(String authority) {
-        return Uri.parse("content://" + authority + "/appwidgets");
-    }
-    
 }

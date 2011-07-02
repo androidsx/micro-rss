@@ -29,7 +29,7 @@ import android.util.Log;
 import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.FeedTableHelper;
+import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.DefaultItemList;
@@ -148,14 +148,12 @@ public class WebserviceHelper {
      * @param appWidgetUri URI to query the DB. TODO: should use the DAO instead
      * @param appWidgetId the widget ID
      * @param maxItemsToRetrieve number of items to retrieve from the feed
-     * @param authority authority for this widget. TODO: should use the DAO instead
      * @param maxItemsToStore number of items to store in the DB
      */
     public static void updateForecastsAndFeeds(Context context,
                     Uri appWidgetUri,
                     int appWidgetId,
                     int maxItemsToRetrieve,
-                    String authority,
                     int maxItemsToStore)
             throws FeedProcessingException {
         Log.d(TAG, "Start to update feeds");
@@ -166,13 +164,11 @@ public class WebserviceHelper {
 
         final ContentValues values = new ContentValues();
             
-        RssItemsDao dao = new SqLiteRssItemsDao(authority);
+        insertNewItemsIntoDb(resolver, appWidgetUri, appWidgetId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
         
-        insertNewItemsIntoDb(resolver, authority, appWidgetUri, appWidgetId, rssUrl, maxItemsToStore, dao);
-        
-        final int numberOfItemsInTheDB = dao.getItemList(resolver, appWidgetId).getNumberOfItems();
+        final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, appWidgetId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
-        int deletedItems = dao.deleteOldestItems(resolver, appWidgetId, itemsToDelete);
+        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, appWidgetId, itemsToDelete);
         if (itemsToDelete == deletedItems) {
             // OK
         } else {
@@ -186,7 +182,7 @@ public class WebserviceHelper {
         ContentValues values2 = new ContentValues();
         long lastUpdate = System.currentTimeMillis();
         // This Uri has the WIDGET_ID, so we only update ONE widget
-        Uri appWidgetUriWithId = ContentUris.withAppendedId(FeedTableHelper.getContentUri(authority),
+        Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(),
                         appWidgetId);
         values2.put(FeedColumns.LAST_UPDATED, lastUpdate);
         int updateRows = context.getContentResolver().update(appWidgetUriWithId, values2, null, null);
@@ -226,7 +222,7 @@ public class WebserviceHelper {
         return itemList;
     }
     
-    private static void insertNewItemsIntoDb(ContentResolver resolver, String authority, Uri appWidgetUri, int appWidgetId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
+    private static void insertNewItemsIntoDb(ContentResolver resolver, Uri appWidgetUri, int appWidgetId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
         final List<Item> newRssItems = new DefaultRssSource().getRssItems(rssUrl, maxNumberOfItems);
         final ItemList oldRssItemsList = dao.getItemList(resolver, appWidgetId);
         
@@ -241,7 +237,7 @@ public class WebserviceHelper {
                 itemsToInsert.addItem(feedItem);
             }
         }
-        new SqLiteRssItemsDao(authority).insertItems(resolver, appWidgetId, itemsToInsert);
+        new SqLiteRssItemsDao().insertItems(resolver, appWidgetId, itemsToInsert);
         Log.i(TAG, "Just inserted " + itemsToInsert.getNumberOfItems() + " new items into the DB");
     }
     

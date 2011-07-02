@@ -15,11 +15,15 @@ import android.util.Log;
 
 /**
  * Content provider for information about feeds and their items.
- * TODO: consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
+ * TODO (WIMM): consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
+ * TODO (WIMM): use Activity.managedQuery instead of ContentResolver.query
  */
 public class MicroRssContentProvider extends ContentProvider {
     public static final String TAG = MicroRssContentProvider.class.getSimpleName();
 
+    /** Content provider authority for this application. Defined in the manifest file too. */
+    private static final String AUTHORITY = "com.androidsx.microrss";
+    
     /** Name of the feed table, whose columns are {@link FeedColumns}. */
     public static final String TABLE_FEEDS = "feeds";
     
@@ -41,6 +45,15 @@ public class MicroRssContentProvider extends ContentProvider {
      */
     private UriMatcher sUriMatcher;
 
+    // TODO: fuck, rename this shit. have a look at getUriMatcher
+    public static final Uri getFeedContentUri() {
+        return Uri.parse("content://" + AUTHORITY + "/" + "appwidgets");
+    }
+    
+    private Uri constructForecastsContentUri() {
+        return Uri.parse("content://" + AUTHORITY + "/" + "anyrss");
+    }
+    
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.v(TAG, "delete() with uri=" + uri);
@@ -113,7 +126,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 try {
                     long rowId = db.insert(TABLE_FEEDS, FeedColumns.FEED_URL, values);
                     if (rowId != -1) {
-                        resultUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), rowId);
+                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), rowId);
                     }
                 } catch (SQLiteConstraintException e) {
                     Log.e("WIMM", "The widget was already created. This is expected, until we fix it in a cleaner way, since we use a constant number. This catch can NOT stay");
@@ -126,7 +139,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 values.put(ItemColumns.FEED_ID, appWidgetId);
                 long rowId = db.insert(TABLE_ITEMS, ItemColumns.FEED_URL, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(FeedTableHelper.getContentUri(ContentProviderAuthority.AUTHORITY), rowId);
+                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.getFeedContentUri(), rowId);
                 }
                 break;
             }
@@ -218,16 +231,12 @@ public class MicroRssContentProvider extends ContentProvider {
     private UriMatcher getUriMatcher() {
         if (sUriMatcher == null) {
             sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-            sUriMatcher.addURI(ContentProviderAuthority.AUTHORITY, "appwidgets", APPWIDGETS);
-            sUriMatcher.addURI(ContentProviderAuthority.AUTHORITY, "appwidgets/#", APPWIDGETS_ID);
-            sUriMatcher.addURI(ContentProviderAuthority.AUTHORITY, "appwidgets/#/forecasts", APPWIDGETS_FORECASTS);
-            sUriMatcher.addURI(ContentProviderAuthority.AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS, FORECASTS);
-            sUriMatcher.addURI(ContentProviderAuthority.AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS + "/#", FORECASTS_ID);
+            sUriMatcher.addURI(AUTHORITY, "appwidgets", APPWIDGETS);
+            sUriMatcher.addURI(AUTHORITY, "appwidgets/#", APPWIDGETS_ID);
+            sUriMatcher.addURI(AUTHORITY, "appwidgets/#/forecasts", APPWIDGETS_FORECASTS);
+            sUriMatcher.addURI(AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS, FORECASTS);
+            sUriMatcher.addURI(AUTHORITY, FeedTableHelper.TWIG_FEED_ITEMS + "/#", FORECASTS_ID);
         }
         return sUriMatcher;
-    }
-    
-    private Uri constructForecastsContentUri() {
-        return Uri.parse("content://" + ContentProviderAuthority.AUTHORITY + "/anyrss");
     }
 }

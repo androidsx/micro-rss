@@ -1,15 +1,9 @@
 package com.androidsx.microrss;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
-import com.androidsx.microrss.db.ContentProviderAuthority;
 
 public class UpdateService extends AbstractUpdateService {
     
-    @Override
-    protected String getAuthority() {
-        return ContentProviderAuthority.AUTHORITY;
-    }
-
     @Override
     protected int getMaxItemsToStoreInDb(int appWidgetId) {
         return new DefaultMaxNumItemsSaved(
