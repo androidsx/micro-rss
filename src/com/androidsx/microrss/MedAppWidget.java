@@ -41,12 +41,6 @@ public class MedAppWidget extends AbstractAppWidget {
   }
 
   @Override
-  protected void askTheUpdateServiceToUpdate(int[] appWidgetIds) {
-    UpdateService.requestUpdate(appWidgetIds);
-    UpdateService.forceUpdate();
-  }
-  
-  @Override
   protected Class<? extends AbstractUpdateService> getUpdateServiceClass() {
     return UpdateService.class;
   }

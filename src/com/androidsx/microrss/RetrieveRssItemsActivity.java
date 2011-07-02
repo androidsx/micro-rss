@@ -37,8 +37,6 @@ public class RetrieveRssItemsActivity extends Activity {
     Log.d(TAG, "onCreate retrieve items activity");
 
     Log.w("WIMM", "Start the update service, and request the first update");
-    UpdateService.requestUpdate(new int[] { WimmTemporaryConstants.widgetId });
-    UpdateService.forceUpdate();
     startService(new Intent(this, UpdateService.class)); // if already started, does nothing
     
     Log.w("WIMM", "Start the doConfigure thread, we are still in the main activity");
@@ -136,6 +134,9 @@ public class RetrieveRssItemsActivity extends Activity {
           String title, String rssUrl, int updateIntervalHours, int autoScrollSeconds) {
     Log.d(TAG, "Save to backend: widgetID " + appWidgetId + ", title " + title
             + ", url " + rssUrl + " (" + updateIntervalHours + "h)");
+    
+    Log.e(TAG, "This is gonna fail unless this is the first time the app is executed for this widget ID");
+    
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
     values.put(AppWidgetsColumns.TITLE, title);
