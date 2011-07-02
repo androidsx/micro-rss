@@ -1,7 +1,6 @@
 package com.androidsx.microrss;
 
-import com.androidsx.anyrss.AbstractUpdateService;
-import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
+import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.ContentProviderAuthority;
 
 public class UpdateService extends AbstractUpdateService {

@@ -31,12 +31,10 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.androidsx.anyrss.configure.DefaultMaxNumItemsSaved;
-import com.androidsx.anyrss.configure.MaxNumItemsSaved;
-import com.androidsx.anyrss.db.FeedTableHelper;
-import com.androidsx.anyrss.db.FeedColumns;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.ContentProviderAuthority;
+import com.androidsx.microrss.db.FeedColumns;
+import com.androidsx.microrss.db.FeedTableHelper;
 
 /**
  * Activity to configure a widget after being inserted (not in configure activity). Usually launched 

@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.androidsx.anyrss.view.AbstractAnyRssListModeActivity;
-import com.androidsx.anyrss.view.AbstractListModeViewAdapter;
 import com.androidsx.commons.androidutil.ApplicationVersionHelper;
 import com.androidsx.commons.appinfo.AboutUsActivity;
 import com.androidsx.commons.appinfo.ChangelogActivity;

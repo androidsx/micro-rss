@@ -6,9 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.androidsx.anyrss.FlurryConstants;
-import com.androidsx.anyrss.db.FeedColumns;
-import com.androidsx.anyrss.db.ItemColumns;
+import com.androidsx.microrss.FlurryConstants;
 import com.flurry.android.FlurryAgent;
 
 /**
