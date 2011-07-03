@@ -5,20 +5,6 @@ public class FlurryConstants {
     
     public static final String EVENT_NEW_WIDGET = "Add new widget";
     public static final String PARAM_CONFIGURE_FEED_URL = "Feed URL";
-    public static final String PARAM_WIDGET_TYPE = "Widget type";
-    public enum WidgetType {
-        MED("Med"), TINY("Tiny"), LARGE("Large"), UNKNOWN("Unknown");
-        private final String name;
-        WidgetType(String name) {
-            this.name = name;
-        }
-        @Override
-        public String toString() {
-            return name;
-        }
-    };
-    
-    public static final String EVENT_DELETE_WIDGET = "Delete widget";
 
     /**
      * Amount of time, in miliseconds, that the application can stay inactive that will
@@ -34,4 +20,6 @@ public class FlurryConstants {
     public static final String ERROR_ID_NEXT_PREVIOUS = "next_previous_buttons";
     public static final String ERROR_ID_UPDATE_SERVICE = "update_service";
     public static final String ERROR_ID_INFO_PROVIDER = "info_provider";
+
+    public static final String FLURRY_APP_KEY = "DBNMS9H7I3Z4PBMIJ7VW";
 }

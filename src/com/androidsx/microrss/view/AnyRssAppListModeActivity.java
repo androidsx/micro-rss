@@ -6,7 +6,7 @@
  */
 package com.androidsx.microrss.view;
 
-import com.androidsx.microrss.ClientSpecificConstants;
+import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.R;
 
 public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
@@ -19,7 +19,7 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
 
   @Override
   protected String getAnalyticsAppKey() {
-    return ClientSpecificConstants.FLURRY_APP_KEY;
+    return FlurryConstants.FLURRY_APP_KEY;
   }
 
   @Override
