@@ -32,13 +32,6 @@
         
         <!-- activity that dispatches to one of the extended view activities -->
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.DetailsViewChooser"/>
-        
-        <!-- library project application info -->
-		<activity android:name="com.androidsx.commons.appinfo.HelpActivity"/>
-		<activity android:name="com.androidsx.commons.appinfo.AboutUsActivity" />
-		<activity android:name="com.androidsx.commons.appinfo.BlogActivity" />
-		<activity android:name="com.androidsx.commons.appinfo.AppInfoActivity" />
-		<activity android:name="com.androidsx.commons.appinfo.ChangelogActivity" />     
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
