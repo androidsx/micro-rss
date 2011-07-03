@@ -43,8 +43,7 @@ public class MicroRssContentProvider extends ContentProvider {
     public static final Uri FEEDS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
     
     /** Content provider for the items table. */
-    // TODO: how come this is not used outside?
-    private static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
+    public static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
     
     private static final int ALL_FEEDS = 101;
     private static final int A_FEED_BY_ID = 102;
