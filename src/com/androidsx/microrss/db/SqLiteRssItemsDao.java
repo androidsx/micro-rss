@@ -29,30 +29,31 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String[] PROJECTION_APPWIDGETS = new String[] {
         FeedColumns.FEED_URL,
+        FeedColumns.TITLE,
         FeedColumns.LAST_UPDATE };
+
     private static final int COL_RSS_URL = 0;
-    private static final int COL_LAST_UPDATED = 1;
+    private static final int COL_TITLE = 1;
+    private static final int COL_LAST_UPDATED = 2;
 
     private static final String[] PROJECTION_FEEDS = new String[] {
-            ItemColumns.FEED_TITLE,
             ItemColumns.CONTENT,
             ItemColumns.FEED_URL,
             ItemColumns.DATE,
             ItemColumns.POSITION,
             BaseColumns._ID};
-    private static final int COL_FEED_TITLE = 0;
-    private static final int COL_FEED_CONTENT = 1;
-    private static final int COL_FEED_URL = 2;
-    private static final int COL_FEED_DATE = 3;
-    private static final int COL_ITEM_INDEX = 4;
-    private static final int COL_ID = 5;
+    private static final int COL_FEED_CONTENT = 0;
+    private static final int COL_FEED_URL = 1;
+    private static final int COL_FEED_DATE = 2;
+    private static final int COL_ITEM_INDEX = 3;
+    private static final int COL_ID = 4;
 
     @Override
     public ItemList getItemList(ContentResolver resolver, int appWidgetId) {
-        Uri appWidgetUri = ContentUris.withAppendedId(
+        Uri feedWithIdUri = ContentUris.withAppendedId(
                 MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
-        final String feedTitle = extractFeedTitle(resolver, appWidgetUri);
-        final ItemList itemList = readSortedItemsFromDb(appWidgetUri, resolver, feedTitle);
+        final String feedTitle = extractFeedTitle(resolver, feedWithIdUri);
+        final ItemList itemList = readSortedItemsFromDb(feedWithIdUri, resolver, feedTitle);
         Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the widget " + appWidgetId);
         return itemList;
     }
@@ -84,7 +85,6 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         for (int i = 0; i < itemsToInsert.getNumberOfItems(); i++) {
             final int index = maxIndex + itemsToInsert.getNumberOfItems() - i;
             Item feedItem = itemsToInsert.getItemAt(i);
-            values.put(ItemColumns.FEED_TITLE, feedItem.getTitle());
             values.put(ItemColumns.CONTENT, feedItem.getContent());
             values.put(ItemColumns.FEED_URL, feedItem.getURL());
             values.put(ItemColumns.DATE, feedItem.getPubDate()
@@ -113,28 +113,21 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         }
     }
     
-    private String extractFeedTitle(ContentResolver resolver, Uri appWidgetUri) {
+    private String extractFeedTitle(ContentResolver resolver, Uri feedWithIdUri) {
         Cursor cursor = null;
-        String feedTitle = "wimm: this makes no sense now";
-        long lastUpdate = 0;
-
-        Log.d(TAG, "Read the widget title " + "(Uri: " + appWidgetUri + ")");
         try {
-            cursor = resolver.query(appWidgetUri, PROJECTION_APPWIDGETS, null,
-                    null, null);
+            cursor = resolver.query(feedWithIdUri, new String[] { FeedColumns.TITLE }, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
-                lastUpdate = cursor.getInt(COL_LAST_UPDATED);
-                long deltaMinutes = (System.currentTimeMillis() - lastUpdate)
-                        / DateUtils.MINUTE_IN_MILLIS;
-                Log.d(TAG, "Delta since last forecast update is "
-                        + deltaMinutes + " min");
+                int titleColumn = cursor.getColumnIndex(FeedColumns.TITLE);
+                return cursor.getString(titleColumn);
+            } else {
+                return "";
             }
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
-        return feedTitle;
     }
     
     private ItemList readSortedItemsFromDb(Uri appWidgetUri, ContentResolver resolver, String feedTitle) {
@@ -147,11 +140,10 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
             while (cursor != null && cursor.moveToNext()) {
                 int index = cursor.getInt(COL_ITEM_INDEX);
-                String title = cursor.getString(COL_FEED_TITLE);
                 String content = cursor.getString(COL_FEED_CONTENT);
                 String url = cursor.getString(COL_FEED_URL);
                 long date = cursor.getLong(COL_FEED_DATE);
-                DefaultItem item = new DefaultItem(title, content, url,
+                DefaultItem item = new DefaultItem("Story title", content, url,
                         new Date(date));
                 itemList.addItem(item);
                 Log.v(TAG, "Read from cursor item #" + index + ": " + item);

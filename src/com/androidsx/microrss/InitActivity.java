@@ -137,6 +137,7 @@ public class InitActivity extends Activity {
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
     values.put(FeedColumns.LAST_UPDATE, -1);
+    values.put(FeedColumns.TITLE, "TFLN (feed title)");
     values.put(FeedColumns.FEED_URL, rssUrl);
 
     // TODO: update instead of insert if editing an existing widget

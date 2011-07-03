@@ -1,6 +1,5 @@
 package com.androidsx.microrss.db;
 
-import android.appwidget.AppWidgetManager;
 
 /**
  * Columns for the DB table that contains the stories.
@@ -17,14 +16,6 @@ public class ItemColumns {
      * starting by 1.
      */
     public static final String POSITION = "position";
-
-    /**
-     * Title of this feed item.
-     * 
-     * @deprecated why the fuck is this here? move to the feeds table
-     */
-    @Deprecated
-    public static final String FEED_TITLE = "feedTitle";
 
     /**
      * Main text content of this item.

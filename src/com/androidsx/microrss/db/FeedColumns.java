@@ -15,4 +15,9 @@ public class FeedColumns {
      * milliseconds, as returned by {@link System#currentTimeMillis()}.
      */
     public static final String LAST_UPDATE = "last_update";
+
+    /**
+     * Title of the feed. Usually assigned by the user.
+     */
+    public static final String TITLE = "title";
 }
