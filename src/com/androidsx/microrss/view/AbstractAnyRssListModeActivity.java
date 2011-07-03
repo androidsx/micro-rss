@@ -97,8 +97,6 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
     if ( currentItemPos > 0) {
       setSelection(currentItemPos);
     }
-    
-    saveLastViewTypeOpened(FeedColumns.WEBVIEW_TYPE_LIST, appWidgetId);
   }
   
   /**
@@ -284,7 +282,4 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
   protected abstract Class<? extends AbstractAnyRssListModeActivity> getListModeActivityClass();
   
   protected abstract AbstractListModeViewAdapter getListModeViewAdapter();
-  
-  protected abstract void saveLastViewTypeOpened(int viewType, int appWidgetId);
-
 }

@@ -15,7 +15,7 @@
             android:label="@string/settings_title">
         </activity>
         
-        <activity android:name="com.androidsx.microrss.RetrieveRssItemsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"> 
+        <activity android:name="InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"> 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

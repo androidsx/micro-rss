@@ -22,7 +22,7 @@ import com.androidsx.microrss.view.AnyRssAppListModeActivity;
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
  * then gets the items from the DB, and passes them to the view activity.
  */
-public class RetrieveRssItemsActivity extends Activity {
+public class InitActivity extends Activity {
   public static final String TAG = "RetrieveRssItemsActivity";
 
   private static final int DIALOG_ERROR_MESSAGE_KEY = 0;
@@ -42,11 +42,10 @@ public class RetrieveRssItemsActivity extends Activity {
     String rssName = getResources().getString(R.string.feed_name);
     
     // FIXME (WIMM): do in an async task? or is this really necessary to build the first view when there are no items?
-    writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS, PREFS_AUTO_SCROLL_RATE_SECONDS);
+    writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS);
     onConfigureThreadFinishesSuccessfully();
   }
   
-  private static final int PREFS_AUTO_SCROLL_RATE_SECONDS = 0;
   private static final int UPDATE_INTERVAL_HOURS = 2;
   
   // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
@@ -78,7 +77,7 @@ public class RetrieveRssItemsActivity extends Activity {
     case DIALOG_ERROR_MESSAGE_KEY: {
       Log.d(TAG, "Show error dialog with msg " + dialogErrorMessage);
       AlertDialog alertDialog = new AlertDialog.Builder(
-          RetrieveRssItemsActivity.this)
+          InitActivity.this)
           .setTitle("Oops, error!")
           .setCancelable(false)
           .setMessage(
@@ -114,7 +113,7 @@ public class RetrieveRssItemsActivity extends Activity {
     case DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY: {
       Log.d(TAG, "Show no-email error dialog with msg " + dialogErrorMessage);
       AlertDialog alertDialog = new AlertDialog.Builder(
-          RetrieveRssItemsActivity.this).setTitle("Oops, error!").setMessage(
+          InitActivity.this).setTitle("Oops, error!").setMessage(
           dialogErrorMessage).setNegativeButton("OK",
           new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -129,7 +128,7 @@ public class RetrieveRssItemsActivity extends Activity {
   }
   
   private static void writeConfigToBackend(int appWidgetId, Context context,
-          String title, String rssUrl, int updateIntervalHours, int autoScrollSeconds) {
+          String title, String rssUrl, int updateIntervalHours) {
     Log.d(TAG, "Save to backend: widgetID " + appWidgetId
             + ", url " + rssUrl + " (" + updateIntervalHours + "h)");
     
@@ -137,8 +136,6 @@ public class RetrieveRssItemsActivity extends Activity {
     
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
-    values.put(FeedColumns.WEBVIEW_TYPE,
-            FeedColumns.WEBVIEW_TYPE_DEFAULT);
     values.put(FeedColumns.LAST_UPDATED, -1);
     values.put(FeedColumns.UPDATE_INTERVAL, updateIntervalHours * 60);
     values.put(FeedColumns.FEED_URL, rssUrl);

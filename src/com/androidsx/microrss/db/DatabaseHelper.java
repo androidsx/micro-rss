@@ -36,7 +36,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                 + FeedColumns.FEED_URL + " TEXT,"
-                + FeedColumns.WEBVIEW_TYPE + " INTEGER,"
                 + FeedColumns.LAST_UPDATED + " BIGINT,"
                 + FeedColumns.UPDATE_INTERVAL + " INTEGER);");
 

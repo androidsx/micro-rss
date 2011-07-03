@@ -29,11 +29,9 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String[] PROJECTION_APPWIDGETS = new String[] {
         FeedColumns.FEED_URL,
-        FeedColumns.LAST_UPDATED,
-        FeedColumns.WEBVIEW_TYPE };
+        FeedColumns.LAST_UPDATED };
     private static final int COL_RSS_URL = 0;
     private static final int COL_LAST_UPDATED = 1;
-    private static final int COL_WEBVIEW_TYPE = 2;
 
     private static final String[] PROJECTION_FEEDS = new String[] {
             ItemColumns.FEED_TITLE,

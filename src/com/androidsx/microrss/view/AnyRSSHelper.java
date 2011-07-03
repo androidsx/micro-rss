@@ -440,7 +440,6 @@ public class AnyRSSHelper {
     return removeExtraHtmlLines;
   }
 
-  @SuppressWarnings("deprecation")
 public static Date parseDateInRfc822(String pubDateStr) {
         if (pubDateStr == null) {
             Log.w(TAG, "This item defines a null date");
@@ -467,16 +466,5 @@ public static Date parseDateInRfc822(String pubDateStr) {
 
     public static String timeFromLastUpdate(long lastUpdate) {
         return secondsToString((System.currentTimeMillis() - lastUpdate) / 1000);
-    }
-
-    @Deprecated
-    public static void setWebviewType(Context context, int webviewTypeList, int appWidgetId, String authority) {
-        Uri appWidgetUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);  
-      
-        ContentResolver resolver = context.getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(FeedColumns.WEBVIEW_TYPE, webviewTypeList);
-        int updateRows = resolver.update(appWidgetUri, values, null, null);
-        Log.d("AnyRSSHelper", "Updated " + updateRows + " rows for the webview type");
     }
 }

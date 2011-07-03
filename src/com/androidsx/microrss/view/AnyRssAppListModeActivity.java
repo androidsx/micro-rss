@@ -197,9 +197,4 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
   protected int getMenuShareContentStringId() {
     return R.string.menu_share_content;
   }
-
-  @Override
-  protected void saveLastViewTypeOpened(int viewType, int appWidgetId) {
-    // we are not using database as backend
-  }
 }
