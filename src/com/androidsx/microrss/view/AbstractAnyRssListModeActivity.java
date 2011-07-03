@@ -102,11 +102,11 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
   * Retrieve the item list. First we look for the list on the extra data passed to the activity, if
   * so, <i>probably</i> we are in application mode. If extra data is empty we retrieve the list
   * from the dao, because probably the activity comes from widget view.
+  * <p>
+  * <strong>WIMM: assume it's in the extras.</strong>
   */
   private ItemList retrieveItemList(Bundle extras, RssItemsDao dao, int appWidgetId) {
-     ItemList itemListFromExtras = (ItemList) extras.getSerializable("itemList");
-     return itemListFromExtras == null ? dao.getItemList(getContentResolver(),
-        appWidgetId) : itemListFromExtras;
+     return (ItemList) extras.getSerializable("itemList");
   }
   
   @Override
