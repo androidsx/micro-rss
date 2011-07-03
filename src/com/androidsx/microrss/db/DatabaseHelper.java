@@ -16,7 +16,7 @@ import com.flurry.android.FlurryAgent;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,18 +36,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                 + FeedColumns.FEED_URL + " TEXT,"
-                + FeedColumns.LAST_UPDATED + " BIGINT,"
-                + FeedColumns.UPDATE_INTERVAL + " INTEGER);");
+                + FeedColumns.LAST_UPDATE + " BIGINT);");
 
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_ITEMS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ItemColumns.FEED_ID + " INTEGER,"
-                + ItemColumns.ITEM_INDEX + " INTEGER,"
+                + ItemColumns.POSITION + " INTEGER,"
                 + ItemColumns.FEED_TITLE + " TEXT,"
-                + ItemColumns.ITEM_CONTENT + " TEXT,"
+                + ItemColumns.CONTENT + " TEXT,"
                 + ItemColumns.FEED_URL + " TEXT,"
-                + ItemColumns.ITEM_DATE + " INTEGER,"
-                + ItemColumns.ITEM_URL + " TEXT);");
+                + ItemColumns.DATE + " INTEGER,"
+                + ItemColumns.URL + " TEXT);");
     }
 
     /**

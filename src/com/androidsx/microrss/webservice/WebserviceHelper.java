@@ -182,7 +182,7 @@ public class WebserviceHelper {
         // This Uri has the WIDGET_ID, so we only update ONE widget
         Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI,
                         appWidgetId);
-        values2.put(FeedColumns.LAST_UPDATED, lastUpdate);
+        values2.put(FeedColumns.LAST_UPDATE, lastUpdate);
         int updateRows = context.getContentResolver().update(appWidgetUriWithId, values2, null, null);
         if (updateRows != 1) {
             Log.w(TAG, "Updated [" + updateRows + " != " + "1] rows for LAST_UPDATED and CURRENT_ITEM_POSITION");

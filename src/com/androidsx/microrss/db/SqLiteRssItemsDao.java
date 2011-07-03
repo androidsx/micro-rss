@@ -29,16 +29,16 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String[] PROJECTION_APPWIDGETS = new String[] {
         FeedColumns.FEED_URL,
-        FeedColumns.LAST_UPDATED };
+        FeedColumns.LAST_UPDATE };
     private static final int COL_RSS_URL = 0;
     private static final int COL_LAST_UPDATED = 1;
 
     private static final String[] PROJECTION_FEEDS = new String[] {
             ItemColumns.FEED_TITLE,
-            ItemColumns.ITEM_CONTENT,
+            ItemColumns.CONTENT,
             ItemColumns.FEED_URL,
-            ItemColumns.ITEM_DATE,
-            ItemColumns.ITEM_INDEX,
+            ItemColumns.DATE,
+            ItemColumns.POSITION,
             BaseColumns._ID};
     private static final int COL_FEED_TITLE = 0;
     private static final int COL_FEED_CONTENT = 1;
@@ -85,11 +85,11 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             final int index = maxIndex + itemsToInsert.getNumberOfItems() - i;
             Item feedItem = itemsToInsert.getItemAt(i);
             values.put(ItemColumns.FEED_TITLE, feedItem.getTitle());
-            values.put(ItemColumns.ITEM_CONTENT, feedItem.getContent());
+            values.put(ItemColumns.CONTENT, feedItem.getContent());
             values.put(ItemColumns.FEED_URL, feedItem.getURL());
-            values.put(ItemColumns.ITEM_DATE, feedItem.getPubDate()
+            values.put(ItemColumns.DATE, feedItem.getPubDate()
                     .getTime());
-            values.put(ItemColumns.ITEM_INDEX, index);
+            values.put(ItemColumns.POSITION, index);
             Log.v(TAG, "Insert item #" + index + ": " + feedItem);
             resolver.insert(appWidgetForecasts, values);
         }
@@ -191,8 +191,8 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         return resolver.query(allForecastsUri, PROJECTION_FEEDS,
                 null,
                 null,
-                ItemColumns.ITEM_INDEX + " DESC,"  // See #insertItems to understand why
-                + ItemColumns.ITEM_DATE + " DESC," // Should not be needed
+                ItemColumns.POSITION + " DESC,"  // See #insertItems to understand why
+                + ItemColumns.DATE + " DESC," // Should not be needed
                 + BaseColumns._ID + " DESC");          // Should not be needed
     }
     

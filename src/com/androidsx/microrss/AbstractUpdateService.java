@@ -31,7 +31,7 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
     protected static final String TAG = "UpdateService";
 
     private static final String[] PROJECTION_APPWIDGETS = new String[] {
-        FeedColumns.LAST_UPDATED,
+        FeedColumns.LAST_UPDATE,
     };
     private static final int COL_LAST_UPDATED = 0;
 

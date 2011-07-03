@@ -96,8 +96,6 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 
   private int feedId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-  private static final String[] PROJECTION_APPWIDGETS = new String[] { FeedColumns.UPDATE_INTERVAL };
-
   private static final int COL_UPDATE_INTERVAL = 0;
 
   private MaxNumItemsSaved maxNumItemsSaved;
@@ -131,7 +129,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
             R.string.conf_default_num_items_saved,
             R.string.max_num_items_saved_prefs_name);
 
-    int updateInterval = getCurrentUpdateInterval();
+    int updateInterval = 1; // FIXME (WIMM): temporary, this should be set as an application-wide setting
     mSeekUpdateInterval.setProgress(updateInterval - 1);
     mSeekUpdateInterval.setSecondaryProgress(updateInterval - 1);
     mUpdateInterval.setText("" + updateInterval);
@@ -155,9 +153,6 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         updateInterval = UPDATE_INTERVAL_FALLBACK_HOURS;
       }
 
-      setUpdateInterval(updateInterval);
-      
-      
       int numItemsSaved;
       try {
         numItemsSaved = Integer.parseInt(mNumItemsSaved.getText().toString());
@@ -173,49 +168,5 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
       break;
     }
     }
-  }
-
-  private void setUpdateInterval(int updateInterval) {
-    ContentResolver resolver = getContentResolver();
-    ContentValues values = new ContentValues();
-
-    // This Uri has the WIDGET_ID, so we only update ONE widget
-    Uri singleFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-    values.put(FeedColumns.UPDATE_INTERVAL, updateInterval * 60);
-    int updateRows = resolver.update(singleFeedUri, values, null, null);
-    Log.d(TAG, "Updated " + updateRows + " rows for UPDATE_INTERVAL with value " 
-        + updateInterval + " (should be one and only one)");
-  }
-
-  /**
-   * Gets the actual update interval for the actual widget that is being configured.
-   * <p>
-   * The update interval format is hours
-   * 
-   * @return
-   */
-  private int getCurrentUpdateInterval() {
-    Uri singleFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-    Cursor cursor = null;
-    int updateIntervalHours = UPDATE_INTERVAL_FALLBACK_HOURS;
-    try {
-      cursor = getContentResolver().query(singleFeedUri, PROJECTION_APPWIDGETS, null, null, null);
-      if (cursor != null && cursor.moveToFirst()) {
-        final int dBUpdateIntervalMinutes = cursor.getInt(COL_UPDATE_INTERVAL);
-        final int updateIntervalMinutes = dBUpdateIntervalMinutes < 60
-              ? UPDATE_INTERVAL_FALLBACK_HOURS * 60
-              : dBUpdateIntervalMinutes;
-        updateIntervalHours = updateIntervalMinutes / 60;
-        Log.d(TAG, "Reading widget update interval from cursor: "
-            + dBUpdateIntervalMinutes + " minutes (" + updateIntervalMinutes
-            + ")");
-      }
-    } finally {
-      if (cursor != null) {
-        cursor.close();
-      }
-    }
-
-    return updateIntervalHours;
   }
 }

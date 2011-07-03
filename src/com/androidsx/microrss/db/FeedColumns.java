@@ -4,21 +4,15 @@ package com.androidsx.microrss.db;
  * Columns for the DB table that contains the feeds.
  */
 public class FeedColumns {
-    /**
-     * URL of the selected RSS.
-     */
-    public static final String FEED_URL = "feedUrl";
-    
-    /**
-     * Last system time when feed items for this widget were updated in millis,
-     * usually set by {@link System#currentTimeMillis()} when they are downloaded.
-     */
-    public static final String LAST_UPDATED = "lastUpdated";
 
-  /**
-   * Interval to wait between background widget updates. This does not
-   * exactly mean that we will download and parse new feeds every this period.
-   */
-    @Deprecated
-    public static final String UPDATE_INTERVAL = "updateInterval";
+    /**
+     * URL of the feed.
+     */
+    public static final String FEED_URL = "url";
+
+    /**
+     * Last system time when stories for this feed. It is expressend in the local system time in
+     * milliseconds, as returned by {@link System#currentTimeMillis()}.
+     */
+    public static final String LAST_UPDATE = "last_update";
 }
