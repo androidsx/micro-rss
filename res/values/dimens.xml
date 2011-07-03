@@ -16,4 +16,8 @@
 
 <resources>
     <dimen name="dialog_padding">10dip</dimen>
+    
+    <!-- WIMM layouts -->
+    <dimen name="widget_image_width">160.0dip</dimen>
+    <dimen name="widget_tile_width">160.0dip</dimen>
 </resources>

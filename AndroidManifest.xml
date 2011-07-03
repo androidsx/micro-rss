@@ -32,6 +32,12 @@
         
         <!-- activity that dispatches to one of the extended view activities -->
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.DetailsViewChooser"/>
+        
+        
+        <!-- WIMM activities -->
+       	<activity android:name="com.androidsx.microrss.view.StoryActivity" android:theme="@style/Theme.MicroRss" />
+	    <activity android:name="com.androidsx.microrss.view.ExpandedStoryActivity" android:theme="@style/Theme.MicroRss" />
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

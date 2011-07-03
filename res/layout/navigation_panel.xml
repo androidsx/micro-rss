@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:layout_gravity="center|bottom">
+	<TableLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_margin="15dip">
+
+		<TableRow>
+			<Button android:visibility="invisible"></Button>
+			<Button android:id="@+id/navigation_up" 
+				android:text="Up" 
+				android:width="80dip"
+				android:onClick="onClickNavigationUp"></Button>
+			<Button android:visibility="invisible"></Button>
+		</TableRow>
+
+		<TableRow>
+			<Button android:id="@+id/navigation_left" 
+				android:text="Left" 
+				android:width="80dip"
+				android:onClick="onClickNavigationLeft"></Button>
+			<Button android:visibility="invisible"></Button>
+			<Button android:id="@+id/navigation_right"
+				android:text="Right" 
+				android:width="80dip"
+				android:onClick="onClickNavigationRight"></Button>
+		</TableRow>
+
+		<TableRow>
+			<Button android:visibility="invisible"></Button>
+			<Button android:id="@+id/navigation_down" 
+				android:text="Down"
+				android:width="80dip"
+				android:onClick="onClickNavigationDown"></Button>
+			<Button android:visibility="invisible"></Button>
+		</TableRow>
+	</TableLayout>
+</RelativeLayout>
