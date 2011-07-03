@@ -5,18 +5,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.util.Log;
-
-import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 
 /**
  * Helper class for the AnyRSS widget app.

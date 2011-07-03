@@ -6,38 +6,13 @@
  */
 package com.androidsx.microrss.view;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.androidsx.commons.androidutil.ApplicationVersionHelper;
-import com.androidsx.commons.appinfo.AboutUsActivity;
-import com.androidsx.commons.appinfo.ChangelogActivity;
 import com.androidsx.microrss.ClientSpecificConstants;
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.configure.SettingsActivity;
 
 public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
-  private static final int SUBMIT_MENU_ID = Menu.FIRST + 1;
-  private static final int CHANGELOG_MENU_ID = Menu.FIRST + 2;
-  private static final int ABOUT_MENU_ID = Menu.FIRST + 3;
 
-  /** Creates the menu items */
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    menu.add(0, CHANGELOG_MENU_ID, CHANGELOG_MENU_ID, getResources().getString(R.string.menu_changelog))
-      .setIcon(android.R.drawable.ic_menu_help);
-    menu.add(0, SUBMIT_MENU_ID, SUBMIT_MENU_ID, getResources().getString(R.string.menu_submit))
-      .setIcon(android.R.drawable.ic_menu_send);
-    menu.add(0, ABOUT_MENU_ID, ABOUT_MENU_ID, getResources().getString(R.string.menu_about))
-    .setIcon(android.R.drawable.ic_menu_info_details);
-  
-    
-    return true;
-  }
-
-  /** Show some information for new users or after updates. */
+  /** Store the install version code in the preferences. */
   @Override
   public void onStart() {
       super.onStart();
@@ -47,44 +22,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
       } 
   }
 
-  /** Handles item selections */
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case SUBMIT_MENU_ID:
-      
-      /* Create the Intent and fill it with our mails */
-      final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-
-      emailIntent.setType("plain/text");
-      emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {
-          "text@textsfromlastnight.com" });
-
-      emailIntent.putExtra(Intent.EXTRA_SUBJECT, "TFLN text");
-      emailIntent.putExtra(Intent.EXTRA_TEXT, "(   ):\n"); 
-   
-      /* Send it off to the Activity-Chooser */
-      startActivity(Intent.createChooser(emailIntent, "Send mail"));
-      
-      return true;
-      
-    case ABOUT_MENU_ID:
-        Intent aboutIntent = new Intent(this, AboutUsActivity.class);
-        aboutIntent.putExtra("withtabs", true);
-        startActivity(aboutIntent);
-        return true;   
-      
-    case CHANGELOG_MENU_ID:   
-      Intent settingsIntent = new Intent(this, ChangelogActivity.class);
-      settingsIntent.putExtra("withtabs", true);
-      startActivity(settingsIntent); 
-      
-      return true;
-    }
-
-    return false;
-  }
-  
   @Override
   protected String getAnalyticsAppKey() {
     return ClientSpecificConstants.FLURRY_APP_KEY;

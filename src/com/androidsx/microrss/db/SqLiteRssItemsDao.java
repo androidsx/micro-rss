@@ -10,7 +10,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.androidsx.microrss.domain.DefaultItem;
@@ -26,15 +25,6 @@ import com.androidsx.microrss.domain.ItemList;
 public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String TAG = SqLiteRssItemsDao.class.getSimpleName();
-
-    private static final String[] PROJECTION_APPWIDGETS = new String[] {
-        FeedColumns.FEED_URL,
-        FeedColumns.TITLE,
-        FeedColumns.LAST_UPDATE };
-
-    private static final int COL_RSS_URL = 0;
-    private static final int COL_FEED_TITLE = 1;
-    private static final int COL_LAST_UPDATED = 2;
 
     private static final String[] PROJECTION_FEEDS = new String[] {
             ItemColumns.CONTENT,
@@ -54,6 +44,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     public ItemList getItemList(ContentResolver resolver, int appWidgetId) {
         Uri feedWithIdUri = ContentUris.withAppendedId(
                 MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
+        // FIXME: there is an extra DB call here, to the feeds table. ItemList shouldn't be aware of the feed
         final String feedTitle = extractFeedTitle(resolver, feedWithIdUri);
         final ItemList itemList = readSortedItemsFromDb(feedWithIdUri, resolver, feedTitle);
         Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the widget " + appWidgetId);
@@ -187,9 +178,9 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         return resolver.query(allForecastsUri, PROJECTION_FEEDS,
                 null,
                 null,
-                ItemColumns.POSITION + " DESC,"  // See #insertItems to understand why
-                + ItemColumns.DATE + " DESC," // Should not be needed
-                + BaseColumns._ID + " DESC");          // Should not be needed
+                ItemColumns.POSITION + " DESC," // See #insertItems to understand why
+                + ItemColumns.DATE + " DESC,"
+                + BaseColumns._ID + " DESC");
     }
     
     private int getMaxIndex(Uri appWidgetUri, ContentResolver resolver) {

@@ -19,7 +19,6 @@ import android.util.Log;
  * perform the DB access operations in a separate thread.
  * <p>
  * TODO (WIMM): consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
- * TODO (WIMM): use Activity.managedQuery instead of ContentResolver.query
  */
 public class MicroRssContentProvider extends ContentProvider {
     public static final String TAG = MicroRssContentProvider.class.getSimpleName();
@@ -44,7 +43,7 @@ public class MicroRssContentProvider extends ContentProvider {
     public static final Uri FEEDS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
     
     /** Content provider for the items table. */
-    // TODO: how come this is not used outside? hmm i think they are doing the parse themselves, jodeeeeeeer
+    // TODO: how come this is not used outside?
     private static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
     
     private static final int ALL_FEEDS = 101;
@@ -259,6 +258,6 @@ public class MicroRssContentProvider extends ContentProvider {
     }
     
     private static String arrayToString(Object[] array) {
-        return array == null ? "[]" : Arrays.asList(array).toString(); 
+        return array == null ? "[]" : Arrays.asList(array).toString();
     }
 }

@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.configure.SettingsActivity;
-import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.Item;

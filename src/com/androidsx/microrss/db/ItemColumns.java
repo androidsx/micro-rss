@@ -1,6 +1,5 @@
 package com.androidsx.microrss.db;
 
-
 /**
  * Columns for the DB table that contains the stories.
  */
@@ -16,12 +15,12 @@ public class ItemColumns {
      * allows to insert a web link to it in the detailed view.
      */
     public static final String ITEM_URL = "url";
-    
+
     /**
      * Title of this story.
      */
     public static final String TITLE = "title";
-    
+
     /**
      * Main text content of this item.
      */
@@ -32,7 +31,7 @@ public class ItemColumns {
      * starting by 1.
      */
     public static final String POSITION = "position";
-    
+
     /**
      * Date and time at which this item was generated. It is only available for some feeds, and
      * allows to write something like "3 hours ago" in the header.

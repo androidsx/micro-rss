@@ -18,11 +18,6 @@ package com.androidsx.microrss.configure;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +27,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 
 /**
  * Activity to configure a widget after being inserted (not in configure activity). Usually launched 
