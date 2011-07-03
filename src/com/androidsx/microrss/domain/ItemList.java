@@ -15,6 +15,7 @@ import java.io.Serializable;
  * workaround to the limitation that we can't pass a list of items (a {@code List<Item>), which is
  * not serializable.
  */
+@Deprecated
 public interface ItemList extends Serializable {
 
   /**

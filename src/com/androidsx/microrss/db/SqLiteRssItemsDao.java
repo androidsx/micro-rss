@@ -22,6 +22,7 @@ import com.androidsx.microrss.domain.ItemList;
  * <p>
  * See {@link #insertItems} to learn how the items are sorted.
  */
+@Deprecated
 public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String TAG = SqLiteRssItemsDao.class.getSimpleName();
