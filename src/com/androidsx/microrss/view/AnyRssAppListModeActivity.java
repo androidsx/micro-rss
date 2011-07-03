@@ -6,7 +6,6 @@
  */
 package com.androidsx.microrss.view;
 
-import com.androidsx.commons.androidutil.ApplicationVersionHelper;
 import com.androidsx.microrss.ClientSpecificConstants;
 import com.androidsx.microrss.R;
 
@@ -16,10 +15,6 @@ public class AnyRssAppListModeActivity extends AbstractAnyRssListModeActivity {
   @Override
   public void onStart() {
       super.onStart();
-      if (ApplicationVersionHelper.isUserOpeningAppForFirstTime(this) || 
-              ApplicationVersionHelper.isUserOpeningAppAfterUpdate(this)) {
-          ApplicationVersionHelper.savesCurrentVersionCode(this);
-      } 
   }
 
   @Override
