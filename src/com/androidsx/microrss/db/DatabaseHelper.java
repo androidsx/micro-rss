@@ -16,7 +16,7 @@ import com.flurry.android.FlurryAgent;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ItemColumns.FEED_ID + " INTEGER,"
                 + ItemColumns.POSITION + " INTEGER,"
+                + ItemColumns.TITLE + " TEXT, "
                 + ItemColumns.CONTENT + " TEXT,"
                 + ItemColumns.ITEM_URL + " TEXT,"
                 + ItemColumns.DATE + " INTEGER);");

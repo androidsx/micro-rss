@@ -40,7 +40,7 @@ public abstract class AbstractUpdateService extends Service implements Runnable 
      * <p>
      * FIXME (WIMM): See {@link DefaultMaxNumItemsSaved}, where a constant and 2 strings also define the maximum...
      */
-    public static final int MAX_ITEMS_PER_FEED = 5;
+    public static final int MAX_ITEMS_PER_FEED = 7;
     
     /**
      * Update interval. Every {@link #UPDATE_INTERVAL} milliseconds, the

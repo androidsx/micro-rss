@@ -11,8 +11,8 @@ public class FeedColumns {
     public static final String FEED_URL = "url";
 
     /**
-     * Last system time when stories for this feed. It is expressend in the local system time in
-     * milliseconds, as returned by {@link System#currentTimeMillis()}.
+     * Time of the latest update for the stories in this feed. It is expressed in the local system
+     * time in milliseconds, as returned by {@link System#currentTimeMillis()}.
      */
     public static final String LAST_UPDATE = "last_update";
 

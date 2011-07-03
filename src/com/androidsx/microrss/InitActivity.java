@@ -128,17 +128,17 @@ public class InitActivity extends Activity {
   }
   
   private static void writeConfigToBackend(int appWidgetId, Context context,
-          String title, String rssUrl, int updateIntervalHours) {
+          String title, String feedUrl, int updateIntervalHours) {
     Log.d(TAG, "Save to backend: widgetID " + appWidgetId
-            + ", url " + rssUrl + " (" + updateIntervalHours + "h)");
+            + ", url " + feedUrl + " (" + updateIntervalHours + "h)");
     
     Log.e(TAG, "This is gonna fail unless this is the first time the app is executed for this widget ID");
     
     ContentValues values = new ContentValues();
     values.put(BaseColumns._ID, appWidgetId);
     values.put(FeedColumns.LAST_UPDATE, -1);
-    values.put(FeedColumns.TITLE, "TFLN (feed title)");
-    values.put(FeedColumns.FEED_URL, rssUrl);
+    values.put(FeedColumns.TITLE, title);
+    values.put(FeedColumns.FEED_URL, feedUrl);
 
     // TODO: update instead of insert if editing an existing widget
     ContentResolver resolver = context.getContentResolver();

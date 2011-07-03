@@ -28,7 +28,7 @@
     <string name="conf_default_update_time">2</string>
     
     <string name="conf_num_items_saved">Number of items to store in the memory:</string>
-    <string name="conf_default_num_items_saved">5</string>
+    <string name="conf_default_num_items_saved">7</string>
     <string name="max_num_items_saved_prefs_name">MaxNumItemsSaved-%d</string>
     
         <string name="list_mode_options_title">Options</string>
