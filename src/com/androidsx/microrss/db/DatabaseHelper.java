@@ -44,9 +44,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ItemColumns.FEED_ID + " INTEGER,"
                 + ItemColumns.POSITION + " INTEGER,"
                 + ItemColumns.CONTENT + " TEXT,"
-                + ItemColumns.FEED_URL + " TEXT,"
-                + ItemColumns.DATE + " INTEGER,"
-                + ItemColumns.URL + " TEXT);");
+                + ItemColumns.ITEM_URL + " TEXT,"
+                + ItemColumns.DATE + " INTEGER);");
     }
 
     /**

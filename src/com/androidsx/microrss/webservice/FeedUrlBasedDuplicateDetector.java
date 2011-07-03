@@ -56,7 +56,7 @@ public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
         Cursor cursor = null;
         try {
             cursor = resolver.query(appWidgetForecasts, null, 
-                    ItemColumns.FEED_URL + " = \"" + url + "\"", null, null);
+                    ItemColumns.ITEM_URL + " = \"" + url + "\"", null, null);
             if (cursor == null || cursor.moveToFirst() == false) {
                 thereAreItemsWithThisUrl = Duplicated.FALSE;
             } else {

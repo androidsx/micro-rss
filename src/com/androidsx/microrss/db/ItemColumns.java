@@ -24,21 +24,13 @@ public class ItemColumns {
 
     /**
      * URL where this item's extended info can be found. It is only available for some feeds, and
-     * allows to insrt a web link to it in the detailed view.
-     * 
-     * @deprecated why the fuck is this here?
+     * allows to insert a web link to it in the detailed view.
      */
-    @Deprecated
-    public static final String FEED_URL = "feedUrl";
+    public static final String ITEM_URL = "url";
 
     /**
      * Date and time at which this item was generated. It is only available for some feeds, and
      * allows to write something like "3 hours ago" in the header.
      */
     public static final String DATE = "date";
-
-    /**
-     * Web link where more details can be found about this feed item.
-     */
-    public static final String URL = "url";
 }

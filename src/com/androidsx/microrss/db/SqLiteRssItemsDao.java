@@ -38,7 +38,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
     private static final String[] PROJECTION_FEEDS = new String[] {
             ItemColumns.CONTENT,
-            ItemColumns.FEED_URL,
+            ItemColumns.ITEM_URL,
             ItemColumns.DATE,
             ItemColumns.POSITION,
             BaseColumns._ID};
@@ -86,7 +86,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             final int index = maxIndex + itemsToInsert.getNumberOfItems() - i;
             Item feedItem = itemsToInsert.getItemAt(i);
             values.put(ItemColumns.CONTENT, feedItem.getContent());
-            values.put(ItemColumns.FEED_URL, feedItem.getURL());
+            values.put(ItemColumns.ITEM_URL, feedItem.getURL());
             values.put(ItemColumns.DATE, feedItem.getPubDate()
                     .getTime());
             values.put(ItemColumns.POSITION, index);
