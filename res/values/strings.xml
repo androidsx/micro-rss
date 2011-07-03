@@ -184,10 +184,6 @@ v1.4 (19.01.2010)\n
 - Open URL button is easier to find\n
     </string>
     
-    <!-- The text to filter email: e.g. android.sx  ->  +spellchecker2.3   <- @gmail.com -->
-    <string name="lp_aboutus_button_feedback_email_id">+tfln</string>
-    
-    <string name="lp_package_application">com.androidsx.tfln</string>
     
     <!-- \Resource to override on the application -->
     <string name="info_limitation_10_items">Important</string>
