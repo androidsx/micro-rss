@@ -18,7 +18,6 @@ import android.util.Log;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
-import com.androidsx.microrss.view.AnyRSSHelper;
 
 class DefaultRssSource implements RssSource {
 
@@ -137,7 +136,7 @@ class DefaultRssSource implements RssSource {
                 .getText());
           } else if (insideItem && RSS_TAG_PUB_DATE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
-            ((MutableItem) items.get(items.size() - 1)).setPubDate(AnyRSSHelper
+            ((MutableItem) items.get(items.size() - 1)).setPubDate(DateParser
                 .parseDateInRfc822(xpp.getText()));
           } else if (insideItem && RSS_TAG_LINK.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
@@ -205,7 +204,7 @@ class DefaultRssSource implements RssSource {
                 .getText());
           } else if (insideItem && ATOM_TAG_PUB_DATE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
-            ((MutableItem) items.get(items.size() - 1)).setPubDate(AnyRSSHelper
+            ((MutableItem) items.get(items.size() - 1)).setPubDate(DateParser
                 .parseDateInRfc822(xpp.getText()));
           } else if (insideItem && ATOM_TAG_LINK.equals(thisTag)
               && xpp.getText().trim().length() > 0) {

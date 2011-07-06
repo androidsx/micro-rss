@@ -1,6 +1,5 @@
 package com.androidsx.microrss.view;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,26 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.util.Log;
 
 /**
  * Helper class for the AnyRSS widget app.
  */
-public class AnyRSSHelper {
-
-    private static final String TAG = "AnyRSSHelper";
-    
-    private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {
-        new SimpleDateFormat("EEE, d MMM yy HH:mm:ss z"),
-        new SimpleDateFormat("EEE, d MMM yy HH:mm z"),
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z"),
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss"),
-        new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"), 
-        new SimpleDateFormat("d MMM yy HH:mm z"),
-        new SimpleDateFormat("d MMM yy HH:mm:ss z"), 
-        new SimpleDateFormat("d MMM yyyy HH:mm z"),
-        new SimpleDateFormat("d MMM yyyy HH:mm:ss z"),
-        new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")}; 
+class AnyRSSHelper {
 
     private static final long SECOND = 1000;
     private static final long MINUTE = 60 * SECOND;
@@ -432,30 +416,6 @@ public class AnyRSSHelper {
     
     return removeExtraHtmlLines;
   }
-
-public static Date parseDateInRfc822(String pubDateStr) {
-        if (pubDateStr == null) {
-            Log.w(TAG, "This item defines a null date");
-            return new Date();
-        } else {
-            Date pubDate = null;
-            // Try all different date formats, return whenever any of them matches
-            for (int i = 0; i < rfc822DateFormats.length; i++) {
-                try {
-                    pubDate = rfc822DateFormats[i].parse(pubDateStr);
-                } catch (java.text.ParseException e) {
-                    // Just try another format
-                    pubDate = null;
-                }
-
-                if (pubDate != null && pubDate.getDate() != 0) {
-                    return pubDate;
-                }
-            }
-            Log.w(TAG, "This item does not define a valid date");
-            return new Date();
-        }
-    }
 
     public static String timeFromLastUpdate(long lastUpdate) {
         return secondsToString((System.currentTimeMillis() - lastUpdate) / 1000);
