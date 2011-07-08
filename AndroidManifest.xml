@@ -37,6 +37,7 @@
         <!-- WIMM activities -->
        	<activity android:name="com.androidsx.microrss.view.StoryActivity" android:theme="@style/Theme.MicroRss" />
 	    <activity android:name="com.androidsx.microrss.view.ExpandedStoryActivity" android:theme="@style/Theme.MicroRss" />
+	    <activity android:name="com.androidsx.microrss.view.FeedActivity" android:theme="@style/Theme.MicroRss" />
 
     </application>
 

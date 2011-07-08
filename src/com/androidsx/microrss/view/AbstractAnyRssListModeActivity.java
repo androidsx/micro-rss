@@ -140,7 +140,7 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             if (which == 0) {
-                createIntentAndStartActivity(StoryActivity.class, position, false);
+                createIntentAndStartActivity(FeedActivity.class, position, false);
             } else if(which == 1) {
               Item currentItem = (Item) getListAdapter().getItem(position);
               Intent sendIntent = new Intent();

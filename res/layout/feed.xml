@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	We have chosen a centered text, instead of a bottom one. Previously on the story_title it had
+	alignBottom="Image", instead we put it in the center with android:layout_centerInParent="true".
+	
+	In order to convert this layout into one with image, just do the steps with the info of each view.
+ -->
+<RelativeLayout
+	android:padding="1.0dip"
+	android:layout_width="@dimen/widget_tile_width" 
+	android:layout_height="@dimen/widget_tile_width"
+	android:layout_margin="4dip"
+	android:background="@drawable/temporal_border" 
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+	<!-- TEXT / TEXT + IMAGE -->
+	<!--
+		TEXT only: android:layout_centerInParent="true", android:maxLines="4"
+		TEXT + IMAGE: android:layout_alignBottom="@+id/story_image", android:maxLines="3", android:background="@color/header_background"
+	-->
+	<TextView android:id="@+id/story_title"
+		android:text="TechCrunch"
+		android:layout_width="@dimen/widget_image_width"
+		android:layout_height="wrap_content" 
+		android:maxLines="4"
+		android:gravity="center"
+		android:layout_centerInParent="true"
+		android:layout_centerHorizontal="true" 
+		style="@style/story_title" />
+
+	<!--TEXT + IMAGE -->
+	<!--
+		TEXT only: leave it like it is
+		TEXT + IMAGE: image1 - android:src="@drawable/icon"
+	-->
+	<ImageView android:id="@+id/story_image" 
+		android:layout_width="25dip" 
+		android:layout_height="25dip" 
+		android:scaleType="fitXY"
+		android:layout_margin="4dip"
+		android:src="@drawable/app_icon"
+		 />
+
+	<LinearLayout android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true" 
+		android:orientation="vertical">
+		<TextView android:id="@+id/feed_title" 
+			android:text="Feed 1 of 4"
+			android:padding="1.0dip" 
+			android:visibility="visible"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:background="@color/story_background_feed_title"
+			android:layout_marginTop="1dip" 
+			android:maxLines="1" 
+			style="@style/story_feed_title" />
+		
+		<!-- TEXT / TEXT + IMAGE -->
+		<!--
+			TEXT only: android:visibility="visible"
+			TEXT + IMAGE: android:visibility="gone"
+		-->
+		<View android:id="@+id/feed_title_bottom_line"
+			android:layout_width="fill_parent"
+			android:layout_height="1dip" 
+			android:visibility="visible"
+			android:background="@color/story_separator_feed_title"/>
+     </LinearLayout>
+		
+	<ImageView android:id="@+id/story_bottom_arrow"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:src="@drawable/bottom_arrow"
+		android:paddingBottom="1dip"
+		android:baselineAligned="false" 
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true" />
+		
+</RelativeLayout>
