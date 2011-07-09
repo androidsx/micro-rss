@@ -10,9 +10,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.ItemColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
+import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.DefaultItem;
+import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 
 public class MicroRssDao {
@@ -49,6 +52,29 @@ public class MicroRssDao {
                 } while (cursor.moveToNext());
             }
             return toIntArray(ids);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
+    public List<Feed> findFeeds() {
+        Cursor cursor = null;
+        try {
+            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
+            final String[] projection = new String[] { FeedColumns.TITLE, FeedColumns.FEED_URL,
+                    FeedColumns.LAST_UPDATE };
+            cursor = contentResolver.query(allFeedsUri, projection, null, null,
+                    BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
+    
+            List<Feed> feeds = new LinkedList<Feed>();
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    feeds.add(feedFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+            return feeds;
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -133,6 +159,12 @@ public class MicroRssDao {
                 cursor.getString(cursor.getColumnIndex(ItemColumns.CONTENT)),
                 cursor.getString(cursor.getColumnIndex(ItemColumns.ITEM_URL)), new Date(
                         cursor.getLong(cursor.getColumnIndex(ItemColumns.DATE))));
+    }
+    
+    private static Feed feedFromCursor(Cursor cursor) {
+        return new DefaultFeed(cursor.getString(cursor.getColumnIndex(FeedColumns.TITLE)),
+                cursor.getString(cursor.getColumnIndex(FeedColumns.FEED_URL)),
+                new Date(cursor.getLong(cursor.getColumnIndex(FeedColumns.LAST_UPDATE))));
     }
 
     private static int[] toIntArray(List<Integer> list) {

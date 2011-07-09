@@ -35,6 +35,15 @@
             android:name="com.androidsx.microrss.configure.SettingsActivity"
             android:label="@string/settings_title">
         </activity>
+        
+        <activity
+        	android:name="com.androidsx.microrss.configure.Preferences"
+        	android:label="@string/settings_title">
+		</activity>
+		<activity
+        	android:name="com.androidsx.microrss.configure.ChooseFeedsActivity"
+        	android:label="@string/settings_title">
+		</activity>
     </application>
 
 	<!-- Permissions -->

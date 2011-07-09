@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 
 public class FeedActivity extends Activity {
@@ -32,8 +33,8 @@ public class FeedActivity extends Activity {
     public void onClickNavigationLeft(View target) {
         int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
         if (feedIndex == 0) {
-            Toast.makeText(this, "Can't go left anymore. Already at index " + feedIndex, Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go left anymore. Already at index " + feedIndex);
+            startActivity(new Intent(this, Preferences.class));
+            Log.d(TAG, "Can't go left anymore. Go to Settings");
         } else {
             Intent intent = new Intent(this, FeedActivity.class);
             intent.putExtras(getIntent().getExtras());

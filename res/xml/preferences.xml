@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <PreferenceCategory
+			android:title="Feed selection">
+	        <Preference
+               	android:title="List of feeds"
+                android:summary="Choose the feeds your want to read"
+                android:key="chooseFeeds" />
+        </PreferenceCategory>
+        
+       <PreferenceCategory
+                android:title="Advanced">
+             <ListPreference
+				android:key="updateInterval"
+				android:title="Update interval"
+				android:entries="@array/update_interval"
+				android:entryValues="@array/update_interval_values"
+				android:dialogTitle="Update the stories every"
+				android:enabled="false" />
+				
+			 <PreferenceScreen
+	                android:key="SecondPrefScreen"
+	                android:title="Google Reader integration"
+	                android:summary="Configure your Google Reader account"
+	                android:enabled="false">
+	                <EditTextPreference
+	                        android:title="Username"
+	                        android:summary="Set your login name here"
+	                        android:persistent="true"
+	                        android:key="GoogleUserEditTextPref" />
+	               <EditTextPreference
+	                        android:title="Password"
+	                        android:summary=""
+	                        android:inputType="textPassword"
+	                        android:persistent="true"
+	                        android:key="GooglePasswordEditTextPref" />   
+	               <Preference
+	                	android:title="Setup Google Reader"
+	                	android:summary="Press here once you fill up your account"
+	                	android:key="checkGoogleReader" />         
+	        </PreferenceScreen>	
+        </PreferenceCategory>
+        
+        
+</PreferenceScreen>
