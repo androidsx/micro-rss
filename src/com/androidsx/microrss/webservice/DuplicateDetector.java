@@ -11,7 +11,7 @@ import com.androidsx.microrss.domain.ItemList;
 interface DuplicateDetector {
     
     /**
-     * Finds out whether this item is already loaded by the widget.
+     * Finds out whether this item is already loaded.
      * 
      * @param item the item which might be duplicated
      * @param itemList the list of items to compare with

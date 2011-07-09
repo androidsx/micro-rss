@@ -17,7 +17,6 @@
 package com.androidsx.microrss.configure;
 
 import android.app.Activity;
-import android.appwidget.AppWidgetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,9 +28,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.androidsx.microrss.R;
 
 /**
- * Activity to configure a widget after being inserted (not in configure activity). Usually launched 
+ * Activity to configure a feed after being inserted (not in configure activity). Usually launched 
  * from a menu entry
  */
+@Deprecated
 public class SettingsActivity extends Activity implements View.OnClickListener { 
   public static final String TAG = "SettingsActivity";
 
@@ -87,7 +87,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
       }
   };
 
-  private int feedId = AppWidgetManager.INVALID_APPWIDGET_ID;
+  private int feedId = -1; //AppWidgetManager.INVALID_APPFEED_ID;
 
   private static final int COL_UPDATE_INTERVAL = 0;
 
@@ -111,12 +111,12 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     mSave = (Button) findViewById(R.id.conf_save);
     mSave.setOnClickListener(this);
 
-    // Read the appWidgetId to configure from the incoming intent
-    feedId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, feedId);
-    if (feedId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-      finish();
-      return;
-    }
+    // Read the feedId to configure from the incoming intent
+    feedId = 0; //getIntent().getIntExtra(AppWidgetManager.EXTRA_APPFEED_ID, feedId);
+    //if (feedId == AppWidgetManager.INVALID_APPFEED_ID) {
+    //  finish();
+    //  return;
+    //}
     
     maxNumItemsSaved = new DefaultMaxNumItemsSaved(
             R.string.conf_default_num_items_saved,

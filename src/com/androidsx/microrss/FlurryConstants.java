@@ -3,7 +3,7 @@ package com.androidsx.microrss;
 public class FlurryConstants {
     public static final String EVENT_NEW_INSTALL = "New install";
     
-    public static final String EVENT_NEW_WIDGET = "Add new widget";
+    public static final String EVENT_NEW_FEED = "Add new feed";
     public static final String PARAM_CONFIGURE_FEED_URL = "Feed URL";
 
     /**

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
-	android:layout_width="@dimen/widget_tile_width" 
-	android:layout_height="@dimen/widget_tile_width"
+	android:layout_width="@dimen/feed_tile_width" 
+	android:layout_height="@dimen/feed_tile_width"
 	android:background="@drawable/temporal_border"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<ScrollView 
-		android:layout_width="@dimen/widget_tile_width" 
-		android:layout_height="@dimen/widget_tile_width">
+		android:layout_width="@dimen/feed_tile_width" 
+		android:layout_height="@dimen/feed_tile_width">
 		<LinearLayout android:id="@+id/linearLayout1"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"

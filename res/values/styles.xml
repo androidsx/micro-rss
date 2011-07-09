@@ -17,7 +17,7 @@
 <resources>
 
     <style name="WidgetBackground">
-        <item name="android:background">@drawable/widget_bg</item>
+        <item name="android:background">@drawable/feed_bg</item>
         <!-- 
         <item name="android:paddingLeft">6dip</item>
         <item name="android:paddingRight">10dip</item>
@@ -30,7 +30,7 @@
     </style>
 
   <style name="WidgetBackgroundTiny">
-        <item name="android:background">@drawable/widget_bg</item>
+        <item name="android:background">@drawable/feed_bg</item>
         <item name="android:paddingLeft">6dip</item>
         <item name="android:paddingRight">10dip</item>
         <item name="android:paddingTop">9dip</item>
@@ -167,7 +167,7 @@
 
 <!-- App Widget styles -->
     <style name="BackgroundWidget">
-        <item name="android:background">@drawable/widget_bg</item>
+        <item name="android:background">@drawable/feed_bg</item>
         <item name="android:focusable">true</item>
     </style>
     

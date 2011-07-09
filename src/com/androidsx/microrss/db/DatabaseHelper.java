@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Create the DB tables. This is only done when the first widget is
+     * Create the DB tables. This is only done when the first feed is
      * added, usually after installing the application.
      * 
      * @param db reference to the SQLite database
@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY,"
+                + BaseColumns._ID + " INTEGER PRIMARY KEY ," // FIXME: AUTOINCREMENT?
                 + FeedColumns.FEED_URL + " TEXT,"
                 + FeedColumns.TITLE + " TEXT,"
                 + FeedColumns.LAST_UPDATE + " BIGINT);");
@@ -56,9 +56,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * <p>
      * Since the schema has changed, and we do not know how the old DB looks
      * like, we are going to have to remove all the old data, and let the
-     * existing widgets crash miserably.
+     * existing feeds crash miserably.
      * <p>
-     * TODO(pablo): mechanism to let the update service, or the app widgets,
+     * TODO(pablo): mechanism to let the update service, or the app feeds,
      * that this has happened, so proper error messages can be shown.
      */
     @Override

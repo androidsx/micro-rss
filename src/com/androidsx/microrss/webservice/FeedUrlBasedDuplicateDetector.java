@@ -27,17 +27,17 @@ public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
         + "$";
 
     private final ContentResolver resolver;
-    private final Uri appWidgetForecasts;
+    private final Uri feedForecasts;
 
     /**
      * Constructs a new duplicate detector instance.
      * 
      * @param contentResolver to access the DB. TODO: should be removed in favor of a DAO interface
-     * @param appWidgetForecasts. TODO: should be removed in favor of a DAO interface
+     * @param feedForecasts. TODO: should be removed in favor of a DAO interface
      */
-    public FeedUrlBasedDuplicateDetector(ContentResolver resolver, Uri appWidgetForecasts) {
+    public FeedUrlBasedDuplicateDetector(ContentResolver resolver, Uri feedForecasts) {
         this.resolver = resolver;
-        this.appWidgetForecasts = appWidgetForecasts;
+        this.feedForecasts = feedForecasts;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
         Duplicated thereAreItemsWithThisUrl;
         Cursor cursor = null;
         try {
-            cursor = resolver.query(appWidgetForecasts, null, 
+            cursor = resolver.query(feedForecasts, null, 
                     ItemColumns.ITEM_URL + " = \"" + url + "\"", null, null);
             if (cursor == null || cursor.moveToFirst() == false) {
                 thereAreItemsWithThisUrl = Duplicated.FALSE;

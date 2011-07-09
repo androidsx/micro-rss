@@ -203,8 +203,8 @@ public class MicroRssContentProvider extends ContentProvider {
                 break;
             }
             case A_FEED_BY_ID: {
-                long appWidgetId = Long.parseLong(uri.getPathSegments().get(1));
-                count = db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + appWidgetId,
+                long feedId = Long.parseLong(uri.getPathSegments().get(1));
+                count = db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + feedId,
                         null);
                 break;
             }

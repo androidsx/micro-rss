@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">    
     <string name="template_user_agent">"%1$s/%2$s (Linux; Android)"</string>
 
-    <string name="widget_loading">Loading data\u2026</string>
-    <string name="widget_error">Error</string>
+    <string name="feed_loading">Loading data\u2026</string>
+    <string name="feed_error">Error</string>
 
     <string name="label_med">Micro RSS med</string>
     <string name="label_tiny">Micro RSS tiny</string>
@@ -13,7 +13,7 @@
     <string name="app_descrip">Remember that text you shouldn\'t have sent last night? We do.</string>
 
 	<!-- anyrss -->
-    <string name="conf_title">Title for this widget:</string>
+    <string name="conf_title">Title for this feed:</string>
     <string name="conf_manual_settings">Manual settings</string>
     <string name="conf_enter_rss_url">URL of the RSS you like:</string>
     <string name="conf_auto_settings">Automatic settings</string>
@@ -23,7 +23,7 @@
 
     <string name="settings_title">Configuration</string>
     <string name="conf_save">Save</string>
-    <string name="conf_update_time">Update the widget every</string>
+    <string name="conf_update_time">Update the feed every</string>
     <string name="conf_update_time_units">hours:</string>
     <string name="conf_default_update_time">2</string>
     
@@ -39,14 +39,14 @@
     </string>
     
     <string name="info_inserting_title">
-    Inserting widgets
+    Inserting feeds
     </string>
     
     <string name="info_inserting">
-    If you want to see more TFLN stories, add the widget to your homescreen. At the beginning you will have few entries, but it will update often and you will not miss any TFLN!\n\n
+    If you want to see more TFLN stories, add the feed to your homescreen. At the beginning you will have few entries, but it will update often and you will not miss any TFLN!\n\n
     
     
-    To add this widget to your home screen: long-press in an empty area, select \"Widgets\" and tap on \"Texts From Last Night\".
+    To add this feed to your home screen: long-press in an empty area, select \"Widgets\" and tap on \"Texts From Last Night\".
     </string>
     
     <string name="info_changelog_title">
@@ -64,7 +64,7 @@
     Credits and disclaimer
     </string>
     <string name="info_credits">
-    This application is licensed under the Apache 2.0 license.\n\nWe have borrowed a lot of knowledge, and also code licensed under Apache 2.0 from Jeff Sharkey great blog, http://jsharkey.org/.\n\nNone of the content that this widget fetches from RSS feeds is under our responsibility.
+    This application is licensed under the Apache 2.0 license.\n\nWe have borrowed a lot of knowledge, and also code licensed under Apache 2.0 from Jeff Sharkey great blog, http://jsharkey.org/.\n\nNone of the content that this feed fetches from RSS feeds is under our responsibility.
     </string>
     
     <string name="info_done">
@@ -90,7 +90,7 @@
     <string name="btn_go_to_url">Open URL</string>
 
     <string name="item_list_position">item_list_extra_position</string>
-    <string name="widget_manual_update">widget_manual_update</string>
+    <string name="feed_manual_update">feed_manual_update</string>
 
     <!-- Dialogs and menu options -->
     <string name="menu_share">Share link</string>
@@ -145,7 +145,7 @@ v2.1 (21.05.2010)\n
 - Full texts in list view\n
 \n       
 v2.0 (20.04.2010)\n
-- Open as an application! (but in widget more items are saved!)\n
+- Open as an application! (but in feed more items are saved!)\n
 - More robust and stable\n
 - Share text, copy\n
 \n     
@@ -170,7 +170,7 @@ v1.5 (29.01.2010)\n
 \n
 v1.4 (19.01.2010)\n
 - New size: 2x4\n
-- Autoscroll for the widget view\n
+- Autoscroll for the feed view\n
 - Open URL button is easier to find\n
     </string>
     
@@ -181,9 +181,9 @@ v1.4 (19.01.2010)\n
     <string name="info_title">Come on, read this!</string>
     <string name="info_subtitle">Or at least the stuff in <b>bold</b></string>
     <string name="info_how_to_use_title"><b>How to use this?</b></string>
-    <string name="info_how_to_use_content">This app is a <b>widget</b>, so add it to your home screen.</string>
+    <string name="info_how_to_use_content">This app is a <b>feed</b>, so add it to your home screen.</string>
     <string name="info_doesnt_refresh_title"><b>It doesn\'t refresh or what?</b></string>
-    <string name="info_doesnt_refresh_content">The widget updates <b>every two hours</b>. We don\'t want to waste battery! To refresh at any time:</string>
+    <string name="info_doesnt_refresh_content">The feed updates <b>every two hours</b>. We don\'t want to waste battery! To refresh at any time:</string>
     <string name="info_more_items_title"><b>I want more items</b></string>
     <!-- TODO(WIMM): 100: not any more -->
     <string name="info_more_items_content">We\'ll keep <b>100 items</b> in the SD card. Wait a few hours to have them all downloaded.</string>

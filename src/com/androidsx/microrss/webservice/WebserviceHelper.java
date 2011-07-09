@@ -46,7 +46,7 @@ public class WebserviceHelper {
 
     private static final String USER_AGENT_TEMPLATE = "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.1.8) Gecko/20100202 Firefox/3.5.8";
     
-    private static final String[] PROJECTION_APPWIDGET = {
+    private static final String[] PROJECTION_APPFEED = {
         FeedColumns.FEED_URL
     };
 
@@ -145,28 +145,28 @@ public class WebserviceHelper {
      * TODO: Move to a non-static method
      *
      * @param context the activity context. TODO: This violates Demeter's law
-     * @param appWidgetId the widget ID
+     * @param feedId the feed ID
      * @param maxItemsToRetrieve number of items to retrieve from the feed
      * @param maxItemsToStore number of items to store in the DB
      */
     public static void updateForecastsAndFeeds(Context context,
-                    int appWidgetId,
+                    int feedId,
                     int maxItemsToRetrieve,
                     int maxItemsToStore)
             throws FeedProcessingException {
         Log.d(TAG, "Start to update feeds");
         prepareUserAgent(context);
         final ContentResolver resolver = context.getContentResolver();
-        final String rssUrl = extractRssUrl(appWidgetId, resolver);
+        final String rssUrl = extractRssUrl(feedId, resolver);
         Log.v(TAG, "Ask the RSS source to retrieve the items from " + rssUrl);
 
         final ContentValues values = new ContentValues();
             
-        insertNewItemsIntoDb(resolver, appWidgetId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
+        insertNewItemsIntoDb(resolver, feedId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
         
-        final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, appWidgetId).getNumberOfItems();
+        final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, feedId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
-        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, appWidgetId, itemsToDelete);
+        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, feedId, itemsToDelete);
         if (itemsToDelete == deletedItems) {
             // OK
         } else {
@@ -174,16 +174,16 @@ public class WebserviceHelper {
                     + deletedItems + " were deleted instead");
         }
         
-        // Mark widget cache as being updated
+        // Mark feed cache as being updated
         values.clear();
         
         ContentValues values2 = new ContentValues();
         long lastUpdate = System.currentTimeMillis();
-        // This Uri has the WIDGET_ID, so we only update ONE widget
-        Uri appWidgetUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI,
-                        appWidgetId);
+        // This Uri has the FEED_ID, so we only update ONE feed
+        Uri feedUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI,
+                        feedId);
         values2.put(FeedColumns.LAST_UPDATE, lastUpdate);
-        int updateRows = context.getContentResolver().update(appWidgetUriWithId, values2, null, null);
+        int updateRows = resolver.update(feedUriWithId, values2, null, null);
         if (updateRows != 1) {
             Log.w(TAG, "Updated [" + updateRows + " != " + "1] rows for LAST_UPDATED and CURRENT_ITEM_POSITION");
         }
@@ -220,9 +220,9 @@ public class WebserviceHelper {
         return itemList;
     }
     
-    private static void insertNewItemsIntoDb(ContentResolver resolver, int appWidgetId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
+    private static void insertNewItemsIntoDb(ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
         final List<Item> newRssItems = new DefaultRssSource().getRssItems(rssUrl, maxNumberOfItems);
-        final ItemList oldRssItemsList = dao.getItemList(resolver, appWidgetId);
+        final ItemList oldRssItemsList = dao.getItemList(resolver, feedId);
         
         final DefaultItemList itemsToInsert = new DefaultItemList();
         final DuplicateDetector duplicateDetector = new HashItemBasedDuplicateDetector();
@@ -235,7 +235,7 @@ public class WebserviceHelper {
                 itemsToInsert.addItem(feedItem);
             }
         }
-        new SqLiteRssItemsDao().insertItems(resolver, appWidgetId, itemsToInsert);
+        new SqLiteRssItemsDao().insertItems(resolver, feedId, itemsToInsert);
         Log.i(TAG, "Just inserted " + itemsToInsert.getNumberOfItems() + " new items into the DB");
     }
     
@@ -245,14 +245,14 @@ public class WebserviceHelper {
         try {
             Uri uri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId); 
             
-            cursor = resolver.query(uri, PROJECTION_APPWIDGET, null,
+            cursor = resolver.query(uri, PROJECTION_APPFEED, null,
                     null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return cursor.getString(COL_RSS_URL);
             } else {
                 Log.e(TAG, "Fatal error: RSS URL not found");
                 throw new FeedProcessingException(
-                        "Can't find the URL for this feed. Please re-add the widget",
+                        "Can't find the URL for this feed. Please re-add the feed",
                         UpdateTaskStatus.FEED_PROCESSING_EXCEPTION);
             }
         } finally {

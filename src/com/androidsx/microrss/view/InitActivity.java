@@ -53,7 +53,7 @@ public class InitActivity extends Activity {
         values.put(FeedColumns.TITLE, title);
         values.put(FeedColumns.FEED_URL, feedUrl);
 
-        // TODO: update instead of insert if editing an existing widget
+        // TODO: update instead of insert if editing an existing feed
         ContentResolver resolver = context.getContentResolver();
         resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
     }

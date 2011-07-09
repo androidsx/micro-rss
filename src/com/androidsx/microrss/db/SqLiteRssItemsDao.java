@@ -42,13 +42,13 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     private static final int COL_ID = 5;
 
     @Override
-    public ItemList getItemList(ContentResolver resolver, int appWidgetId) {
+    public ItemList getItemList(ContentResolver resolver, int feedId) {
         Uri feedWithIdUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
+                MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
         // FIXME: there is an extra DB call here, to the feeds table. ItemList shouldn't be aware of the feed
         final String feedTitle = extractFeedTitle(resolver, feedWithIdUri);
         final ItemList itemList = readSortedItemsFromDb(feedWithIdUri, resolver, feedTitle);
-        Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the widget " + appWidgetId);
+        Log.d(TAG, itemList.getNumberOfItems() + " items were loaded from the DB for the feed " + feedId);
         return itemList;
     }
     
@@ -65,15 +65,15 @@ public class SqLiteRssItemsDao implements RssItemsDao {
      * FIXME: we are inserting one by one, wtf?
      */
     @Override
-    public void insertItems(ContentResolver resolver, int appWidgetId,
+    public void insertItems(ContentResolver resolver, int feedId,
             ItemList itemsToInsert) {
         Log.d(TAG, "Insert " + itemsToInsert.getNumberOfItems() + " elements into the DB");
-        final Uri appWidgetUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
-        final Uri appWidgetForecasts = Uri.withAppendedPath(appWidgetUri,
+        final Uri feedUri = ContentUris.withAppendedId(
+                MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+        final Uri feedForecasts = Uri.withAppendedPath(feedUri,
                 MicroRssContentProvider.TABLE_ITEMS);
         
-        final int maxIndex = getMaxIndex(appWidgetUri, resolver);
+        final int maxIndex = getMaxIndex(feedUri, resolver);
         
         final ContentValues values = new ContentValues();
         for (int i = 0; i < itemsToInsert.getNumberOfItems(); i++) {
@@ -86,25 +86,25 @@ public class SqLiteRssItemsDao implements RssItemsDao {
                     .getTime());
             values.put(ItemColumns.POSITION, index);
             Log.v(TAG, "Insert item #" + index + ": " + feedItem);
-            resolver.insert(appWidgetForecasts, values);
+            resolver.insert(feedForecasts, values);
         }
     }
     
     // TODO: this may help: there is a column in BaseColumn named _COUNT :)
     @Override
-    public int deleteOldestItems(ContentResolver resolver, int appWidgetId, int numItemsToDelete) {
+    public int deleteOldestItems(ContentResolver resolver, int feedId, int numItemsToDelete) {
         if (numItemsToDelete == 0) {
             Log.v(TAG, "No items are to be deleted");
             return 0;
         } else {
             Log.d(TAG, "Attempting to delete the " + numItemsToDelete + " oldest items from the DB");
-            final Uri appWidgetUri = ContentUris.withAppendedId(
-                    MicroRssContentProvider.FEEDS_CONTENT_URI, appWidgetId);
-            final List<Integer> sortedListOfIds = readSortedItemIdsFromDb(appWidgetUri, resolver);
+            final Uri feedUri = ContentUris.withAppendedId(
+                    MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+            final List<Integer> sortedListOfIds = readSortedItemIdsFromDb(feedUri, resolver);
             final List<Integer> idsToDelete = sortedListOfIds.subList(
                     sortedListOfIds.size() - numItemsToDelete,
                     sortedListOfIds.size());
-            return deleteItemsById(resolver, appWidgetUri, idsToDelete);
+            return deleteItemsById(resolver, feedUri, idsToDelete);
         }
     }
     
@@ -125,13 +125,13 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         }
     }
     
-    private ItemList readSortedItemsFromDb(Uri appWidgetUri, ContentResolver resolver, String feedTitle) {
+    private ItemList readSortedItemsFromDb(Uri feedUri, ContentResolver resolver, String feedTitle) {
         DefaultItemList itemList = new DefaultItemList();
         itemList.setTitle(feedTitle);
         
         Cursor cursor = null;
         try {
-            cursor = queryForSortedItems(resolver, appWidgetUri);
+            cursor = queryForSortedItems(resolver, feedUri);
 
             while (cursor != null && cursor.moveToNext()) {
                 int index = cursor.getInt(COL_POSITION);
@@ -153,12 +153,12 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     }
     
     /** TODO: merge with #readSortedItemsFromDb */
-    private List<Integer> readSortedItemIdsFromDb(Uri appWidgetUri, ContentResolver resolver) {
+    private List<Integer> readSortedItemIdsFromDb(Uri feedUri, ContentResolver resolver) {
         final List<Integer> sortedListOfIds = new LinkedList<Integer>();
 
         Cursor cursor = null;
         try {
-            cursor = queryForSortedItems(resolver, appWidgetUri);
+            cursor = queryForSortedItems(resolver, feedUri);
 
             while (cursor != null && cursor.moveToNext()) {
                 int id = cursor.getInt(COL_ID);
@@ -172,8 +172,8 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         return sortedListOfIds;
     }
     
-    private Cursor queryForSortedItems(ContentResolver resolver, Uri appWidgetUri) {
-        Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
+    private Cursor queryForSortedItems(ContentResolver resolver, Uri feedUri) {
+        Uri allForecastsUri = Uri.withAppendedPath(feedUri,
                 MicroRssContentProvider.TABLE_ITEMS);
 
         return resolver.query(allForecastsUri, PROJECTION_FEEDS,
@@ -184,18 +184,18 @@ public class SqLiteRssItemsDao implements RssItemsDao {
                 + BaseColumns._ID + " DESC");
     }
     
-    private int getMaxIndex(Uri appWidgetUri, ContentResolver resolver) {
+    private int getMaxIndex(Uri feedUri, ContentResolver resolver) {
         Cursor cursor = null;
         int maxId;
         try {
-            Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
+            Uri allForecastsUri = Uri.withAppendedPath(feedUri,
                     MicroRssContentProvider.TABLE_ITEMS);
             cursor = resolver.query(allForecastsUri, PROJECTION_FEEDS, null,
                     null, null);
             maxId = 0;
             while (cursor != null && cursor.moveToNext()) {
-                int appWidgetId= cursor.getInt(COL_POSITION);
-                maxId = appWidgetId > maxId ? appWidgetId : maxId;
+                int feedId= cursor.getInt(COL_POSITION);
+                maxId = feedId > maxId ? feedId : maxId;
             }
         } finally {
             if (cursor != null) {
@@ -206,7 +206,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         return maxId;
     }
     
-    private int deleteItemsById(ContentResolver resolver, Uri appWidgetUri, List<Integer> listOfIds) {
+    private int deleteItemsById(ContentResolver resolver, Uri feedUri, List<Integer> listOfIds) {
         StringBuilder whereClause = new StringBuilder();
         whereClause.append(BaseColumns._ID + " IN (");
         for (Integer id : listOfIds) {
@@ -215,7 +215,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         whereClause.replace(whereClause.length() - 2, whereClause.length(), ")");
         Log.v(TAG, "WHERE clase to delete items: " + whereClause);
         
-        final Uri allForecastsUri = Uri.withAppendedPath(appWidgetUri,
+        final Uri allForecastsUri = Uri.withAppendedPath(feedUri,
                 MicroRssContentProvider.TABLE_ITEMS);
         return resolver.delete(allForecastsUri, whereClause.toString(), null);
     }

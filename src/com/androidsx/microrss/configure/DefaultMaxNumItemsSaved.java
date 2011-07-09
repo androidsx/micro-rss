@@ -37,9 +37,9 @@ public class DefaultMaxNumItemsSaved implements MaxNumItemsSaved {
   }
 
   @Override
-  public int getMaxNumItemsSaved(Context context, int appWidgetId) {
+  public int getMaxNumItemsSaved(Context context, int feedId) {
     int maxNumItemsSaved = SharedPreferencesHelper.getIntValue(context, String.format(
-        context.getResources().getString(maxNumItemsSavedPrefsNameId), appWidgetId));
+        context.getResources().getString(maxNumItemsSavedPrefsNameId), feedId));
     if (maxNumItemsSaved == 0) {
      maxNumItemsSaved = getDefaultMaxNumItemsSaved(context);
     }
@@ -48,9 +48,9 @@ public class DefaultMaxNumItemsSaved implements MaxNumItemsSaved {
   }
 
   @Override
-  public void setMaxNumItemsSaved(Context context, int appWidgetId, int maxNumItemsSaved) {
+  public void setMaxNumItemsSaved(Context context, int feedId, int maxNumItemsSaved) {
     SharedPreferencesHelper.saveIntValue(context, String.format(
-        context.getResources().getString(maxNumItemsSavedPrefsNameId), appWidgetId), maxNumItemsSaved);
+        context.getResources().getString(maxNumItemsSavedPrefsNameId), feedId), maxNumItemsSaved);
   }
 
 }

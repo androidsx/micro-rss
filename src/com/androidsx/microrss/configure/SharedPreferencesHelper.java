@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesHelper {
 
-  private static final String PREFS_NAME = "AnyRssAppWidget";
+  private static final String PREFS_NAME = "com.androidsx.microrss.mainconfig";
   private static final char ARRAY_SEPARATOR = '|';
   private static final String ARRAY_SEPARATOR_REGEX = "\\|";
   

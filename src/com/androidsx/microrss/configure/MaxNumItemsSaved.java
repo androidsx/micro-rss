@@ -7,9 +7,9 @@ import android.content.Context;
  */
 public interface MaxNumItemsSaved {
   
-  int getMaxNumItemsSaved(Context context, int appWidgetId);
+  int getMaxNumItemsSaved(Context context, int feedId);
   
-  void setMaxNumItemsSaved(Context context, int appWidgetId, int maxNumItemsSaved);
+  void setMaxNumItemsSaved(Context context, int feedId, int maxNumItemsSaved);
   
   int getDefaultMaxNumItemsSaved(Context context);
 }
