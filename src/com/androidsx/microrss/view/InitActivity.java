@@ -1,12 +1,9 @@
 package com.androidsx.microrss.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -17,7 +14,6 @@ import com.androidsx.microrss.UpdateService;
 import com.androidsx.microrss.WimmTemporaryConstants;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
-import com.androidsx.microrss.db.dao.DataNotFoundException;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 
 /**
@@ -25,128 +21,60 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
  * then gets the items from the DB, and passes them to the view activity.
  */
 public class InitActivity extends Activity {
-  public static final String TAG = "RetrieveRssItemsActivity";
+    public static final String TAG = "RetrieveRssItemsActivity";
 
-  private static final int DIALOG_ERROR_MESSAGE_KEY = 0;
-  String dialogErrorMessage = "";
-  private static final int DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY = 2;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate init activity");
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    Log.d(TAG, "onCreate retrieve items activity");
+        Log.i(TAG, "Start the update service");
+        startService(new Intent(this, UpdateService.class)); // if already started, does nothing
 
-    Log.w("WIMM", "Start the update service, and request the first update");
-    startService(new Intent(this, UpdateService.class)); // if already started, does nothing
+         // FIXME: this can't be hard-coded anymore. In AnyRSS, it used to come from the extras
+        String rssUrl = getResources().getString(R.string.feed_url);
+        String rssName = getResources().getString(R.string.feed_name);
+
+        // FIXME (WIMM): do in an a-sync task? or is this really necessary to build the first view when there are no items?
+        writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl);
+        dispatchToViewActivities();
+    }
+
+    private static void writeConfigToBackend(int appWidgetId, Context context, String title,
+            String feedUrl) {
+        Log.i(TAG, "Save initial config to the DB");
+
+        Log.e(TAG, "FIXME: This is gonna fail unless this is the first time the app is executed");
+        ContentValues values = new ContentValues();
+        values.put(BaseColumns._ID, appWidgetId);
+        values.put(FeedColumns.LAST_UPDATE, -1);
+        values.put(FeedColumns.TITLE, title);
+        values.put(FeedColumns.FEED_URL, feedUrl);
+
+        // TODO: update instead of insert if editing an existing widget
+        ContentResolver resolver = context.getContentResolver();
+        resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
+    }
     
-    Log.w("WIMM", "Start the doConfigure thread, we are still in the main activity");
-    String rssUrl = getResources().getString(R.string.feed_url); // FIXME: this can't be hardcoded anymore. In AnyRSS, it used to come from the extras (from the configure activity, I guess)
-    String rssName = getResources().getString(R.string.feed_name);
-    
-    // FIXME (WIMM): do in an async task? or is this really necessary to build the first view when there are no items?
-    writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl, UPDATE_INTERVAL_HOURS);
-    onConfigureThreadFinishesSuccessfully();
-  }
-  
-  private static final int UPDATE_INTERVAL_HOURS = 2;
-  
-    // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
-    private void onConfigureThreadFinishesSuccessfully() {
-        Log.i("WIMM", "Continue with the normal execution of the activity");
+    private void dispatchToViewActivities() {
+        Log.i(TAG, "Dispatch to the view activities");
 
         Intent intent = new Intent(this, FeedActivity.class);
 
         final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
-        try {
-            int[] feedIds = dao.findFeedIds();
-            int feedId = feedIds[0]; // TODO: what if not found?
-            int[] sortedStoryIds = dao.findStoryIds(feedId);
-
-            intent.putExtra(ExtrasConstants.STORY_IDS, sortedStoryIds);
-            intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
-
-        } catch (DataNotFoundException e) {
-            Log.e(TAG, "WIMM opps", e);
+        int[] feedIds = dao.findFeedIds();
+        final int firstFeedIndex = 0;
+        
+        // TODO: If there are no feeds, dispatch to a different view
+        if (feedIds.length > 0) {
+            intent.putExtra(ExtrasConstants.FEED_IDS, feedIds);
+            intent.putExtra(ExtrasConstants.FEED_INDEX, firstFeedIndex);
+            startActivity(intent);
+            Log.i(TAG, "End of the initialization activity");
+        } else {
+            // FIXME: deal with this properly
+            Log.e(TAG, "There are no feeds");
         }
-        startActivity(intent);
-
-        Log.i(TAG, "End of the anyrss activity");
         finish();
     }
-
-  @Override
-  protected Dialog onCreateDialog(int id) {
-
-    switch (id) {
-    case DIALOG_ERROR_MESSAGE_KEY: {
-      Log.d(TAG, "Show error dialog with msg " + dialogErrorMessage);
-      AlertDialog alertDialog = new AlertDialog.Builder(
-          InitActivity.this)
-          .setTitle("Oops, error!")
-          .setCancelable(false)
-          .setMessage(
-              dialogErrorMessage
-                  + "\n\nYou can send us an email, we'll find out and tell you "
-                  + "why it failed to load").setNegativeButton("No, thanks",
-              new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  dialog.cancel();
-                  finish();
-                }
-              }).setPositiveButton("Email us",
-              new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  final Intent emailIntent = new Intent(
-                      android.content.Intent.ACTION_SEND);
-                  emailIntent.setType("text/html");
-                  emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-                      new String[] { "android.sx@gmail.com" });
-                  emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                      getResources().getString(R.string.app_name) + " error: " + dialogErrorMessage);
-                  emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-                      "RSS: " + getResources().getString(R.string.feed_url));
-
-                  dialog.cancel();
-                  finish();
-
-                  startActivity(Intent.createChooser(emailIntent, "Share via"));
-                }
-              }).create();
-      return alertDialog;
-    }
-    case DIALOG_NO_EMAIL_ERROR_MESSAGE_KEY: {
-      Log.d(TAG, "Show no-email error dialog with msg " + dialogErrorMessage);
-      AlertDialog alertDialog = new AlertDialog.Builder(
-          InitActivity.this).setTitle("Oops, error!").setMessage(
-          dialogErrorMessage).setNegativeButton("OK",
-          new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-              dialog.cancel();
-              finish();
-            }
-          }).create();
-      return alertDialog;
-    }
-    }
-    return null;
-  }
-  
-  private static void writeConfigToBackend(int appWidgetId, Context context,
-          String title, String feedUrl, int updateIntervalHours) {
-    Log.d(TAG, "Save to backend: widgetID " + appWidgetId
-            + ", url " + feedUrl + " (" + updateIntervalHours + "h)");
-    
-    Log.e(TAG, "This is gonna fail unless this is the first time the app is executed for this widget ID");
-    
-    ContentValues values = new ContentValues();
-    values.put(BaseColumns._ID, appWidgetId);
-    values.put(FeedColumns.LAST_UPDATE, -1);
-    values.put(FeedColumns.TITLE, title);
-    values.put(FeedColumns.FEED_URL, feedUrl);
-
-    // TODO: update instead of insert if editing an existing widget
-    ContentResolver resolver = context.getContentResolver();
-    resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
-  }
-  
 }

@@ -9,4 +9,9 @@ class ExtrasConstants {
     /** Index of the story that the view is expected to display. */
     static final String STORY_INDEX = "story-index";
 
+    /** Sorted integer array with the IDs of all feeds. */
+    static final String FEED_IDS = "feed-ids";
+    
+    /** Index of the current feed. */
+    static final String FEED_INDEX = "feed-index";
 }

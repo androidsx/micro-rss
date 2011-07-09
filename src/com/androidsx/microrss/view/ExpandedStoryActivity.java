@@ -28,8 +28,6 @@ public class ExpandedStoryActivity extends Activity {
             // TODO: formatted date
             ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
             ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
-            
-            Log.e("WIMM", story.toString());
         } catch (DataNotFoundException e) {
             e.printStackTrace();
         }
@@ -47,7 +45,7 @@ public class ExpandedStoryActivity extends Activity {
             Toast.makeText(this, "Can't go left anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
             Log.w(TAG, "Can't go left anymore. Already at index " + storyIndex);
         } else {
-            Intent intent = new Intent(this, StoryActivity.class);
+            Intent intent = new Intent(this, ExpandedStoryActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.STORY_INDEX, storyIndex - 1);
             startActivity(intent);
@@ -62,7 +60,7 @@ public class ExpandedStoryActivity extends Activity {
             Toast.makeText(this, "Can't go right anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
             Log.w(TAG, "Can't go right anymore. Already at index " + storyIndex);
         } else {
-            Intent intent = new Intent(this, StoryActivity.class);
+            Intent intent = new Intent(this, ExpandedStoryActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.STORY_INDEX, storyIndex + 1);
             startActivity(intent);
@@ -70,6 +68,6 @@ public class ExpandedStoryActivity extends Activity {
     }
 
     public void onClickNavigationDown(View target) {
-        Toast.makeText(this, "Do nothing", Toast.LENGTH_LONG).show();
+        // Can't go further down from here
     }
 }

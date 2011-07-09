@@ -26,23 +26,20 @@ public class StoryActivity extends Activity {
         try {
             Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
             ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
-            
-            Log.e("WIMM", story.toString());
+            // FIXME: remove this fucking exception grrrrr
         } catch (DataNotFoundException e) {
             e.printStackTrace();
         }
     }
     
     public void onClickNavigationUp(View target) {
-        int storyIndex = getIntent().getIntExtra("story-index", 0);
         Intent intent = new Intent(this, FeedActivity.class);
         intent.putExtras(getIntent().getExtras());
-        intent.putExtra(ExtrasConstants.STORY_INDEX, storyIndex - 1);
         startActivity(intent);
     }
 
     public void onClickNavigationLeft(View target) {
-        int storyIndex = getIntent().getIntExtra("story-index", 0);
+        int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
         if (storyIndex == 0) {
             Toast.makeText(this, "Can't go left anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
             Log.w(TAG, "Can't go left anymore. Already at index " + storyIndex);
