@@ -6,6 +6,7 @@
  */
 package com.androidsx.microrss.view;
 
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 
 import android.app.Activity;
@@ -29,6 +30,8 @@ import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.configure.SettingsActivity;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
+import com.androidsx.microrss.db.dao.DataNotFoundException;
+import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
 import com.flurry.android.FlurryAgent;
@@ -140,7 +143,22 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             if (which == 0) {
-                createIntentAndStartActivity(FeedActivity.class, position, false);
+                Intent intent = new Intent(AbstractAnyRssListModeActivity.this, FeedActivity.class);
+                
+                final MicroRssDao dao = new MicroRssDao(AbstractAnyRssListModeActivity.this.getContentResolver());
+                try {
+                    int[] feedIds = dao.findFeedIds();
+                    int feedId = feedIds[0]; // TODO: what if not found?
+                    int[] sortedStoryIds = dao.findStoryIds(feedId);
+                    
+                    intent.putExtra(ExtrasConstants.STORY_IDS, sortedStoryIds);
+                    intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
+                    
+                } catch (DataNotFoundException e) {
+                    Log.e(TAG, "WIMM opps", e);
+                }
+                startActivity(intent);
+                
             } else if(which == 1) {
               Item currentItem = (Item) getListAdapter().getItem(position);
               Intent sendIntent = new Intent();
@@ -189,6 +207,14 @@ public abstract class AbstractAnyRssListModeActivity extends ListActivity {
             }
           }
         }).show();
+  }
+  
+  private static String intArray2string(int[] ids) {
+      StringBuilder builder = new StringBuilder();
+      for (int id : ids) {
+          builder.append(id);
+      }
+      return builder.toString();
   }
   
   /** Creates the menu items */

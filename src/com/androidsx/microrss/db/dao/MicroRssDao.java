@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.ItemColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.domain.DefaultItem;
@@ -34,6 +35,28 @@ public class MicroRssDao {
         throw new UnsupportedOperationException();
     }
 
+    public int[] findFeedIds() {
+        Cursor cursor = null;
+        try {
+            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
+            final String[] projection = new String[] { BaseColumns._ID };
+            cursor = contentResolver.query(allFeedsUri, projection, null, null,
+                    BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
+    
+            List<Integer> ids = new LinkedList<Integer>();
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    ids.add(cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)));
+                } while (cursor.moveToNext());
+            }
+            return toIntArray(ids);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
     protected void findFeed() {
         throw new UnsupportedOperationException();
     }
@@ -87,6 +110,8 @@ public class MicroRssDao {
     }
 
     /** @return a single story, given its ID */
+    // TODO: maybe instead of throwing an exception, an empty item that says "we're sorry, no item here"
+    // TODO: and consider making it unchecked
     public Item findStory(int id) throws DataNotFoundException {
         Cursor cursor = null;
         try {

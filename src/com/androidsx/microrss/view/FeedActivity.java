@@ -21,14 +21,20 @@ public class FeedActivity extends Activity {
     }
 
     public void onClickNavigationLeft(View target) {
-        startActivity(new Intent(this, FeedActivity.class));
+        final Intent intent = new Intent(this, FeedActivity.class);
+        intent.putExtras(getIntent().getExtras());
+        startActivity(intent);
     }
 
     public void onClickNavigationRight(View target) {
-        startActivity(new Intent(this, FeedActivity.class));
+        final Intent intent = new Intent(this, FeedActivity.class);
+        intent.putExtras(getIntent().getExtras());
+        startActivity(intent);
     }
 
     public void onClickNavigationDown(View target) {
-        startActivity(new Intent(this, StoryActivity.class));
+        final Intent intent = new Intent(this, StoryActivity.class);
+        intent.putExtras(getIntent().getExtras());
+        startActivity(intent);
     }
 }
