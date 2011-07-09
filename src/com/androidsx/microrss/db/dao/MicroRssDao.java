@@ -60,7 +60,7 @@ public class MicroRssDao {
         throw new UnsupportedOperationException();
     }
 
-    public List<Item> findStories(int feedId) throws DataNotFoundException {
+    public List<Item> findStories(int feedId) {
         Cursor cursor = null;
         try {
             final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
@@ -85,7 +85,7 @@ public class MicroRssDao {
     }
     
     /** @return sorted IDs of all the stories in a feed, given its ID */
-    public int[] findStoryIds(int feedId) throws DataNotFoundException {
+    public int[] findStoryIds(int feedId) {
         Cursor cursor = null;
         try {
             final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
@@ -110,8 +110,7 @@ public class MicroRssDao {
 
     /** @return a single story, given its ID */
     // TODO: maybe instead of throwing an exception, an empty item that says "we're sorry, no item here"
-    // TODO: and consider making it unchecked
-    public Item findStory(int id) throws DataNotFoundException {
+    public Item findStory(int id) {
         Cursor cursor = null;
         try {
             final Uri anItemUri = ContentUris.withAppendedId(MicroRssContentProvider.ITEMS_CONTENT_URI, id);
@@ -120,7 +119,7 @@ public class MicroRssDao {
             if (cursor != null && cursor.moveToFirst()) {
                 return itemFromCursor(cursor);
             } else {
-                throw new DataNotFoundException("No story was found for the id " + id);
+                throw new IllegalArgumentException("No story was found for the id " + id);
             }
         } finally {
             if (cursor != null) {

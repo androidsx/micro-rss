@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.db.dao.DataNotFoundException;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 
 public class FeedActivity extends Activity {
@@ -66,15 +65,10 @@ public class FeedActivity extends Activity {
             Log.e(TAG, "OUCH"); // FIXME
         } else {
             int feedId = feedIds[feedIndex];
-        
-            try {
-                final MicroRssDao dao = new MicroRssDao(getContentResolver());
-                intent.putExtra(ExtrasConstants.STORY_IDS, dao.findStoryIds(feedId));
-                intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
-                startActivity(intent);
-            } catch (DataNotFoundException e) {
-                throw new RuntimeException(e);
-            }        
+            final MicroRssDao dao = new MicroRssDao(getContentResolver());
+            intent.putExtra(ExtrasConstants.STORY_IDS, dao.findStoryIds(feedId));
+            intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
+            startActivity(intent);
         }
     }
 }

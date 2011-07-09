@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.db.dao.DataNotFoundException;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Item;
 
@@ -23,14 +22,11 @@ public class ExpandedStoryActivity extends Activity {
         
         int[] storyIds = getIntent().getIntArrayExtra(ExtrasConstants.STORY_IDS);
         int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
-        try {
-            Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
-            // TODO: formatted date
-            ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
-            ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
-        } catch (DataNotFoundException e) {
-            e.printStackTrace();
-        }
+        
+        Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
+        // TODO: formatted date
+        ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
+        ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
     }
     
     public void onClickNavigationUp(View target) {
