@@ -15,8 +15,11 @@ import android.util.Log;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
+import com.androidsx.microrss.db.dao.DataNotFoundException;
+import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.ItemList;
-import com.androidsx.microrss.view.AnyRssAppListModeActivity;
+import com.androidsx.microrss.view.ExtrasConstants;
+import com.androidsx.microrss.view.FeedActivity;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
@@ -60,12 +63,22 @@ public class InitActivity extends Activity {
   }
 
   private void startIntentToDisplayItems(ItemList itemList) {
-    Intent detailIntent = new Intent(this, AnyRssAppListModeActivity.class);
-    detailIntent.putExtra("appWidgetId", 0);
-    detailIntent.putExtra("itemList", itemList);
-    Log.w("WIMM", "Start AnyRssAppListModeActivity, passing the list of " + itemList.getNumberOfItems() + " items");
-    startActivity(detailIntent);
-
+          Intent intent = new Intent(this, FeedActivity.class);
+          
+          final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
+          try {
+              int[] feedIds = dao.findFeedIds();
+              int feedId = feedIds[0]; // TODO: what if not found?
+              int[] sortedStoryIds = dao.findStoryIds(feedId);
+              
+              intent.putExtra(ExtrasConstants.STORY_IDS, sortedStoryIds);
+              intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
+              
+          } catch (DataNotFoundException e) {
+              Log.e(TAG, "WIMM opps", e);
+          }
+          startActivity(intent);
+          
     Log.i(TAG, "End of the anyrss activity");
     finish();
   }

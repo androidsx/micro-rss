@@ -22,17 +22,8 @@
             </intent-filter>
         </activity>
         
-		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppListModeActivity"/>
-		<activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssAppItemModeActivity"/>
-        
-        <!-- Original AnyRSS extended view activities -->
-        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssItemModeActivity"/>
-        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssListModeActivity"/>
-        <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.AnyRssExpandableModeActivity"/>
-        
         <!-- activity that dispatches to one of the extended view activities -->
         <activity android:theme="@android:style/Theme.Dialog" android:name="com.androidsx.microrss.view.DetailsViewChooser"/>
-        
         
         <!-- WIMM activities -->
        	<activity android:name="com.androidsx.microrss.view.StoryActivity" android:theme="@style/Theme.MicroRss" />
