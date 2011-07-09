@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
@@ -17,6 +18,11 @@ public class FeedActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
+        
+        int[] feedIds = getIntent().getIntArrayExtra(ExtrasConstants.FEED_IDS);
+        int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
+        
+        ((TextView) findViewById(R.id.feed_title)).setText("Feed " + (feedIndex + 1) + " / " + feedIds.length);
     }
     
     public void onClickNavigationUp(View target) {

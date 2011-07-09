@@ -15,6 +15,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
+import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
 import com.flurry.android.FlurryAgent;
@@ -138,7 +139,7 @@ public class UpdateService extends Service implements Runnable {
     public void run() {
         Log.d(TAG, "Processing thread of the update service started");
 
-        requestUpdate(new int[] { WimmTemporaryConstants.widgetId });
+        requestUpdate(new MicroRssDao(getContentResolver()).findFeedIds());
 
         boolean areThereHumans = false; // ie, are there widgets that are not zombies?
         while (hasMoreUpdates()) {

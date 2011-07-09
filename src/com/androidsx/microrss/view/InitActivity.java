@@ -6,12 +6,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.UpdateService;
-import com.androidsx.microrss.WimmTemporaryConstants;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.dao.MicroRssDao;
@@ -31,22 +29,26 @@ public class InitActivity extends Activity {
         Log.i(TAG, "Start the update service");
         startService(new Intent(this, UpdateService.class)); // if already started, does nothing
 
-         // FIXME: this can't be hard-coded anymore. In AnyRSS, it used to come from the extras
-        String rssUrl = getResources().getString(R.string.feed_url);
-        String rssName = getResources().getString(R.string.feed_name);
-
-        // FIXME (WIMM): do in an a-sync task? or is this really necessary to build the first view when there are no items?
-        writeConfigToBackend(WimmTemporaryConstants.widgetId, this, rssName, rssUrl);
+        MicroRssDao dao = new MicroRssDao(getContentResolver());
+        int[] currentIds = dao.findFeedIds();
+        if (currentIds.length == 0) {
+            Log.i("WIMM", "This is temporary: put some feeds into the DB");
+            // FIXME (WIMM): do in an a-sync task? or is this really necessary to build the first view when there are no items?
+            writeConfigToBackend(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch");
+            writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml");
+            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol");
+            writeConfigToBackend(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml");
+        }
+        
         dispatchToViewActivities();
     }
 
-    private static void writeConfigToBackend(int appWidgetId, Context context, String title,
+    private static void writeConfigToBackend(Context context, String title,
             String feedUrl) {
         Log.i(TAG, "Save initial config to the DB");
 
-        Log.e(TAG, "FIXME: This is gonna fail unless this is the first time the app is executed");
+        Log.e(TAG, "FIXME: This is terrible: we create more and more feeds");
         ContentValues values = new ContentValues();
-        values.put(BaseColumns._ID, appWidgetId);
         values.put(FeedColumns.LAST_UPDATE, -1);
         values.put(FeedColumns.TITLE, title);
         values.put(FeedColumns.FEED_URL, feedUrl);

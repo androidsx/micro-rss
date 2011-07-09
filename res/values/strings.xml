@@ -75,16 +75,6 @@
     Our apps
     </string>
     
-    <!-- URL of the feed -->
-    <string name="feed_url">
-    http://feeds.feedburner.com/Techcrunch
-    </string>
-    
-    <!-- Name of the feed -->
-    <string name="feed_name">
-    Micro RSS (feed name)
-    </string>
-    
     <!-- Loading dialog -->
     <string name="dialog_loading_title">
      Loading ...
