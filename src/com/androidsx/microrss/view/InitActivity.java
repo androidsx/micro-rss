@@ -1,4 +1,4 @@
-package com.androidsx.microrss;
+package com.androidsx.microrss.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,14 +12,13 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.androidsx.microrss.R;
+import com.androidsx.microrss.UpdateService;
+import com.androidsx.microrss.WimmTemporaryConstants;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
-import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.db.dao.DataNotFoundException;
 import com.androidsx.microrss.db.dao.MicroRssDao;
-import com.androidsx.microrss.domain.ItemList;
-import com.androidsx.microrss.view.ExtrasConstants;
-import com.androidsx.microrss.view.FeedActivity;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
@@ -51,37 +50,29 @@ public class InitActivity extends Activity {
   
   private static final int UPDATE_INTERVAL_HOURS = 2;
   
-  // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
-  private void onConfigureThreadFinishesSuccessfully() {
-    Log.i("WIMM", "Continue with the normal execution of the activity");
-    
-    Log.w("WIMM", "Main activity: grab the items from the database (instead of the internet)");
-    ItemList itemList = new SqLiteRssItemsDao().getItemList(getContentResolver(), WimmTemporaryConstants.widgetId);
-    
-    Log.w("WIMM", "Start the item to display the " + itemList.getNumberOfItems() + " that were just fetched from the DB");
-    startIntentToDisplayItems(itemList);
-  }
+    // FIXME: Here, we don't even filter by resultCode (in a rush due to wimm)
+    private void onConfigureThreadFinishesSuccessfully() {
+        Log.i("WIMM", "Continue with the normal execution of the activity");
 
-  private void startIntentToDisplayItems(ItemList itemList) {
-          Intent intent = new Intent(this, FeedActivity.class);
-          
-          final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
-          try {
-              int[] feedIds = dao.findFeedIds();
-              int feedId = feedIds[0]; // TODO: what if not found?
-              int[] sortedStoryIds = dao.findStoryIds(feedId);
-              
-              intent.putExtra(ExtrasConstants.STORY_IDS, sortedStoryIds);
-              intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
-              
-          } catch (DataNotFoundException e) {
-              Log.e(TAG, "WIMM opps", e);
-          }
-          startActivity(intent);
-          
-    Log.i(TAG, "End of the anyrss activity");
-    finish();
-  }
+        Intent intent = new Intent(this, FeedActivity.class);
+
+        final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
+        try {
+            int[] feedIds = dao.findFeedIds();
+            int feedId = feedIds[0]; // TODO: what if not found?
+            int[] sortedStoryIds = dao.findStoryIds(feedId);
+
+            intent.putExtra(ExtrasConstants.STORY_IDS, sortedStoryIds);
+            intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
+
+        } catch (DataNotFoundException e) {
+            Log.e(TAG, "WIMM opps", e);
+        }
+        startActivity(intent);
+
+        Log.i(TAG, "End of the anyrss activity");
+        finish();
+    }
 
   @Override
   protected Dialog onCreateDialog(int id) {

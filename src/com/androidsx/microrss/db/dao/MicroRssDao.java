@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.ItemColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.domain.DefaultItem;
