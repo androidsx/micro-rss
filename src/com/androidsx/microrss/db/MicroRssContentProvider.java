@@ -120,7 +120,7 @@ public class MicroRssContentProvider extends ContentProvider {
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
-                Log.d(TAG, "Insert a new item for the feed " + feedId + " with the values " + values);
+                Log.d(TAG, "Insert a new item for the feed " + feedId);
                 values.put(ItemColumns.FEED_ID, feedId);
                 long rowId = db.insert(TABLE_ITEMS, null, values);
                 if (rowId != -1) {
@@ -129,7 +129,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 break;
             }
             case ALL_ITEMS: {
-                Log.d(TAG, "Insert items, just like that. Not attached to a feed? Values are " + values);
+                Log.d(TAG, "Insert items, just like that. Not attached to a feed?");
                 long rowId = db.insert(TABLE_ITEMS, null, values);
                 if (rowId != -1) {
                     resultUri = ContentUris.withAppendedId(ITEMS_CONTENT_URI, rowId);
