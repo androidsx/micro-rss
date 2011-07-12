@@ -15,6 +15,13 @@ import java.util.Date;
 public interface Feed extends Serializable {
 
   /**
+   * Database ID for this feed.
+   * 
+   * @return database ID
+   */
+  int getId();
+    
+  /**
    * Plain text representation of the title of the feed
    * 
    * @return title of the item
@@ -27,6 +34,13 @@ public interface Feed extends Serializable {
    * @return URL the URL of the item
    */
   String getURL();
+  
+  /**
+   * Is this feed active? Only active feeds are updated and shown in the views. 
+   * 
+   * @return true if and only the feed is active
+   */
+  boolean isActive();
   
   /**
    * Last modification date of the feed 

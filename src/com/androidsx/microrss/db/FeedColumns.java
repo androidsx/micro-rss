@@ -20,4 +20,10 @@ public class FeedColumns {
      * Title of the feed. Usually assigned by the user.
      */
     public static final String TITLE = "title";
+
+    /**
+     * Flag that indicates whether this feed is active. Only active feeds are updated and shown in
+     * the views. The others are just in "selectable" state.
+     */
+    public static final String ACTIVE = "active";
 }

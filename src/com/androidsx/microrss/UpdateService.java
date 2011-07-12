@@ -134,7 +134,7 @@ public class UpdateService extends Service implements Runnable {
     public void run() {
         Log.d(TAG, "Processing thread of the update service started");
 
-        requestUpdate(new MicroRssDao(getContentResolver()).findFeedIds());
+        requestUpdate(new MicroRssDao(getContentResolver()).findActiveFeedIds());
 
         boolean areThereHumans = false; // ie, are there feeds that are not zombies?
         while (hasMoreUpdates()) {

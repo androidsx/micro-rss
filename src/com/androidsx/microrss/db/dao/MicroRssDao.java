@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -25,19 +26,25 @@ public class MicroRssDao {
         this.contentResolver = contentResolver;
     }
 
-    protected void persistFeed() {
-        throw new UnsupportedOperationException();
+    public void updateFeed(Feed feed) {
+        ContentValues values = new ContentValues();
+        values.put(BaseColumns._ID, feed.getId());
+        values.put(FeedColumns.LAST_UPDATE, feed.getLastModificationDate().getDate()); // FIXME: sure?
+        values.put(FeedColumns.TITLE, feed.getTitle());
+        values.put(FeedColumns.FEED_URL, feed.getURL());
+        values.put(FeedColumns.ACTIVE, feed.isActive());
+
+        final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feed.getId());
+        
+        contentResolver.update(aFeedUri, values, null, null);
     }
 
-    protected void updateFeed() {
-        throw new UnsupportedOperationException();
+    public void updateFeedActive(Feed feed, boolean active) {
+        Feed updatedFeed = new DefaultFeed(feed.getId(), feed.getTitle(), feed.getURL(), active, feed.getLastModificationDate());
+        updateFeed(updatedFeed);
     }
-
-    protected void persistStories() {
-        throw new UnsupportedOperationException();
-    }
-
-    public int[] findFeedIds() {
+    
+    public int[] findAllFeedIds() {
         Cursor cursor = null;
         try {
             final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
@@ -59,12 +66,34 @@ public class MicroRssDao {
         }
     }
     
+    public int[] findActiveFeedIds() {
+        Cursor cursor = null;
+        try {
+            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
+            final String[] projection = new String[] { BaseColumns._ID };
+            cursor = contentResolver.query(allFeedsUri, projection, FeedColumns.ACTIVE + " = 1", null,
+                    BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
+    
+            List<Integer> ids = new LinkedList<Integer>();
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    ids.add(cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)));
+                } while (cursor.moveToNext());
+            }
+            return toIntArray(ids);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
     public List<Feed> findFeeds() {
         Cursor cursor = null;
         try {
             final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
-            final String[] projection = new String[] { FeedColumns.TITLE, FeedColumns.FEED_URL,
-                    FeedColumns.LAST_UPDATE };
+            final String[] projection = new String[] { BaseColumns._ID, FeedColumns.TITLE,
+                    FeedColumns.FEED_URL, FeedColumns.ACTIVE, FeedColumns.LAST_UPDATE };
             cursor = contentResolver.query(allFeedsUri, projection, null, null,
                     BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
     
@@ -82,10 +111,6 @@ public class MicroRssDao {
         }
     }
     
-    protected void findFeed() {
-        throw new UnsupportedOperationException();
-    }
-
     public List<Item> findStories(int feedId) {
         Cursor cursor = null;
         try {
@@ -162,8 +187,11 @@ public class MicroRssDao {
     }
     
     private static Feed feedFromCursor(Cursor cursor) {
-        return new DefaultFeed(cursor.getString(cursor.getColumnIndex(FeedColumns.TITLE)),
+        return new DefaultFeed(
+                cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)),
+                cursor.getString(cursor.getColumnIndex(FeedColumns.TITLE)),
                 cursor.getString(cursor.getColumnIndex(FeedColumns.FEED_URL)),
+                cursor.getInt(cursor.getColumnIndex(FeedColumns.ACTIVE)) == 1,
                 new Date(cursor.getLong(cursor.getColumnIndex(FeedColumns.LAST_UPDATE))));
     }
 

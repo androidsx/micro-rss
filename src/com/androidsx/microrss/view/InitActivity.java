@@ -30,21 +30,21 @@ public class InitActivity extends Activity {
         startService(new Intent(this, UpdateService.class)); // if already started, does nothing
 
         MicroRssDao dao = new MicroRssDao(getContentResolver());
-        int[] currentIds = dao.findFeedIds();
+        int[] currentIds = dao.findAllFeedIds();
         if (currentIds.length == 0) {
             Log.i("WIMM", "This is temporary: put some feeds into the DB");
             // FIXME (WIMM): do in an a-sync task? or is this really necessary to build the first view when there are no items?
-            writeConfigToBackend(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch");
-            writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml");
-            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol");
-            writeConfigToBackend(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml");
+            writeConfigToBackend(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch", true);
+            writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml", false);
+            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol", true);
+            writeConfigToBackend(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml", true);
         }
         
         dispatchToViewActivities();
     }
 
     private static void writeConfigToBackend(Context context, String title,
-            String feedUrl) {
+            String feedUrl, boolean active) {
         Log.i(TAG, "Save initial config to the DB");
 
         Log.e(TAG, "FIXME: This is terrible: we create more and more feeds");
@@ -52,6 +52,7 @@ public class InitActivity extends Activity {
         values.put(FeedColumns.LAST_UPDATE, -1);
         values.put(FeedColumns.TITLE, title);
         values.put(FeedColumns.FEED_URL, feedUrl);
+        values.put(FeedColumns.ACTIVE, active);
 
         // TODO: update instead of insert if editing an existing feed
         ContentResolver resolver = context.getContentResolver();
@@ -64,7 +65,7 @@ public class InitActivity extends Activity {
         Intent intent = new Intent(this, FeedActivity.class);
 
         final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
-        int[] feedIds = dao.findFeedIds();
+        int[] feedIds = dao.findActiveFeedIds();
         final int firstFeedIndex = 0;
         
         // TODO: If there are no feeds, dispatch to a different view
