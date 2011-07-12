@@ -11,16 +11,18 @@ public class MutableItem implements Item {
     Date pubDate;
     String title;
     String url;
+    String thumbnail;
 
     public MutableItem() {
     }
     
-    public MutableItem(String content, Date pubDate, String title, String url) {
+    public MutableItem(String content, Date pubDate, String title, String url, String thumbnail) {
         super();
         this.content = content;
         this.pubDate = pubDate;
         this.title = title;
         this.url = url;
+        this.thumbnail = thumbnail;
     }
 
     @Override
@@ -42,9 +44,14 @@ public class MutableItem implements Item {
     public String getURL() {
         return url;
     }
+    
+    @Override
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
-    public String getUrl() {
-        return url;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public void setUrl(String url) {

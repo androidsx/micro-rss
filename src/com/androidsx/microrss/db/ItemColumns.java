@@ -37,4 +37,9 @@ public class ItemColumns {
      * allows to write something like "3 hours ago" in the header.
      */
     public static final String DATE = "date";
+    
+    /**
+     * Thumbnail URL of the item (if any) 
+     */
+    public static final String THUMBNAIL_URL = "thumbnail";
 }

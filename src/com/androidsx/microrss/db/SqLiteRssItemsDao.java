@@ -33,13 +33,15 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             ItemColumns.DATE,
             ItemColumns.POSITION,
             ItemColumns.TITLE,
+            ItemColumns.THUMBNAIL_URL,
             BaseColumns._ID};
     private static final int COL_CONTENT = 0;
     private static final int COL_ITEM_URL = 1;
     private static final int COL_DATE = 2;
     private static final int COL_POSITION = 3;
     private static final int COL_ITEM_TITLE = 4;
-    private static final int COL_ID = 5;
+    private static final int COL_ITEM_THUMBNAIL = 5;
+    private static final int COL_ID = 6;
 
     @Override
     public ItemList getItemList(ContentResolver resolver, int feedId) {
@@ -82,6 +84,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             values.put(ItemColumns.CONTENT, feedItem.getContent());
             values.put(ItemColumns.ITEM_URL, feedItem.getURL());
             values.put(ItemColumns.TITLE, feedItem.getTitle());
+            values.put(ItemColumns.THUMBNAIL_URL, feedItem.getThumbnail());
             values.put(ItemColumns.DATE, feedItem.getPubDate()
                     .getTime());
             values.put(ItemColumns.POSITION, index);
@@ -138,9 +141,10 @@ public class SqLiteRssItemsDao implements RssItemsDao {
                 String content = cursor.getString(COL_CONTENT);
                 String title = cursor.getString(COL_ITEM_TITLE);
                 String url = cursor.getString(COL_ITEM_URL);
+                String thumbnail = cursor.getString(COL_ITEM_THUMBNAIL);
                 long date = cursor.getLong(COL_DATE);
                 DefaultItem item = new DefaultItem(title, content, url,
-                        new Date(date));
+                        new Date(date), thumbnail);
                 itemList.addItem(item);
                 Log.v(TAG, "Read from cursor item #" + index + ": " + item);
             }

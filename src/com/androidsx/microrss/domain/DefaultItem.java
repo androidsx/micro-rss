@@ -18,12 +18,14 @@ public class DefaultItem implements Item {
   private final String description;
   private final String URL;
   private final Date pubDate;
+  private final String thumbnail;
 
-  public DefaultItem(String title, String description, String URL, Date pubDate) {
+  public DefaultItem(String title, String description, String URL, Date pubDate, String thumbnail) {
     this.title = title;
     this.description = description;
     this.URL = URL;
     this.pubDate = pubDate;
+    this.thumbnail = thumbnail;
   }
 
   @Override
@@ -45,10 +47,15 @@ public class DefaultItem implements Item {
   public Date getPubDate() {
     return pubDate;
   }
+  
+  @Override
+  public String getThumbnail() {
+    return thumbnail;
+  }
 
   @Override
   public String toString() {
-    return "[" + title.replace('\n', ' ') + ", " + description.substring(0, Math.min(20, description.length())).replace('\n', ' ') + "]";
+    return "[" + title.replace('\n', ' ') + ", " + description.substring(0, Math.min(20, description.length())).replace('\n', ' ') + " thumb: " + thumbnail + "]";
   }
 
   @Override

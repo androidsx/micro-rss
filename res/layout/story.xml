@@ -21,7 +21,7 @@
 	<ImageView android:id="@+id/story_image" 
 		android:layout_width="@dimen/feed_image_width" 
 		android:layout_height="@dimen/feed_image_width" 
-		android:scaleType="fitXY"
+		android:scaleType="centerCrop"
 		android:layout_centerInParent="true" />
 
 	<!-- TEXT / TEXT + IMAGE -->

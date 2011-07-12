@@ -27,6 +27,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.androidsx.microrss.FlurryConstants;
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
@@ -162,7 +163,7 @@ public class WebserviceHelper {
 
         final ContentValues values = new ContentValues();
             
-        insertNewItemsIntoDb(resolver, feedId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
+        insertNewItemsIntoDb(context, resolver, feedId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
         
         final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, feedId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
@@ -209,7 +210,7 @@ public class WebserviceHelper {
    
         prepareUserAgent(context);
         
-        List<Item> newRssItems = new DefaultRssSource().getRssItems(rssUrl, maxNumberOfItems);
+        List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems);
         DefaultItemList itemList = new DefaultItemList();
         itemList.setTitle(rssName);
         for (int i = 0; i < newRssItems.size(); i++) {
@@ -220,8 +221,8 @@ public class WebserviceHelper {
         return itemList;
     }
     
-    private static void insertNewItemsIntoDb(ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
-        final List<Item> newRssItems = new DefaultRssSource().getRssItems(rssUrl, maxNumberOfItems);
+    private static void insertNewItemsIntoDb(Context context, ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
+        final List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems);
         final ItemList oldRssItemsList = dao.getItemList(resolver, feedId);
         
         final DefaultItemList itemsToInsert = new DefaultItemList();

@@ -41,5 +41,12 @@ public interface Item extends Serializable {
    * @return pubDate publication date of the item
    */
   Date getPubDate();
+  
+  /**
+   * Thumbnail URL of the item (if any) 
+   * 
+   * @return thumbnail the URL of the image representing the item
+   */
+  String getThumbnail();
 
 }

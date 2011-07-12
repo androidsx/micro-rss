@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.util.Log;
 
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
@@ -36,8 +37,26 @@ class DefaultRssSource implements RssSource {
   private static final String ATOM_TAG_DESCRIPTION = "content";
   private static final String ATOM_TAG_PUB_DATE = "published";
   private static final String ATOM_TAG_LINK = "id";
+  
+  // THUMNAIL tags (from Media RSS specification)
+  public final static String MEDIA_NAMESPACE = "http://search.yahoo.com/mrss/";
+  
+  private static final String THUMB_TAG_1 = "thumbnail";
+  
+  private static final String THUMB_TAG_2 = "content";
+  private static final String THUMB_TAG_2_TYPE = "type";
+  private static final String THUMB_TAG_2_TYPE_SHOULD_CONTAIN = "image/"; 
+  private static final String THUMB_TAG_URL = "url";
+  
 
   private static XmlPullParserFactory sFactory = null;
+
+  private CacheImageManager cacheImageManager;
+  
+  public DefaultRssSource(CacheImageManager cacheImageManager) {
+    this.cacheImageManager = cacheImageManager;
+  }
+  
 
   /**
    * We try three times. Ugly as hell.
@@ -65,6 +84,7 @@ class DefaultRssSource implements RssSource {
         try {
             stream = WebserviceHelper.queryApi(rssUrl);
             parseResponse = parseResponse(stream, maxNumberOfItems, rssUrl);
+            retrieveThumbnails(parseResponse);
         } finally {
             try {
                 if (stream != null) {
@@ -105,9 +125,11 @@ class DefaultRssSource implements RssSource {
       if (sFactory == null) {
         sFactory = XmlPullParserFactory.newInstance();
       }
-
+      sFactory.setNamespaceAware(true);
+      
       XmlPullParser xpp = sFactory.newPullParser();
       boolean insideItem = false;
+      String thisNamespace = null;
       String thisTag = null;
       xpp.setInput(response, null); // Setting null to the encoding auto-detects
                                     // encoding
@@ -117,16 +139,26 @@ class DefaultRssSource implements RssSource {
           && items.size() <= maxNumberOfItems) {
         if (eventType == XmlPullParser.START_TAG) {
           thisTag = xpp.getName();
+          thisNamespace = xpp.getNamespace();
           if (RSS_TAG_ITEM.equals(thisTag)) {
-            items.add(new MutableItem("(no content)", new Date(), "(no title)", ""));
+            items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
             insideItem = true;
+          }
+          
+          if (insideItem) {
+              String thumbnail = parseThumbnailUrl(xpp, thisTag);
+              if (thumbnail != null) {
+                  ((MutableItem) items.get(items.size() - 1)).setThumbnail(thumbnail);
+              }
           }
         } else if (eventType == XmlPullParser.END_TAG) {
           if (RSS_TAG_ITEM.equals(thisTag)) {
             thisTag = null;
             insideItem = false;
+            thisNamespace = null;
           }
-        } else if (eventType == XmlPullParser.TEXT) {
+        } else if (eventType == XmlPullParser.TEXT && ((thisNamespace != null && !thisNamespace.equalsIgnoreCase(
+                MEDIA_NAMESPACE)) || thisNamespace == null)) { // any except mediaRSS
           if (insideItem && RSS_TAG_TITLE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
             ((MutableItem) items.get(items.size() - 1)).setTitle(xpp.getText());
@@ -173,9 +205,11 @@ class DefaultRssSource implements RssSource {
       if (sFactory == null) {
         sFactory = XmlPullParserFactory.newInstance();
       }
+      sFactory.setNamespaceAware(true);
 
       XmlPullParser xpp = sFactory.newPullParser();
       boolean insideItem = false;
+      String thisNamespace = null;
       String thisTag = null;
       xpp.setInput(response, null); // Setting null to the encoding auto-detects
       // encoding
@@ -185,16 +219,25 @@ class DefaultRssSource implements RssSource {
           && items.size() <= maxNumberOfItems) {
         if (eventType == XmlPullParser.START_TAG) {
           thisTag = xpp.getName();
+          thisNamespace = xpp.getNamespace();
           if (ATOM_TAG_ITEM.equals(thisTag)) {
-            items.add(new MutableItem("(no content)", new Date(), "(no title)", ""));
+            items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
             insideItem = true;
+          }
+          if (insideItem) {
+              String thumbnail = parseThumbnailUrl(xpp, thisTag);
+              if (thumbnail != null) {
+                  ((MutableItem) items.get(items.size() - 1)).setThumbnail(thumbnail);
+              }
           }
         } else if (eventType == XmlPullParser.END_TAG) {
           if (ATOM_TAG_ITEM.equals(thisTag)) {
             thisTag = null;
             insideItem = false;
+            thisNamespace = null;
           }
-        } else if (eventType == XmlPullParser.TEXT) {
+        } else if (eventType == XmlPullParser.TEXT && ((thisNamespace != null && !thisNamespace.equalsIgnoreCase(
+                MEDIA_NAMESPACE)) || thisNamespace == null)) { // base or any namespace
           if (insideItem && ATOM_TAG_TITLE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
             ((MutableItem) items.get(items.size() - 1)).setTitle(xpp.getText());
@@ -229,12 +272,48 @@ class DefaultRssSource implements RssSource {
 
     return items;
   }
+  
+  
+  private String parseThumbnailUrl(XmlPullParser xpp, String thisTag) {
+      if (THUMB_TAG_1.equals(thisTag) && xpp.getNamespace() != null
+              && xpp.getNamespace().equalsIgnoreCase(MEDIA_NAMESPACE)) {
+          int numAttrs = xpp.getAttributeCount();
+          for (int i = 0; i < numAttrs; i++) {
+              if (xpp.getAttributeName(i).equals(THUMB_TAG_URL)) {
+                  String thumb = xpp.getAttributeValue(i).trim();
+                  Log.v(TAG, "Thumbnail url by media:thumbnail = " + thumb);
+                  return thumb;
+              }
+          }
+      }
+
+      if (THUMB_TAG_2.equals(thisTag) && xpp.getNamespace() != null
+              && xpp.getNamespace().equalsIgnoreCase(MEDIA_NAMESPACE)) {
+          String thumbUrl = null;
+          boolean isImage = false;
+          int numAttrs = xpp.getAttributeCount();
+          for (int i = 0; i < numAttrs; i++) {
+              if (xpp.getAttributeName(i).equals(THUMB_TAG_2_TYPE)) {
+                  if (xpp.getAttributeValue(i).contains(THUMB_TAG_2_TYPE_SHOULD_CONTAIN)) {
+                      isImage = true;
+                  }
+              }
+              if (xpp.getAttributeName(i).equals(THUMB_TAG_URL)) {
+                  thumbUrl = xpp.getAttributeValue(i).trim();
+              }
+          }
+          if (isImage == true && !thumbUrl.equals("")) {
+              Log.v(TAG, "Thumbnail url by media:content = " + thumbUrl);
+              return thumbUrl;
+          }
+      }
+      return null;
+  }
 
   /**
    * Parse a webservice XML response into {@link Item} objects.
    */
-  private List<Item> parseResponse(InputStream response, int maxNumberOfItems,
-      String rssUrl) throws FeedProcessingException {
+  private List<Item> parseResponse(InputStream response, int maxNumberOfItems, String rssUrl) throws FeedProcessingException {
     List<Item> items = null;
     String responseString = "";
     try {
@@ -281,11 +360,23 @@ class DefaultRssSource implements RssSource {
       if (item.getURL() == null) {
         ((MutableItem) item).setUrl(rssUrl);
       }
+      if (item.getThumbnail() == null) {
+          ((MutableItem) item).setThumbnail("");
+      }
     }
-
     Log.i(TAG, items.size() + " items have been downloaded and parsed");
-
     return items;
   }
+  
+    private void retrieveThumbnails(final List<Item> items) {
+        int downloadedThumbs = 0;
+        for (Item item : items) {
+            String thumbnail = item.getThumbnail();
+            if (thumbnail != "") {
+                downloadedThumbs += (cacheImageManager.downloadAndSaveInCache(thumbnail)) ? 1 : 0;
+            }
+        }
+        Log.i(TAG, downloadedThumbs + " thumbnails out of " + items.size() + " items has been downloaded or hitted in the cache");
+    }
 
 }

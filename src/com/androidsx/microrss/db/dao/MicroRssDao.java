@@ -165,7 +165,8 @@ public class MicroRssDao {
         Cursor cursor = null;
         try {
             final Uri anItemUri = ContentUris.withAppendedId(MicroRssContentProvider.ITEMS_CONTENT_URI, id);
-            final String[] projection = new String[] { ItemColumns.TITLE, ItemColumns.CONTENT, ItemColumns.ITEM_URL, ItemColumns.DATE };
+            final String[] projection = new String[] { ItemColumns.TITLE, ItemColumns.CONTENT,
+                    ItemColumns.ITEM_URL, ItemColumns.THUMBNAIL_URL, ItemColumns.DATE };
             cursor = contentResolver.query(anItemUri, projection, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return itemFromCursor(cursor);
@@ -180,10 +181,11 @@ public class MicroRssDao {
     }
 
     private static Item itemFromCursor(Cursor cursor) {
-        return new DefaultItem(cursor.getString(cursor.getColumnIndex(ItemColumns.TITLE)),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.CONTENT)),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.ITEM_URL)), new Date(
-                        cursor.getLong(cursor.getColumnIndex(ItemColumns.DATE))));
+        return new DefaultItem(cursor.getString(cursor.getColumnIndex(ItemColumns.TITLE)), cursor
+                .getString(cursor.getColumnIndex(ItemColumns.CONTENT)), cursor.getString(cursor
+                .getColumnIndex(ItemColumns.ITEM_URL)), new Date(cursor.getLong(cursor
+                .getColumnIndex(ItemColumns.DATE))), cursor.getString(cursor
+                .getColumnIndex(ItemColumns.THUMBNAIL_URL)));
     }
     
     private static Feed feedFromCursor(Cursor cursor) {
