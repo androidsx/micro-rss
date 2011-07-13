@@ -100,7 +100,7 @@ public class MicroRssContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.v(TAG, "insert() with uri=" + uri + ", values=" + values);
+        Log.v(TAG, "insert() with uri=" + uri + ", values=[...]");
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         Uri resultUri = null;

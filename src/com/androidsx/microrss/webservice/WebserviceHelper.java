@@ -128,6 +128,8 @@ public class WebserviceHelper {
             HttpEntity entity = response.getEntity();
             stream = entity.getContent();
         } catch (Exception e) {
+            // FIXME: well... maybe shouldn't be an exception? we WON'T end up in the error view
+            // FIXME: easy to reproduce: start a new DB without internet connection
             throw new FeedProcessingException(
                 "Can't download the feed! Either the network connection or the server is down",
               e,

@@ -1,13 +1,11 @@
 package com.androidsx.microrss.configure;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -16,7 +14,6 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 
 public class ChooseFeedsActivity extends ListActivity {
-
     private static final String TAG = "ChooseFeedsActivity";
     
     private MicroRssDao dao;
@@ -42,15 +39,6 @@ public class ChooseFeedsActivity extends ListActivity {
         }
     }
     
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        //feeds = dao.findFeeds();
-        //setListAdapter(new ArrayAdapter<String>(this,
-        //        android.R.layout.simple_list_item_multiple_choice, feedToStringArray(feeds)));
-    }
-
     /**
      * TODO: Refresh all views somehow. Not done because, once the WIMM Portal is in place, we
      * probably won't need to do such a thing
@@ -58,7 +46,10 @@ public class ChooseFeedsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        dao.updateFeedActive(feeds.get(position), listView.getCheckedItemPositions().get(position));
+        boolean newActiveStatus = listView.getCheckedItemPositions().get(position);
+        Feed feed = feeds.get(position);
+        Log.i(TAG, "Update the feed " + feed.getTitle() + " as active=" + newActiveStatus);
+        dao.updateFeedActive(feed, newActiveStatus);
     }
 
     private static String[] feedToStringArray(List<Feed> list) {

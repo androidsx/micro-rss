@@ -32,6 +32,7 @@ public class StoryActivity extends Activity {
 
         int[] storyIds = getIntent().getIntArrayExtra(ExtrasConstants.STORY_IDS);
         int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
+        // FIXME: out of bounds exception! for instance, if we have no items for this feed yet
         Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
 
         ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
