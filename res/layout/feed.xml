@@ -42,8 +42,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true" 
 		android:orientation="vertical">
-		<TextView android:id="@+id/feed_title_not_really" 
-			android:text="Feed 1 of 4"
+		<TextView android:id="@+id/feed_count" 
 			android:padding="1.0dip" 
 			android:visibility="visible"
 			android:layout_width="wrap_content"

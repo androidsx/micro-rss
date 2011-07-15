@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.domain.Feed;
 
 public class FeedActivity extends Activity {
     private static final String TAG = "FeedActivity";
@@ -22,8 +23,12 @@ public class FeedActivity extends Activity {
         
         int[] feedIds = getIntent().getIntArrayExtra(ExtrasConstants.FEED_IDS);
         int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
+        // FIXME: out of bounds exception! for instance, if no feeds loaded yet. but... what sense does it make?
+        MicroRssDao dao = new MicroRssDao(getContentResolver());
+        Feed feed = dao.findFeed(feedIds[feedIndex]);
         
-        ((TextView) findViewById(R.id.feed_title)).setText("Feed " + (feedIndex + 1) + " / " + feedIds.length);
+        ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
+        ((TextView) findViewById(R.id.feed_count)).setText(getString(R.string.feed_count, (feedIndex + 1), feedIds.length));
     }
     
     public void onClickNavigationUp(View target) {
