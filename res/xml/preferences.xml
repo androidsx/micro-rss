@@ -11,12 +11,12 @@
        <PreferenceCategory
                 android:title="Advanced">
              <ListPreference
-				android:key="updateInterval"
+				android:key="@string/pref_update_interval"
 				android:title="Update interval"
 				android:entries="@array/update_interval"
 				android:entryValues="@array/update_interval_values"
-				android:dialogTitle="Update the stories every"
-				android:enabled="false" />
+				android:defaultValue="60000"
+				android:dialogTitle="Update the stories every" />
 				
 			 <PreferenceScreen
 	                android:key="SecondPrefScreen"

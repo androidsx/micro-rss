@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="update_interval">
+		<item>1 minute (!)</item>
 		<item>1 hour</item>
 		<item>3 hours</item>
 		<item>6 hours</item>
-		<item>12 hours</item>
 		<item>1 day</item>
 	</string-array>
+	<!-- The values are in milliseconds -->
 	<string-array name="update_interval_values">
-		<item>1</item>
-		<item>3</item>
-		<item>6</item>
-		<item>12</item>
-		<item>24</item>
+		<item>60000</item>
+		<item>3600000</item>
+		<item>10800000</item>
+		<item>21600000</item>
+		<item>86400000</item>
 	</string-array>
 </resources>

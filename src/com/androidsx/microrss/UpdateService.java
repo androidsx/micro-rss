@@ -8,7 +8,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
@@ -33,13 +35,13 @@ public class UpdateService extends Service implements Runnable {
      * FIXME (WIMM): See {@link DefaultMaxNumItemsSaved}, where a constant and 2 strings also define
      * the maximum...
      */
-    public static final int MAX_ITEMS_PER_FEED = 7;
+    public static final int MAX_ITEMS_PER_FEED = 5;
 
     /**
-     * Update interval. Every {@link #UPDATE_INTERVAL} milliseconds, the update service wakes up,
+     * Default update interval, in milliseconds. Every update period, the update service wakes up,
      * checks whether any feed needs updating, sets a new alarm, and sleeps again.
      */
-    private static final long UPDATE_INTERVAL = 30 * DateUtils.SECOND_IN_MILLIS;
+    private static final long DEFAULT_UPDATE_INTERVAL_MILLIS = 3 * DateUtils.HOUR_IN_MILLIS;
 
     /**
      * Specific {@link Intent#setAction(String)} used when performing a full update of all feeds,
@@ -173,7 +175,7 @@ public class UpdateService extends Service implements Runnable {
 
             // Schedule alarm, and force the device awake for this update
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, timeForNextUpdateAlarm(UPDATE_INTERVAL),
+            alarmManager.set(AlarmManager.RTC_WAKEUP, timeForNextUpdateAlarm(getUpdateIntervalMillis()),
                     pendingIntent);
         } else {
             Log.i(TAG, "There are no more feeds in the home screen, so no need to set an alarm");
@@ -183,6 +185,15 @@ public class UpdateService extends Service implements Runnable {
         stopSelf();
     }
 
+    /** Fetches the update interval from the shared preferences, or returns a reasonable default value */
+    private long getUpdateIntervalMillis() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String updateIntervalKey = getResources().getString(R.string.pref_update_interval);
+        String updateInterval = sharedPrefs.getString(updateIntervalKey, String.valueOf(DEFAULT_UPDATE_INTERVAL_MILLIS));
+        Log.e(TAG, "The update interval is " + updateInterval);
+        return new Long(updateInterval);
+    }
+    
     private long timeForNextUpdateAlarm(long minUpdateIntervalMillis) {
         Time time = new Time();
         time.set(System.currentTimeMillis() + minUpdateIntervalMillis);
