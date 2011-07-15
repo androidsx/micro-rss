@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="fill_parent"
-	android:layout_height="fill_parent" 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
 	android:layoutAnimation="@anim/fade_in_layout"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+	android:background="@color/wrapper_background_color" >
 
-	<ScrollView android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="fill_parent" 
-			android:orientation="vertical">
-			
-			<include layout="@layout/feed" />
-
-			<include layout="@layout/navigation_panel" />
-		</LinearLayout>
-	</ScrollView>
-</LinearLayout>
+	<FrameLayout
+		android:id="@+id/frame_wrapper"
+		android:layout_width="@dimen/wimm_screen_width"
+		android:layout_height="@dimen/wimm_screen_height"
+		android:layout_marginTop="10dip"
+		android:layout_centerHorizontal="true" >
+		<include layout="@layout/feed" />
+	</FrameLayout>
+	
+	<FrameLayout
+		android:layout_below="@id/frame_wrapper"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="10dip"
+		android:layout_centerInParent="true" >
+		<include layout="@layout/navigation_panel" />
+	</FrameLayout>
+</RelativeLayout>

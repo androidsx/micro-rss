@@ -5,13 +5,11 @@
 	
 	In order to convert this layout into one with image, just do the steps with the info of each view.
  -->
-<RelativeLayout
-	android:padding="1.0dip"
-	android:layout_width="@dimen/feed_tile_width" 
-	android:layout_height="@dimen/feed_tile_width"
-	android:layout_margin="4dip"
-	android:background="@drawable/temporal_border" 
-	xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@color/application_background"
+	>
 
 	<!--TEXT + IMAGE -->
 	<!--
@@ -19,8 +17,8 @@
 		TEXT + IMAGE: image1 - android:src="@drawable/icon"
 	-->
 	<ImageView android:id="@+id/story_image" 
-		android:layout_width="@dimen/feed_image_width" 
-		android:layout_height="@dimen/feed_image_width" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent" 
 		android:scaleType="centerCrop"
 		android:layout_centerInParent="true" />
 
@@ -31,7 +29,7 @@
 	-->
 	<TextView android:id="@+id/story_title"
 		android:text="Short centered fsdf sdsd fsdf  sd fsd  fsdfsda fd sdf  "
-		android:layout_width="@dimen/feed_image_width"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
 		android:maxLines="4"
 		android:layout_centerInParent="true"

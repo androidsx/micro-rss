@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- for WIMM debug we change the gravity from center to left -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
 	android:layout_gravity="left|bottom">
+	
 	<TableLayout android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_margin="0dip">
 
 		<TableRow>
-			<Button android:visibility="invisible"></Button>
+			<Button android:visibility="invisible"/>
 			<Button android:id="@+id/navigation_up" 
 				android:text="Up" 
 				android:width="60dip"
-				android:onClick="onClickNavigationUp"></Button>
-			<Button android:visibility="invisible"></Button>
+				android:onClick="onClickNavigationUp"/>
+			<Button android:visibility="invisible"/>
 		</TableRow>
 
 		<TableRow>
 			<Button android:id="@+id/navigation_left" 
 				android:text="Left" 
 				android:width="55dip"
-				android:onClick="onClickNavigationLeft"></Button>
+				android:onClick="onClickNavigationLeft"/>
 			<Button android:visibility="invisible"></Button>
 			<Button android:id="@+id/navigation_right"
 				android:text="Right" 
 				android:width="55dip"
-				android:onClick="onClickNavigationRight"></Button>
+				android:onClick="onClickNavigationRight"/>
 		</TableRow>
 
 		<TableRow>
-			<Button android:visibility="invisible"></Button>
+			<Button android:visibility="invisible"/>
 			<Button android:id="@+id/navigation_down" 
 				android:text="Down"
 				android:width="60dip"
-				android:onClick="onClickNavigationDown"></Button>
-			<Button android:visibility="invisible"></Button>
+				android:onClick="onClickNavigationDown"/>
+			<Button android:visibility="invisible"/>
 		</TableRow>
 	</TableLayout>
 </RelativeLayout>
