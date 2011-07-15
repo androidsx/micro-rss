@@ -111,6 +111,25 @@ public class MicroRssDao {
         }
     }
     
+    public Feed findFeed(int id) {
+        Cursor cursor = null;
+        try {
+            final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, id);
+            final String[] projection = new String[] { BaseColumns._ID, FeedColumns.FEED_URL, FeedColumns.TITLE,
+                    FeedColumns.LAST_UPDATE, FeedColumns.ACTIVE };
+            cursor = contentResolver.query(aFeedUri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return feedFromCursor(cursor);
+            } else {
+                throw new IllegalArgumentException("No feed was found for the id " + id);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
     public List<Item> findStories(int feedId) {
         Cursor cursor = null;
         try {
