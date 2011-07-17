@@ -53,12 +53,14 @@ public class ExpandedStoryActivity extends Activity {
     }
 
     public void onClickNavigationRight(View target) {
-        int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
         if (intentDecoder.canGoRight()) {
             startActivity(intentEncoder.buildGoRightIntent(this, ExpandedStoryActivity.class));
         } else {
-            Toast.makeText(this, "Can't go right anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go right anymore. Already at index " + storyIndex);
+            Toast.makeText(this,
+                    "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex(),
+                    Toast.LENGTH_SHORT).show();
+            Log.w(TAG,
+                    "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex());
         }
     }
 
