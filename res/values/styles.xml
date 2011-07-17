@@ -308,7 +308,7 @@
     <style name="story_title">
         <item name="android:textSize">19.0sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/story_title</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
@@ -316,7 +316,7 @@
     
     <style name="story_feed_title">
         <item name="android:textSize">10.0sp</item>
-        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textColor">@color/story_feed_title</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
     </style>
@@ -336,7 +336,7 @@
     
    <style name="expanded_story_timestamp">
         <item name="android:textSize">10.0sp</item>
-        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textColor">@color/expanded_story_timestamp</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingBottom">1.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
@@ -344,7 +344,7 @@
     
    <style name="expanded_story_description">
         <item name="android:textSize">13.0sp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/expanded_story_description</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingTop">1.0dip</item>
         <item name="android:paddingBottom">2.0dip</item>

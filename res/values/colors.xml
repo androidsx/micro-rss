@@ -10,13 +10,15 @@
 	
     <color name="expanded_story_separator_feed_title">#55e74e4e</color>
     <color name="expanded_story_feed_title">#FFe74e4e</color>
-    <color name="story_separator_feed_title">#FFe74e4e</color>
+    <color name="expanded_story_timestamp">#ffbbbbbb</color>
+    <color name="expanded_story_description">#FFFFFF</color>
 
-	
+    <color name="story_separator_feed_title">#FFe74e4e</color>
+	<color name="story_title">#FFFFFF</color>
+    <color name="story_feed_title">#ffbbbbbb</color>
     <color name="story_background_feed_title">#aa000000</color>
     <color name="story_background_title">#cc000000</color>
     
-    <color name="light_gray">#ffbbbbbb</color>
     
     <color name="wrapper_background_color">#333333</color>
     

@@ -22,7 +22,8 @@
 		android:maxLines="4"
 		android:gravity="center"
 		android:layout_centerInParent="true"
-		android:layout_centerHorizontal="true" 
+		android:layout_centerHorizontal="true"
+		android:text="Feed title" 
 		style="@style/story_title" />
 
 	<!--TEXT + IMAGE -->
