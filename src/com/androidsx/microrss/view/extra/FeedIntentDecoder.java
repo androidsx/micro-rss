@@ -1,10 +1,10 @@
-package com.androidsx.microrss.view;
+package com.androidsx.microrss.view.extra;
 
 import android.content.Intent;
 
-class FeedIntentEncoder extends IntentEncoder {
+public class FeedIntentDecoder extends IntentDecoder {
 
-    FeedIntentEncoder(Intent intent) {
+    public FeedIntentDecoder(Intent intent) {
         super(intent);
     }
 

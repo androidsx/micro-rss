@@ -1,10 +1,11 @@
-package com.androidsx.microrss.view;
+package com.androidsx.microrss.view.extra;
+
 
 import android.content.Intent;
 
-class StoryIntentDecoder extends IntentDecoder {
+public class StoryIntentEncoder extends IntentEncoder {
 
-    StoryIntentDecoder(Intent intent) {
+    public StoryIntentEncoder(Intent intent) {
         super(intent);
     }
 

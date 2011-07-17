@@ -12,11 +12,16 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
+import com.androidsx.microrss.view.extra.ExtrasConstants;
+import com.androidsx.microrss.view.extra.FeedIntentDecoder;
+import com.androidsx.microrss.view.extra.FeedIntentEncoder;
+import com.androidsx.microrss.view.extra.IntentDecoder;
+import com.androidsx.microrss.view.extra.IntentEncoder;
 
 public class FeedActivity extends Activity {
     private static final String TAG = "FeedActivity";
     private IntentDecoder intentDecoder;
-    private FeedIntentEncoder intentEncoder;
+    private IntentEncoder intentEncoder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

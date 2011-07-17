@@ -1,4 +1,4 @@
-package com.androidsx.microrss.view;
+package com.androidsx.microrss.view.extra;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,14 +16,14 @@ import android.content.Intent;
  * }
  * </pre>
  */
-abstract class IntentEncoder {
+public abstract class IntentEncoder {
     private final Intent incomingIntent;
 
-    IntentEncoder(Intent incomingIntent) {
+    protected IntentEncoder(Intent incomingIntent) {
         this.incomingIntent = incomingIntent;
     }
     
-    Intent buildGoLeftIntent(Context packageContext, Class<?> cls) {
+    public Intent buildGoLeftIntent(Context packageContext, Class<?> cls) {
         Intent intent = new Intent(packageContext, cls);
         intent.putExtras(incomingIntent.getExtras());
         int currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), 0);
@@ -31,7 +31,7 @@ abstract class IntentEncoder {
         return intent;
     }
 
-    Intent buildGoRightIntent(Context packageContext, Class<?> cls) {
+    public Intent buildGoRightIntent(Context packageContext, Class<?> cls) {
         Intent intent = new Intent(packageContext, cls);
         intent.putExtras(incomingIntent.getExtras());
         int currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), 0);

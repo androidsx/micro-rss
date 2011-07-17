@@ -12,6 +12,7 @@ import com.androidsx.microrss.UpdateService;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.view.extra.ExtrasConstants;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and

@@ -1,4 +1,4 @@
-package com.androidsx.microrss.view;
+package com.androidsx.microrss.view.extra;
 
 import android.content.Intent;
 
@@ -19,16 +19,16 @@ import android.content.Intent;
  * }
  * </pre>
  */
-abstract class IntentDecoder {
+public abstract class IntentDecoder {
     private final int[] ids;
     private final int currentIndex;
 
-    public IntentDecoder(Intent incomingIntent) {
+    protected IntentDecoder(Intent incomingIntent) {
         ids = incomingIntent.getIntArrayExtra(getIdsKey());
         currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), -1);
     }
 
-    boolean isValidIndex() {
+    public boolean isValidIndex() {
         return currentIndex >= 0 && currentIndex < ids.length;
     }
 
@@ -36,24 +36,24 @@ abstract class IntentDecoder {
         return index >= 0 && index < ids.length;
     }
     
-    int getCurrentIndex() {
+    public int getCurrentIndex() {
         return currentIndex;
     }
     
     /** Only meaningful if {@code isValidIndex() == true}. */
-    int getCurrentId() {
+    public int getCurrentId() {
         return ids[currentIndex];
     }
     
-    int getCount() {
+    public int getCount() {
         return ids.length;
     }
     
-    boolean canGoLeft() {
+    public boolean canGoLeft() {
         return isValidIndex(currentIndex - 1);
     }
     
-    boolean canGoRight() {
+    public boolean canGoRight() {
         return isValidIndex(currentIndex + 1);
     }
     

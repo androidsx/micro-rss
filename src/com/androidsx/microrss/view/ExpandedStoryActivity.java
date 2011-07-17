@@ -11,6 +11,10 @@ import android.widget.Toast;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Item;
+import com.androidsx.microrss.view.extra.IntentDecoder;
+import com.androidsx.microrss.view.extra.IntentEncoder;
+import com.androidsx.microrss.view.extra.StoryIntentDecoder;
+import com.androidsx.microrss.view.extra.StoryIntentEncoder;
 
 public class ExpandedStoryActivity extends Activity {
     private static final String TAG = "ExpandedStoryActivity";
