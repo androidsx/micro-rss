@@ -21,14 +21,16 @@ public class FeedActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
         
-        int[] feedIds = getIntent().getIntArrayExtra(ExtrasConstants.FEED_IDS);
-        int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
-        // FIXME: out of bounds exception! for instance, if no feeds loaded yet. but... what sense does it make?
-        MicroRssDao dao = new MicroRssDao(getContentResolver());
-        Feed feed = dao.findFeed(feedIds[feedIndex]);
-        
-        ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
-        ((TextView) findViewById(R.id.feed_count)).setText(getString(R.string.feed_count, (feedIndex + 1), feedIds.length));
+        IntentDecoder intentDecoder = new FeedIntentDecoder(getIntent());
+        if (intentDecoder.isValidIndex()) {
+            Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
+            ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
+            ((TextView) findViewById(R.id.feed_count)).setText(getString(R.string.feed_count,
+                    (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
+        } else {
+            Log.e(TAG, "Wrong index: " + intentDecoder.getCurrentIndex() + " (total: " + intentDecoder.getCount() + ")");
+            finish();
+        }
     }
     
     public void onClickNavigationUp(View target) {

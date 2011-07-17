@@ -30,17 +30,18 @@ public class StoryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_wrapper);
 
-        int[] storyIds = getIntent().getIntArrayExtra(ExtrasConstants.STORY_IDS);
-        int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
-        // FIXME: out of bounds exception! for instance, if we have no items for this feed yet
-        Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
-
-        ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
-
-        Bitmap storyBitmap = getStoryBitmap(story.getThumbnail());
-        if (storyBitmap != null) {
-            Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
-            switchToImageLayout(storyBitmap);
+        IntentDecoder intentDecoder = new StoryIntentDecoder(getIntent());
+        if (intentDecoder.isValidIndex()) {
+            Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
+            ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
+            Bitmap storyBitmap = getStoryBitmap(story.getThumbnail());
+            if (storyBitmap != null) {
+                Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
+                switchToImageLayout(storyBitmap);
+            }
+        } else {
+            Log.e(TAG, "Wrong index: " + intentDecoder.getCurrentIndex() + " (total: " + intentDecoder.getCount() + ")");
+            finish();
         }
     }
 

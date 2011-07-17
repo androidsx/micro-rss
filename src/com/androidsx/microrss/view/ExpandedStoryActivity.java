@@ -20,13 +20,15 @@ public class ExpandedStoryActivity extends Activity {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.expanded_story_wrapper); 
         
-        int[] storyIds = getIntent().getIntArrayExtra(ExtrasConstants.STORY_IDS);
-        int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
-        
-        Item story = new MicroRssDao(getContentResolver()).findStory(storyIds[storyIndex]);
-        // TODO: formatted date
-        ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
-        ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
+        IntentDecoder intentDecoder = new StoryIntentDecoder(getIntent());
+        if (intentDecoder.isValidIndex()) {
+            Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
+            ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
+            ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
+        } else {
+            Log.e(TAG, "Wrong index: " + intentDecoder.getCurrentIndex() + " (total: " + intentDecoder.getCount() + ")");
+            finish();
+        }
     }
     
     public void onClickNavigationUp(View target) {
