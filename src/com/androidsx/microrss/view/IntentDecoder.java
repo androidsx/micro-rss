@@ -23,9 +23,9 @@ abstract class IntentDecoder {
     private final int[] ids;
     private final int currentIndex;
 
-    public IntentDecoder(Intent intent) {
-        ids = intent.getIntArrayExtra(getIdsKey());
-        currentIndex = intent.getIntExtra(getCurrentIndexKey(), -1);
+    public IntentDecoder(Intent incomingIntent) {
+        ids = incomingIntent.getIntArrayExtra(getIdsKey());
+        currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), -1);
     }
 
     boolean isValidIndex() {
