@@ -139,8 +139,8 @@ public class InitActivity extends Activity {
             startActivity(intentEncoder.buildGoDownIntent(FeedActivity.class, new FeedNavigationExtras(), feedIds));
             Log.i(TAG, "End of the initialization activity");
         } else {
-            // FIXME: deal with this properly: dispatch to a different view
-            Log.e(TAG, "There are no feeds");
+            Log.w(TAG, "There are no feeds: dispatch to the NoFeedsActivity");
+            startActivity(new Intent(this, NoFeedsActivity.class));
         }
         finish();
     }
