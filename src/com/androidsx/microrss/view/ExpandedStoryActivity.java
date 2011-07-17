@@ -14,13 +14,14 @@ import com.androidsx.microrss.domain.Item;
 
 public class ExpandedStoryActivity extends Activity {
     private static final String TAG = "ExpandedStoryActivity";
+    private IntentDecoder intentDecoder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.expanded_story_wrapper); 
         
-        IntentDecoder intentDecoder = new StoryIntentDecoder(getIntent());
+        intentDecoder = new StoryIntentDecoder(getIntent());
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
             ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
@@ -39,29 +40,28 @@ public class ExpandedStoryActivity extends Activity {
 
     public void onClickNavigationLeft(View target) {
         int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
-        if (storyIndex == 0) {
-            Toast.makeText(this, "Can't go left anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go left anymore. Already at index " + storyIndex);
-        } else {
+        if (intentDecoder.canGoLeft()) {
             Intent intent = new Intent(this, ExpandedStoryActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.STORY_INDEX, storyIndex - 1);
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "Can't go left anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "Can't go left anymore. Already at index " + storyIndex);
         }
     }
 
     // TODO: copy-pasted from StoryActivity
     public void onClickNavigationRight(View target) {
-        int[] storyIds = getIntent().getIntArrayExtra(ExtrasConstants.STORY_IDS);
         int storyIndex = getIntent().getIntExtra(ExtrasConstants.STORY_INDEX, 0);
-        if (storyIndex == storyIds.length - 1) {
-            Toast.makeText(this, "Can't go right anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go right anymore. Already at index " + storyIndex);
-        } else {
+        if (intentDecoder.canGoRight()) {
             Intent intent = new Intent(this, ExpandedStoryActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.STORY_INDEX, storyIndex + 1);
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "Can't go right anymore. Already at index " + storyIndex, Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "Can't go right anymore. Already at index " + storyIndex);
         }
     }
 

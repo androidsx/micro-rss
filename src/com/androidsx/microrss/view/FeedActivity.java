@@ -15,13 +15,14 @@ import com.androidsx.microrss.domain.Feed;
 
 public class FeedActivity extends Activity {
     private static final String TAG = "FeedActivity";
+    private IntentDecoder intentDecoder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
         
-        IntentDecoder intentDecoder = new FeedIntentDecoder(getIntent());
+        intentDecoder = new FeedIntentDecoder(getIntent());
         if (intentDecoder.isValidIndex()) {
             Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
             ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
@@ -39,34 +40,29 @@ public class FeedActivity extends Activity {
 
     public void onClickNavigationLeft(View target) {
         int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
-        if (feedIndex == 0) {
-            startActivity(new Intent(this, Preferences.class));
-            Log.d(TAG, "Can't go left anymore. Go to Settings");
-        } else {
+        if (intentDecoder.canGoLeft()) {
             Intent intent = new Intent(this, FeedActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.FEED_INDEX, feedIndex - 1);
-            
             // FIXME: here, we need to reload the array of story ids
-            
             startActivity(intent);
+        } else {
+            startActivity(new Intent(this, Preferences.class));
+            Log.d(TAG, "Can't go left anymore. Go to Settings");
         }
     }
 
     public void onClickNavigationRight(View target) {
-        int[] feedIds = getIntent().getIntArrayExtra(ExtrasConstants.FEED_IDS);
         int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
-        if (feedIndex == feedIds.length - 1) {
-            Toast.makeText(this, "Can't go right anymore. Already at index " + feedIndex, Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go right anymore. Already at index " + feedIndex);
-        } else {
+        if (intentDecoder.canGoRight()) {
             Intent intent = new Intent(this, FeedActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(ExtrasConstants.FEED_INDEX, feedIndex + 1);
-            
             // FIXME: here, we need to reload the array of story ids
-            
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "Can't go right anymore. Already at index " + feedIndex, Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "Can't go right anymore. Already at index " + feedIndex);
         }
     }
 

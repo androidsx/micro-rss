@@ -32,6 +32,10 @@ abstract class IntentDecoder {
         return currentIndex >= 0 && currentIndex < ids.length;
     }
 
+    private boolean isValidIndex(int index) {
+        return index >= 0 && index < ids.length;
+    }
+    
     int getCurrentIndex() {
         return currentIndex;
     }
@@ -43,6 +47,14 @@ abstract class IntentDecoder {
     
     int getCount() {
         return ids.length;
+    }
+    
+    boolean canGoLeft() {
+        return isValidIndex(currentIndex - 1);
+    }
+    
+    boolean canGoRight() {
+        return isValidIndex(currentIndex + 1);
     }
     
     /** Key of the extra that holds the IDs. */
