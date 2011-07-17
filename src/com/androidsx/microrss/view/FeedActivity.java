@@ -12,9 +12,6 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
-import com.androidsx.microrss.view.extra.ExtrasConstants;
-import com.androidsx.microrss.view.extra.FeedIntentDecoder;
-import com.androidsx.microrss.view.extra.FeedIntentEncoder;
 import com.androidsx.microrss.view.extra.IntentDecoder;
 import com.androidsx.microrss.view.extra.IntentEncoder;
 
@@ -28,8 +25,8 @@ public class FeedActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
         
-        intentDecoder = new FeedIntentDecoder(getIntent());
-        intentEncoder = new FeedIntentEncoder(getIntent());
+        intentDecoder = new IntentDecoder(getIntent(), new FeedNavigationExtras());
+        intentEncoder = new IntentEncoder(getIntent(), new FeedNavigationExtras());
         
         if (intentDecoder.isValidIndex()) {
             Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
@@ -70,15 +67,15 @@ public class FeedActivity extends Activity {
     public void onClickNavigationDown(View target) {
         final Intent intent = new Intent(this, StoryActivity.class);
         intent.putExtras(getIntent().getExtras());
-        final int[] feedIds = getIntent().getIntArrayExtra(ExtrasConstants.FEED_IDS);
-        final int feedIndex = getIntent().getIntExtra(ExtrasConstants.FEED_INDEX, 0);
+        final int[] feedIds = getIntent().getIntArrayExtra(new FeedNavigationExtras().getAllIdsKey());
+        final int feedIndex = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIndexKey(), 0);
         if (feedIndex >= feedIds.length) {
             Log.e(TAG, "OUCH"); // FIXME
         } else {
             int feedId = feedIds[feedIndex];
             final MicroRssDao dao = new MicroRssDao(getContentResolver());
-            intent.putExtra(ExtrasConstants.STORY_IDS, dao.findStoryIds(feedId));
-            intent.putExtra(ExtrasConstants.STORY_INDEX, 0);
+            intent.putExtra(new StoryNavigationExtras().getAllIdsKey(), dao.findStoryIds(feedId));
+            intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), 0);
             startActivity(intent);
         }
     }

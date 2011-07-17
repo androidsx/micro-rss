@@ -1,5 +1,7 @@
 package com.androidsx.microrss.view.extra;
 
+import com.androidsx.microrss.view.NavigationExtras;
+
 import android.content.Intent;
 
 /**
@@ -7,7 +9,7 @@ import android.content.Intent;
  * extras. It should usually go like this:
  * 
  * <pre>
- * IntentDecoder intentDecoder = new FeedIntentDecoder(getIntent());
+ * IntentDecoder intentDecoder = new IntentDecoder(getIntent(), new StoryNavigationExtras());
  * if (intentDecoder.isValidIndex()) {
  *     // Retrieve the feed with the ID intentDecoder.getCurrentId()
  *     // Update the UI using intentDecoder.getCount()
@@ -19,13 +21,13 @@ import android.content.Intent;
  * }
  * </pre>
  */
-public abstract class IntentDecoder {
+public class IntentDecoder {
     private final int[] ids;
     private final int currentIndex;
 
-    protected IntentDecoder(Intent incomingIntent) {
-        ids = incomingIntent.getIntArrayExtra(getIdsKey());
-        currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), -1);
+    public IntentDecoder(Intent incomingIntent, NavigationExtras extrasKeys) {
+        ids = incomingIntent.getIntArrayExtra(extrasKeys.getCurrentIndexKey());
+        currentIndex = incomingIntent.getIntExtra(extrasKeys.getCurrentIndexKey(), -1);
     }
 
     public boolean isValidIndex() {
@@ -56,10 +58,4 @@ public abstract class IntentDecoder {
     public boolean canGoRight() {
         return isValidIndex(currentIndex + 1);
     }
-    
-    /** Key of the extra that holds the IDs. */
-    protected abstract String getIdsKey();
-    
-    /** Key of the extra that holds the current index. */
-    protected abstract String getCurrentIndexKey();
 }

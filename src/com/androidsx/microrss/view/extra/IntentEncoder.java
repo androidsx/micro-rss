@@ -1,5 +1,7 @@
 package com.androidsx.microrss.view.extra;
 
+import com.androidsx.microrss.view.NavigationExtras;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -8,7 +10,7 @@ import android.content.Intent;
  * using the existing extras to derive the extras of the new intent.
  * 
  * <pre>
- * IntentEncoder intentEncoder = new FeedIntentEncoder(getIntent());
+ * IntentEncoder intentEncoder = new IntentEncoder(getIntent(), new FeedNavigationExtras());
  * if (intentDecoder.canGoLeft()) {
  *     startActivity(intentEncoder.buildGoLeftIntent(this, FeedActivity.class));
  * } else {
@@ -16,32 +18,28 @@ import android.content.Intent;
  * }
  * </pre>
  */
-public abstract class IntentEncoder {
+public class IntentEncoder {
     private final Intent incomingIntent;
+    private final NavigationExtras extrasKeys;
 
-    protected IntentEncoder(Intent incomingIntent) {
+    public IntentEncoder(Intent incomingIntent, NavigationExtras extrasKeys) {
         this.incomingIntent = incomingIntent;
+        this.extrasKeys = extrasKeys;
     }
     
     public Intent buildGoLeftIntent(Context packageContext, Class<?> cls) {
         Intent intent = new Intent(packageContext, cls);
         intent.putExtras(incomingIntent.getExtras());
-        int currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), 0);
-        intent.putExtra(getCurrentIndexKey(), currentIndex - 1);
+        int currentIndex = incomingIntent.getIntExtra(extrasKeys.getCurrentIndexKey(), 0);
+        intent.putExtra(extrasKeys.getCurrentIndexKey(), currentIndex - 1);
         return intent;
     }
 
     public Intent buildGoRightIntent(Context packageContext, Class<?> cls) {
         Intent intent = new Intent(packageContext, cls);
         intent.putExtras(incomingIntent.getExtras());
-        int currentIndex = incomingIntent.getIntExtra(getCurrentIndexKey(), 0);
-        intent.putExtra(getCurrentIndexKey(), currentIndex + 1);
+        int currentIndex = incomingIntent.getIntExtra(extrasKeys.getCurrentIndexKey(), 0);
+        intent.putExtra(extrasKeys.getCurrentIndexKey(), currentIndex + 1);
         return intent;
     }
-    
-    /** Key of the extra that holds the IDs. */
-    protected abstract String getIdsKey();
-    
-    /** Key of the extra that holds the current index. */
-    protected abstract String getCurrentIndexKey();
 }

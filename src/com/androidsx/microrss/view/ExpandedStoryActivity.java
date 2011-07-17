@@ -13,8 +13,6 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.view.extra.IntentDecoder;
 import com.androidsx.microrss.view.extra.IntentEncoder;
-import com.androidsx.microrss.view.extra.StoryIntentDecoder;
-import com.androidsx.microrss.view.extra.StoryIntentEncoder;
 
 public class ExpandedStoryActivity extends Activity {
     private static final String TAG = "ExpandedStoryActivity";
@@ -26,8 +24,8 @@ public class ExpandedStoryActivity extends Activity {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.expanded_story_wrapper); 
         
-        intentDecoder = new StoryIntentDecoder(getIntent());
-        intentEncoder = new StoryIntentEncoder(getIntent());
+        intentDecoder = new IntentDecoder(getIntent(), new StoryNavigationExtras());
+        intentEncoder = new IntentEncoder(getIntent(), new StoryNavigationExtras());
         
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());

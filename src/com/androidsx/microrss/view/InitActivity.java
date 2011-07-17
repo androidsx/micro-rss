@@ -12,7 +12,6 @@ import com.androidsx.microrss.UpdateService;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.dao.MicroRssDao;
-import com.androidsx.microrss.view.extra.ExtrasConstants;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
@@ -141,8 +140,8 @@ public class InitActivity extends Activity {
         
         // TODO: If there are no feeds, dispatch to a different view
         if (feedIds.length > 0) {
-            intent.putExtra(ExtrasConstants.FEED_IDS, feedIds);
-            intent.putExtra(ExtrasConstants.FEED_INDEX, firstFeedIndex);
+            intent.putExtra(new FeedNavigationExtras().getAllIdsKey(), feedIds);
+            intent.putExtra(new FeedNavigationExtras().getCurrentIndexKey(), firstFeedIndex);
             startActivity(intent);
             Log.i(TAG, "End of the initialization activity");
         } else {
