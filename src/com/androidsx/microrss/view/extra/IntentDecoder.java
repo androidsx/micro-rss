@@ -26,7 +26,7 @@ public class IntentDecoder {
     private final int currentIndex;
 
     public IntentDecoder(Intent incomingIntent, NavigationExtras extrasKeys) {
-        ids = incomingIntent.getIntArrayExtra(extrasKeys.getCurrentIndexKey());
+        ids = incomingIntent.getIntArrayExtra(extrasKeys.getAllIdsKey());
         currentIndex = incomingIntent.getIntExtra(extrasKeys.getCurrentIndexKey(), -1);
     }
 
