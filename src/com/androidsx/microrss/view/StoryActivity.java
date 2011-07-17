@@ -35,7 +35,7 @@ public class StoryActivity extends Activity {
         setContentView(R.layout.story_wrapper);
 
         intentDecoder = new IntentDecoder(getIntent(), new StoryNavigationExtras());
-        intentEncoder = new IntentEncoder(getIntent(), new StoryNavigationExtras());
+        intentEncoder = new IntentEncoder(this, getIntent());
         
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
@@ -51,15 +51,18 @@ public class StoryActivity extends Activity {
         }
     }
 
+    /** Before going up to the feed level, we clean up the extras that won't make sense any more up there. */
     public void onClickNavigationUp(View target) {
-        Intent intent = new Intent(this, FeedActivity.class);
-        intent.putExtras(getIntent().getExtras());
+        Intent intent = intentEncoder.buildGoUpIntent(FeedActivity.class);
+        intent.putExtra(new StoryNavigationExtras().getAllIdsKey(), (String[]) null);
+        intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), (String) null);
         startActivity(intent);
+
     }
 
     public void onClickNavigationLeft(View target) {
         if (intentDecoder.canGoLeft()) {
-            startActivity(intentEncoder.buildGoLeftIntent(this, StoryActivity.class));
+            startActivity(intentEncoder.buildGoLeftIntent(StoryActivity.class, new StoryNavigationExtras()));
         } else {
             Toast.makeText(this,
                     "Can't go left anymore. Already at index " + intentDecoder.getCurrentIndex(),
@@ -70,7 +73,7 @@ public class StoryActivity extends Activity {
 
     public void onClickNavigationRight(View target) {
         if (intentDecoder.canGoRight()) {
-            startActivity(intentEncoder.buildGoRightIntent(this, StoryActivity.class));
+            startActivity(intentEncoder.buildGoRightIntent(StoryActivity.class, new StoryNavigationExtras()));
         } else {
             Toast.makeText(this, "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex(),
                     Toast.LENGTH_SHORT).show();

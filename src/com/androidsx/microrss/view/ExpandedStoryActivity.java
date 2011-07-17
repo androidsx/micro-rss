@@ -1,7 +1,6 @@
 package com.androidsx.microrss.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +24,7 @@ public class ExpandedStoryActivity extends Activity {
         setContentView(R.layout.expanded_story_wrapper); 
         
         intentDecoder = new IntentDecoder(getIntent(), new StoryNavigationExtras());
-        intentEncoder = new IntentEncoder(getIntent(), new StoryNavigationExtras());
+        intentEncoder = new IntentEncoder(this, getIntent());
         
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
@@ -38,14 +37,12 @@ public class ExpandedStoryActivity extends Activity {
     }
     
     public void onClickNavigationUp(View target) {
-        Intent intent = new Intent(this, StoryActivity.class);
-        intent.putExtras(getIntent().getExtras());
-        startActivity(intent);
+        startActivity(intentEncoder.buildGoUpIntent(StoryActivity.class));
     }
 
     public void onClickNavigationLeft(View target) {
         if (intentDecoder.canGoLeft()) {
-            startActivity(intentEncoder.buildGoLeftIntent(this, ExpandedStoryActivity.class));
+            startActivity(intentEncoder.buildGoLeftIntent(ExpandedStoryActivity.class, new StoryNavigationExtras()));
         } else {
             Toast.makeText(this,
                     "Can't go left anymore. Already at index " + intentDecoder.getCurrentIndex(),
@@ -56,7 +53,7 @@ public class ExpandedStoryActivity extends Activity {
 
     public void onClickNavigationRight(View target) {
         if (intentDecoder.canGoRight()) {
-            startActivity(intentEncoder.buildGoRightIntent(this, ExpandedStoryActivity.class));
+            startActivity(intentEncoder.buildGoRightIntent(ExpandedStoryActivity.class, new StoryNavigationExtras()));
         } else {
             Toast.makeText(this,
                     "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex(),

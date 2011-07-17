@@ -12,6 +12,7 @@ import com.androidsx.microrss.UpdateService;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.view.extra.IntentEncoder;
 
 /**
  * Main activity: starts the service, waits for the configuration thread to do the first update, and
@@ -132,20 +133,13 @@ public class InitActivity extends Activity {
     private void dispatchToViewActivities() {
         Log.i(TAG, "Dispatch to the view activities");
 
-        Intent intent = new Intent(this, FeedActivity.class);
-
-        final MicroRssDao dao = new MicroRssDao(this.getContentResolver());
-        int[] feedIds = dao.findActiveFeedIds();
-        final int firstFeedIndex = 0;
-        
-        // TODO: If there are no feeds, dispatch to a different view
+        int[] feedIds = new MicroRssDao(this.getContentResolver()).findActiveFeedIds();
         if (feedIds.length > 0) {
-            intent.putExtra(new FeedNavigationExtras().getAllIdsKey(), feedIds);
-            intent.putExtra(new FeedNavigationExtras().getCurrentIndexKey(), firstFeedIndex);
-            startActivity(intent);
+            IntentEncoder intentEncoder = new IntentEncoder(this, getIntent());
+            startActivity(intentEncoder.buildGoDownIntent(FeedActivity.class, new FeedNavigationExtras(), feedIds));
             Log.i(TAG, "End of the initialization activity");
         } else {
-            // FIXME: deal with this properly
+            // FIXME: deal with this properly: dispatch to a different view
             Log.e(TAG, "There are no feeds");
         }
         finish();

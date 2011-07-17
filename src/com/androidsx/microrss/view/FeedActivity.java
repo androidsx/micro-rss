@@ -26,7 +26,7 @@ public class FeedActivity extends Activity {
         setContentView(R.layout.feed_wrapper);
         
         intentDecoder = new IntentDecoder(getIntent(), new FeedNavigationExtras());
-        intentEncoder = new IntentEncoder(getIntent(), new FeedNavigationExtras());
+        intentEncoder = new IntentEncoder(this, getIntent());
         
         if (intentDecoder.isValidIndex()) {
             Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
@@ -40,12 +40,12 @@ public class FeedActivity extends Activity {
     }
     
     public void onClickNavigationUp(View target) {
-        Toast.makeText(this, "We are supposed to terminate app", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Terminate application!", Toast.LENGTH_LONG).show();
     }
 
     public void onClickNavigationLeft(View target) {
         if (intentDecoder.canGoLeft()) {
-            startActivity(intentEncoder.buildGoLeftIntent(this, FeedActivity.class));
+            startActivity(intentEncoder.buildGoLeftIntent(FeedActivity.class, new FeedNavigationExtras()));
         } else {
             startActivity(new Intent(this, Preferences.class));
             Log.d(TAG, "Can't go left anymore. Go to Settings");
@@ -54,7 +54,7 @@ public class FeedActivity extends Activity {
 
     public void onClickNavigationRight(View target) {
         if (intentDecoder.canGoRight()) {
-            startActivity(intentEncoder.buildGoRightIntent(this, FeedActivity.class));
+            startActivity(intentEncoder.buildGoRightIntent(FeedActivity.class, new FeedNavigationExtras()));
         } else {
             Toast.makeText(this,
                     "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex(),
@@ -65,18 +65,8 @@ public class FeedActivity extends Activity {
     }
 
     public void onClickNavigationDown(View target) {
-        final Intent intent = new Intent(this, StoryActivity.class);
-        intent.putExtras(getIntent().getExtras());
-        final int[] feedIds = getIntent().getIntArrayExtra(new FeedNavigationExtras().getAllIdsKey());
-        final int feedIndex = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIndexKey(), 0);
-        if (feedIndex >= feedIds.length) {
-            Log.e(TAG, "OUCH"); // FIXME
-        } else {
-            int feedId = feedIds[feedIndex];
-            final MicroRssDao dao = new MicroRssDao(getContentResolver());
-            intent.putExtra(new StoryNavigationExtras().getAllIdsKey(), dao.findStoryIds(feedId));
-            intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), 0);
-            startActivity(intent);
-        }
+        MicroRssDao dao = new MicroRssDao(getContentResolver());
+        int[] storyIds = dao.findStoryIds(intentDecoder.getCurrentId());
+        startActivity(intentEncoder.buildGoDownIntent(StoryActivity.class, new StoryNavigationExtras(), storyIds));
     }
 }
