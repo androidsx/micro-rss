@@ -3,6 +3,8 @@ package com.androidsx.microrss.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -30,7 +32,12 @@ public class FeedActivity extends Activity {
         
         if (intentDecoder.isValidIndex()) {
             Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
-            ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
+            
+            // Underline the text
+            SpannableString title = new SpannableString(feed.getTitle());
+            title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
+            
+            ((TextView) findViewById(R.id.feed_title)).setText(title);
             ((TextView) findViewById(R.id.feed_count)).setText(getString(R.string.feed_count,
                     (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
         } else {

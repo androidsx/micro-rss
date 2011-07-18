@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,6 +41,15 @@ public class StoryActivity extends Activity {
         
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
+            
+            // Underline the text
+            SpannableString feedName = new SpannableString("Feed name");
+            feedName.setSpan(new UnderlineSpan(), 0, feedName.length(), 0);
+            
+            ((TextView) findViewById(R.id.feed_title)).setText(feedName);
+            ((TextView) findViewById(R.id.story_count)).setText(getString(R.string.story_count,
+                    (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
+            
             ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
             Bitmap storyBitmap = getStoryBitmap(story.getThumbnail());
             if (storyBitmap != null) {
@@ -121,6 +132,10 @@ public class StoryActivity extends Activity {
         TextView feed = ((TextView) findViewById(R.id.feed_title));
         feed.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
         feed.setBackgroundColor(R.color.story_background_feed_title);
+        
+        TextView storyCount = ((TextView) findViewById(R.id.story_count));
+        storyCount.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
+        storyCount.setBackgroundColor(R.color.story_background_feed_title);
         
         TextView title = ((TextView) findViewById(R.id.story_title));
         title.setMaxLines(3);

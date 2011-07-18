@@ -35,18 +35,31 @@
 		android:layout_centerInParent="true"
 		android:layout_centerHorizontal="true" 
 		style="@style/story_title" />
+		
+		
+	<TextView android:id="@+id/feed_title" 
+		android:text="ReadWriteWeb"
+		android:padding="1.0dip" 
+		android:visibility="visible"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:layout_marginTop="1dip"
+		android:layout_marginLeft="2dip"  
+		android:maxLines="1" 
+		style="@style/story_feed_title" />		
 
 	<LinearLayout android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true" 
 		android:orientation="vertical">
-		<TextView android:id="@+id/feed_title" 
-			android:text="ReadWriteWeb"
+		<TextView android:id="@+id/story_count" 
+			android:text="Story 1 / 3"
 			android:padding="1.0dip" 
 			android:visibility="visible"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
 			android:layout_marginTop="1dip" 
+			android:layout_marginRight="2dip"
 			android:maxLines="1" 
 			style="@style/story_feed_title" />
 		
@@ -58,7 +71,7 @@
 		<View android:id="@+id/feed_title_bottom_line"
 			android:layout_width="fill_parent"
 			android:layout_height="1dip" 
-			android:visibility="visible"
+			android:visibility="gone"
 			android:background="@color/story_separator_feed_title"/>
      </LinearLayout>
 		

@@ -23,7 +23,7 @@
 		android:gravity="center"
 		android:layout_centerInParent="true"
 		android:layout_centerHorizontal="true"
-		android:text="Feed title" 
+		android:text="Feed title (2)" 
 		style="@style/feed_title" />
 
 	<!--TEXT + IMAGE -->
@@ -34,8 +34,9 @@
 	<ImageView android:id="@+id/feed_image" 
 		android:layout_width="25dip" 
 		android:layout_height="25dip" 
-		android:scaleType="fitXY"
+		android:scaleType="center"
 		android:layout_margin="4dip"
+		android:src="@drawable/temporal_favicon_example"
 		 />
 
 	<LinearLayout android:layout_width="wrap_content" 
@@ -43,12 +44,14 @@
 		android:layout_alignParentRight="true" 
 		android:orientation="vertical">
 		<TextView android:id="@+id/feed_count" 
+			android:text="Mock feed 1 of 1"
 			android:padding="1.0dip" 
 			android:visibility="visible"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
 			android:layout_marginTop="1dip" 
 			android:maxLines="1" 
+			android:layout_marginRight="2dip"
 			style="@style/story_feed_title" />
 		
 		<!-- TEXT / TEXT + IMAGE -->
@@ -59,7 +62,7 @@
 		<View android:id="@+id/feed_title_bottom_line"
 			android:layout_width="fill_parent"
 			android:layout_height="1dip" 
-			android:visibility="visible"
+			android:visibility="gone"
 			android:background="@color/story_separator_feed_title"/>
      </LinearLayout>
 		
