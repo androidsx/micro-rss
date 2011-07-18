@@ -46,7 +46,6 @@
 			android:visibility="visible"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			android:background="@color/story_background_feed_title"
 			android:layout_marginTop="1dip" 
 			android:maxLines="1" 
 			style="@style/story_feed_title" />

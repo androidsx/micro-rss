@@ -24,7 +24,7 @@
 		android:layout_centerInParent="true"
 		android:layout_centerHorizontal="true"
 		android:text="Feed title" 
-		style="@style/story_title" />
+		style="@style/feed_title" />
 
 	<!--TEXT + IMAGE -->
 	<!--
@@ -36,7 +36,6 @@
 		android:layout_height="25dip" 
 		android:scaleType="fitXY"
 		android:layout_margin="4dip"
-		android:src="@drawable/app_icon"
 		 />
 
 	<LinearLayout android:layout_width="wrap_content" 
@@ -48,7 +47,6 @@
 			android:visibility="visible"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			android:background="@color/story_background_feed_title"
 			android:layout_marginTop="1dip" 
 			android:maxLines="1" 
 			style="@style/story_feed_title" />

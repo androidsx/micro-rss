@@ -6,20 +6,29 @@
     <color name="semi_black">#f666</color>
     
     <!-- WIMM layouts -->
-	<color name="application_background">#000000</color>
+	<color name="application_background">#FFFFFF</color>
 	
-    <color name="expanded_story_separator_feed_title">#55e74e4e</color>
-    <color name="expanded_story_feed_title">#FFe74e4e</color>
-    <color name="expanded_story_timestamp">#ffbbbbbb</color>
-    <color name="expanded_story_description">#FFFFFF</color>
+	<!-- Expandable colors -->
+    <color name="expanded_story_separator_feed_title">#55849cd9</color>
+    <color name="expanded_story_feed_title">#849cd9</color>
+    <color name="expanded_story_timestamp">#999999</color>
+    <color name="expanded_story_description">#ff666666</color>
 
-    <color name="story_separator_feed_title">#FFe74e4e</color>
-	<color name="story_title">#FFFFFF</color>
-    <color name="story_feed_title">#ffbbbbbb</color>
-    <color name="story_background_feed_title">#aa000000</color>
-    <color name="story_background_title">#cc000000</color>
+	<!-- Story colors -->
+    <color name="story_separator_feed_title">#99849cd9</color>
     
+	<color name="story_title">#849cd9</color>
+    <color name="story_background_title">#CC000000</color>
+	<color name="story_title_with_background">#EEEEEE</color>
+	
+    <color name="story_feed_title">#777777</color>
+    <color name="story_background_feed_title">#77000000</color>
+    <color name="story_feed_title_with_background">#ffDDDDDD</color>
     
+	<!-- Feed colors -->
+    <color name="feed_title">#444444</color>
+    
+    <!-- Wrapper for WIMM layouts -->
     <color name="wrapper_background_color">#333333</color>
     
 </resources>

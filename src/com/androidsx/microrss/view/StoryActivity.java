@@ -118,11 +118,16 @@ public class StoryActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.story_image);
         imageView.setImageBitmap(bitmap);
         
+        TextView feed = ((TextView) findViewById(R.id.feed_title));
+        feed.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
+        feed.setBackgroundColor(R.color.story_background_feed_title);
+        
         TextView title = ((TextView) findViewById(R.id.story_title));
         title.setMaxLines(3);
-        title.setBackgroundColor(R.color.story_background_title);
+        title.setTextColor(getResources().getColor(R.color.story_title_with_background));
+        title.setBackgroundColor(R.color.story_background_title); 
         
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.story_image);
         
         title.setLayoutParams(params);

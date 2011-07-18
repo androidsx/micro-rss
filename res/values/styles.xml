@@ -306,7 +306,7 @@
 	
 	<!-- Story styles -->
     <style name="story_title">
-        <item name="android:textSize">19.0sp</item>
+        <item name="android:textSize">17.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/story_title</item>
         <item name="android:paddingLeft">3.0dip</item>
@@ -321,7 +321,15 @@
         <item name="android:paddingRight">3.0dip</item>
     </style>
     
-    
+	<!-- Feed title -->
+    <style name="feed_title">
+        <item name="android:textSize">17.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/feed_title</item>
+        <item name="android:paddingLeft">3.0dip</item>
+        <item name="android:paddingRight">3.0dip</item>
+        <item name="android:paddingBottom">5dip</item>
+    </style>
     
     
     <!-- Expanded story styles -->
