@@ -97,6 +97,22 @@ class AnyRSSHelper {
     return content.replaceAll("\\<.*?\\>", "").trim();
   }
   
+  /**
+   * Removes all consecutive tabs, whitespaces and line carriages
+   * from a {@link String}, event in the middle of the string.
+   * 
+   * It is usually used after removing HTML tags, where there are
+   * duplicated tabs, line carriages, etc.
+   * 
+   * @param content String that may contain duplicated whitespaces
+   * @return the String with no more than 2 consecutive spaces, no tabs and
+   * no more than 2 line carriages.
+   */
+  public static String removeWhitespaceSubstrings(String content) {
+    return content.replaceAll(" +", " ").replaceAll("\t+", "")
+    .replaceAll("\n{3,}", "\n\n");
+  }
+  
   /** Map with the key HTML entities and value UNICODE characters */
   private static HashMap<String,Integer> htmlEntities = new HashMap<String,Integer>();
   static {
@@ -411,7 +427,7 @@ class AnyRSSHelper {
     String removeHtmlTags = AnyRSSHelper.removeHtmlTags(unescapeHTML);
     String removeExtraHtmlLines = removeHtmlTags.trim();
     
-    return removeExtraHtmlLines;
+    return AnyRSSHelper.removeWhitespaceSubstrings(removeExtraHtmlLines);
   }
 
     public static String timeFromLastUpdate(long lastUpdate) {
