@@ -29,7 +29,7 @@ public class ExpandedStoryActivity extends Activity {
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
             ((TextView) findViewById(R.id.expanded_story_title)).setText(story.getTitle());
-            ((TextView) findViewById(R.id.expanded_story_description)).setText(story.getContent());
+            ((TextView) findViewById(R.id.expanded_story_description)).setText(AnyRSSHelper.cleanHTML(story.getContent()));
         } else {
             Log.e(TAG, "Wrong index: " + intentDecoder.getCurrentIndex() + " (total: " + intentDecoder.getCount() + ")");
             finish();
