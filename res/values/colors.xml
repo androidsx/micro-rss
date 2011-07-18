@@ -9,24 +9,26 @@
 	<color name="application_background">#FFFFFF</color>
 	
 	<!-- Expandable colors -->
+    <color name="expanded_story_feed_title">#FF849cd9</color>
     <color name="expanded_story_separator_feed_title">#55849cd9</color>
-    <color name="expanded_story_feed_title">#849cd9</color>
     <color name="expanded_story_timestamp">#999999</color>
-    <color name="expanded_story_description">#ff666666</color>
+    <color name="expanded_story_description">#000000</color>
 
 	<!-- Story colors -->
-    <color name="story_separator_feed_title">#99849cd9</color>
+	
+	<!-- not used since the underline done programatically -->
+    <color name="story_separator_feed_title">#FF849cd9</color>
     
 	<color name="story_title">#849cd9</color>
     <color name="story_background_title">#CC000000</color>
-	<color name="story_title_with_background">#EEEEEE</color>
+	<color name="story_title_with_background">#FFFFFF</color>
 	
-    <color name="story_feed_title">#777777</color>
+    <color name="story_feed_title">#000000</color>
     <color name="story_background_feed_title">#77000000</color>
-    <color name="story_feed_title_with_background">#ffDDDDDD</color>
+    <color name="story_feed_title_with_background">#FFFFFF</color>
     
 	<!-- Feed colors -->
-    <color name="feed_title">#444444</color>
+    <color name="feed_title">#000000</color>
     
     <!-- Wrapper for WIMM layouts -->
     <color name="wrapper_background_color">#333333</color>
