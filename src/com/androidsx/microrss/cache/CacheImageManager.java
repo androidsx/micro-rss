@@ -35,6 +35,10 @@ public class CacheImageManager {
 
     private Context context;
     
+    public enum CompressFormatImage {
+        PNG, JPEG
+    }
+    
     public CacheImageManager(Context context) {
         this.context = context;
     }
@@ -73,10 +77,11 @@ public class CacheImageManager {
      * 
      * The url will be the unique identifier of the cache image (if any), we can use {@link #getFilenameForUrl} to 
      * get the filename.
+     * @param compressFormat TODO
      * 
      * @return true if there was success saving to cache the image (or a hit in the cache), and false if not 
      */
-    public boolean downloadAndSaveInCache(String url) {
+    public boolean downloadAndSaveInCache(String url, CompressFormatImage compressFormat) {
         File cache = FileCacheUtil.getFileFromExternalCache(context, getFilenameForUrl(url));
         if (cache != null) {
             Log.d(TAG, "Trying to download an image that is already in cache, " + url);
@@ -102,7 +107,12 @@ public class CacheImageManager {
                 Bitmap scaledBitmap = resizeBitmap(imageBitmap);
 
                 FileOutputStream out = new FileOutputStream(cacheFile);
-                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+                
+                if (CompressFormatImage.PNG.equals(compressFormat)) {
+                    scaledBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                } else {
+                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+                }
                 out.close();
                 
                 // advice the garbage collector?

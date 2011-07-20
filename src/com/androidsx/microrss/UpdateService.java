@@ -156,6 +156,7 @@ public class UpdateService extends Service implements Runnable {
                         feedId,
                         Math.max(UpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
                         maxItemsToStoreInDb);
+                WebserviceHelper.retrieveFaviconFromFeed(this, feedId);
             } catch (FeedProcessingException e) {
                 Log.e(TAG, "Exception while processing content for the feed " + feedId
                         + ". We'll end up in the error view.", e);

@@ -1,5 +1,9 @@
 package com.androidsx.microrss.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +12,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
-class AnyRSSHelper {
+import com.androidsx.microrss.cache.CacheImageManager;
+
+public class AnyRSSHelper {
+    
+    private static final String TAG = "AnyRSSHelper";
 
     private static final long SECOND = 1000;
     private static final long MINUTE = 60 * SECOND;
@@ -432,5 +443,71 @@ class AnyRSSHelper {
 
     public static String timeFromLastUpdate(long lastUpdate) {
         return secondsToString((System.currentTimeMillis() - lastUpdate) / 1000);
+    }
+    
+    /**
+     * Get the URL to retrieve a favicon for the given url.
+     * 
+     * Alternatives:
+     *   - http://www.getfavicon.org/?url=<domain_with_http>/<name file>.<image type>
+     *       Returns an image really ugly if not found, no way to have other default
+     *       Not built in any escalable server, time response high
+     *   - http://g.etfv.co/<domain_with_http>?defaulticon=none"
+     *       Random bitmap sizes, with default value
+     *       Built in GAE, almost any page cached
+     *   - http://www.google.com/s2/u/0/favicons?domain=<domain_without_http>
+     *       Always 16x16 pngs, but sometimes doesn't get from subdomains.
+     * 
+     * @param url usually the feed URL
+     * @return the url to retrieve the favicon url
+     */
+    public static String retrieveFaviconUrl(String url) {
+        String domain = extractDomain(url);
+        String result = "";
+        if (!domain.equals("")) {
+            result = "http://g.etfv.co/" + domain + "?defaulticon=none";
+        } 
+        return result;
+    }
+    
+    public static Bitmap getBitmapFromCache(Context context, String url) {
+        Bitmap localBitmap = null;
+        if (!url.equals("")) {
+            CacheImageManager cacheManager = new CacheImageManager(context);
+            File imageFromCache = cacheManager.retrieveImage(cacheManager.getFilenameForUrl(url));
+            if (imageFromCache != null && imageFromCache.exists()) {
+                if (imageFromCache.length() > 1000L) {
+                    FileInputStream localFileInputStream;
+                    try {
+                        localFileInputStream = new FileInputStream(imageFromCache);
+                        localBitmap = BitmapFactory.decodeStream(localFileInputStream);
+                        localFileInputStream.close();
+                    } catch (FileNotFoundException e) {
+                        Log.w(TAG, "We couldn't get the cache file for the url: " + url);
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        Log.w(TAG, "Some problems decoding the cache file for url: " + url);
+                        e.printStackTrace();
+                    }
+                } else {
+                    localBitmap = BitmapFactory.decodeFile(imageFromCache.getAbsolutePath());
+                }
+            }
+        }
+        return localBitmap;
+    }
+    
+    /**
+     * Extract the domain with the protocol from a URL. Example: http://www.elpais.com/rss ->
+     * http://www.elpais.com
+     * 
+     * @param url
+     * @return the domain with the protocol namespace
+     */
+    private static String extractDomain(String url) {
+        // We don't use URL object for performance reasons, 12x faster
+        int slashSlash = url.indexOf("//") + 2;
+        int firstSlash = url.indexOf('/', slashSlash);
+        return url.substring(0, (firstSlash != -1) ? firstSlash : url.length());
     }
 }

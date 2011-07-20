@@ -28,6 +28,7 @@ import android.util.Log;
 
 import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.cache.CacheImageManager;
+import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
@@ -36,6 +37,7 @@ import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.DefaultItemList;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
+import com.androidsx.microrss.view.AnyRSSHelper;
 import com.flurry.android.FlurryAgent;
 
 /**
@@ -190,6 +192,28 @@ public class WebserviceHelper {
         if (updateRows != 1) {
             Log.w(TAG, "Updated [" + updateRows + " != " + "1] rows for LAST_UPDATED and CURRENT_ITEM_POSITION");
         }
+    }
+    
+    /**
+     * Perform a query to retrieve the favicon for this feed from the
+     * corresponding domain, and store the image in the cache.
+     * This call blocks until the request is finished.
+     * <p>
+     * TODO: Move to a non-static method
+     *
+     * @param context the activity context. TODO: This violates Demeter's law
+     * @param feedId the feed ID
+     * @throws FeedProcessingException 
+     */
+    public static void retrieveFaviconFromFeed(Context context, int feedId) throws FeedProcessingException {
+        Log.d(TAG, "Start to retrieve the favicon for [" + feedId + "]");
+        final ContentResolver resolver = context.getContentResolver();
+        final String rssUrl = extractRssUrl(feedId, resolver);
+
+        prepareUserAgent(context);
+        CacheImageManager cacheManager = new CacheImageManager(context);
+        boolean result = cacheManager.downloadAndSaveInCache(AnyRSSHelper.retrieveFaviconUrl(rssUrl), CompressFormatImage.PNG);
+        Log.d(TAG, "Result of retrieval of favicon for feed [" + feedId + "]: " + result);
     }
     
     /**

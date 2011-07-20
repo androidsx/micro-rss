@@ -16,6 +16,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
+import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
@@ -373,7 +374,7 @@ class DefaultRssSource implements RssSource {
         for (Item item : items) {
             String thumbnail = item.getThumbnail();
             if (thumbnail != "") {
-                downloadedThumbs += (cacheImageManager.downloadAndSaveInCache(thumbnail)) ? 1 : 0;
+                downloadedThumbs += (cacheImageManager.downloadAndSaveInCache(thumbnail, CompressFormatImage.JPEG)) ? 1 : 0;
             }
         }
         Log.i(TAG, downloadedThumbs + " thumbnails out of " + items.size() + " items has been downloaded or hitted in the cache");

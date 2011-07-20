@@ -1,14 +1,8 @@
 package com.androidsx.microrss.view;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -20,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.view.extra.IntentDecoder;
@@ -41,18 +34,14 @@ public class StoryActivity extends Activity {
         
         if (intentDecoder.isValidIndex()) {
             Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
-            
-            // Underline the text
-            SpannableString feedName = new SpannableString("Feed name");
-            feedName.setSpan(new UnderlineSpan(), 0, feedName.length(), 0);
-            
-            ((TextView) findViewById(R.id.feed_title)).setText(feedName);
+
+            ((TextView) findViewById(R.id.feed_title)).setText("Feed name");
             ((TextView) findViewById(R.id.story_count)).setText(getString(R.string.story_count,
                     (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
             
             ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
             ((TextView) findViewById(R.id.story_description)).setText(AnyRSSHelper.cleanHTML(story.getContent()));
-            Bitmap storyBitmap = getStoryBitmap(story.getThumbnail());
+            Bitmap storyBitmap = AnyRSSHelper.getBitmapFromCache(this, story.getThumbnail());
             if (storyBitmap != null) {
                 Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
                 switchToImageLayout(storyBitmap);
@@ -95,33 +84,6 @@ public class StoryActivity extends Activity {
 
     public void onClickNavigationDown(View target) {
         // Can't go further down from here
-    }
-    
-    private Bitmap getStoryBitmap(String url) {
-        Bitmap localBitmap = null;
-        if (!url.equals("")) {
-            CacheImageManager cacheManager = new CacheImageManager(this);
-            File imageFromCache = cacheManager.retrieveImage(cacheManager.getFilenameForUrl(url));
-            if (imageFromCache != null && imageFromCache.exists()) {
-                if (imageFromCache.length() > 1000L) {
-                    FileInputStream localFileInputStream;
-                    try {
-                        localFileInputStream = new FileInputStream(imageFromCache);
-                        localBitmap = BitmapFactory.decodeStream(localFileInputStream);
-                        localFileInputStream.close();
-                    } catch (FileNotFoundException e) {
-                        Log.w(TAG, "We couldn't get the cache file for the url: " + url);
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        Log.w(TAG, "Some problems decoding the cache file for url: " + url);
-                        e.printStackTrace();
-                    }
-                } else {
-                    localBitmap = BitmapFactory.decodeFile(imageFromCache.getAbsolutePath());
-                }
-            }
-        }
-        return localBitmap;
     }
     
     private void switchToImageLayout(Bitmap bitmap) {
