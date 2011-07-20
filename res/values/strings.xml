@@ -190,8 +190,8 @@ v1.4 (19.01.2010)\n
     <!-- TODO(WIMM): 100: not any more -->
     <string name="info_more_items_content">We\'ll keep <b>100 items</b> in the SD card. Wait a few hours to have them all downloaded.</string>
     
-    <string name="feed_count">Feed %1$d / %2$d</string>
-    <string name="story_count">Story %1$d / %2$d</string>
+    <string name="feed_count">%1$d / %2$d</string>
+    <string name="story_count">%1$d / %2$d</string>
     
     <string name="no_feeds_configured">No feeds have been configured yet</string>
     
