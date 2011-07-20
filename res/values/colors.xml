@@ -8,17 +8,10 @@
     <!-- WIMM layouts -->
 	<color name="application_background">#FFFFFF</color>
 	
-	<!-- Expandable colors -->
-    <color name="expanded_story_feed_title">#FF849cd9</color>
-    <color name="expanded_story_separator_feed_title">#55849cd9</color>
-    <color name="expanded_story_timestamp">#999999</color>
-    <color name="expanded_story_description">#000000</color>
 
 	<!-- Story colors -->
 	
 	<!-- not used since the underline done programatically -->
-    <color name="story_separator_feed_title">#FF849cd9</color>
-    
 	<color name="story_title">#849cd9</color>
     <color name="story_background_title">#CC000000</color>
 	<color name="story_title_with_background">#FFFFFF</color>
@@ -27,6 +20,11 @@
     <color name="story_background_feed_title">#77000000</color>
     <color name="story_feed_title_with_background">#FFFFFF</color>
     
+    <color name="story_separator_feed_title">#55849cd9</color>
+
+    <color name="story_timestamp">#999999</color>
+    <color name="story_description">#000000</color>
+
 	<!-- Feed colors -->
     <color name="feed_title">#000000</color>
     

@@ -304,14 +304,15 @@
 
 	<!-- WIMM layouts -->
 	
-	<!-- Story styles -->
+	<!-- Story view: to be in the center in the view we need to put some 
+        bottom padding, as much as the feed_title could take up -->
     <style name="story_title">
-        <item name="android:textSize">17.0sp</item>
+        <item name="android:textSize">15.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/story_title</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
-        <item name="android:paddingBottom">5dip</item>
+        <item name="android:paddingBottom">10dip</item>
     </style>
     
     <style name="story_feed_title">
@@ -321,7 +322,25 @@
         <item name="android:paddingRight">3.0dip</item>
     </style>
     
-	<!-- Feed title -->
+   <style name="story_timestamp">
+        <item name="android:textSize">10.0sp</item>
+        <item name="android:textColor">@color/story_timestamp</item>
+        <item name="android:paddingLeft">3.0dip</item>
+        <item name="android:paddingBottom">1.0dip</item>
+        <item name="android:paddingRight">3.0dip</item>
+    </style> 
+    
+   <style name="story_description">
+        <item name="android:textSize">13.0sp</item>
+        <item name="android:textColor">@color/story_description</item>
+        <item name="android:paddingLeft">3.0dip</item>
+        <item name="android:paddingTop">1.0dip</item>
+        <item name="android:paddingBottom">2.0dip</item>
+        <item name="android:paddingRight">3.0dip</item>
+    </style> 
+    
+    
+    <!-- Feed view -->
     <style name="feed_title">
         <item name="android:textSize">17.0sp</item>
         <item name="android:textStyle">bold</item>
@@ -330,34 +349,6 @@
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
     </style>
-    
-    
-    <!-- Expanded story styles -->
-    <style name="expanded_story_title">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">14.0sp</item>
-        <item name="android:textColor">@color/expanded_story_feed_title</item>
-        <item name="android:paddingLeft">3.0dip</item>
-        <item name="android:paddingTop">1.5dip</item>
-        <item name="android:paddingRight">3.0dip</item>
-    </style> 
-    
-   <style name="expanded_story_timestamp">
-        <item name="android:textSize">10.0sp</item>
-        <item name="android:textColor">@color/expanded_story_timestamp</item>
-        <item name="android:paddingLeft">3.0dip</item>
-        <item name="android:paddingBottom">1.0dip</item>
-        <item name="android:paddingRight">3.0dip</item>
-    </style> 
-    
-   <style name="expanded_story_description">
-        <item name="android:textSize">13.0sp</item>
-        <item name="android:textColor">@color/expanded_story_description</item>
-        <item name="android:paddingLeft">3.0dip</item>
-        <item name="android:paddingTop">1.0dip</item>
-        <item name="android:paddingBottom">2.0dip</item>
-        <item name="android:paddingRight">3.0dip</item>
-    </style> 
 
     <style name="Theme.MicroRss" parent="@android:style/Theme.Black">
         <item name="android:windowNoTitle">true</item>

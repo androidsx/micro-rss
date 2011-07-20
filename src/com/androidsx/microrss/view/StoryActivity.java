@@ -51,6 +51,7 @@ public class StoryActivity extends Activity {
                     (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
             
             ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
+            ((TextView) findViewById(R.id.story_description)).setText(AnyRSSHelper.cleanHTML(story.getContent()));
             Bitmap storyBitmap = getStoryBitmap(story.getThumbnail());
             if (storyBitmap != null) {
                 Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
@@ -93,9 +94,7 @@ public class StoryActivity extends Activity {
     }
 
     public void onClickNavigationDown(View target) {
-        Intent intent = new Intent(this, ExpandedStoryActivity.class);
-        intent.putExtras(getIntent().getExtras());
-        startActivity(intent);
+        // Can't go further down from here
     }
     
     private Bitmap getStoryBitmap(String url) {
@@ -138,16 +137,15 @@ public class StoryActivity extends Activity {
         storyCount.setBackgroundColor(R.color.story_background_feed_title);
         
         TextView title = ((TextView) findViewById(R.id.story_title));
-        title.setMaxLines(3);
+        title.setMaxLines(5);
+        title.setPadding(3, 0, 3, 3);
         title.setTextColor(getResources().getColor(R.color.story_title_with_background));
         title.setBackgroundColor(R.color.story_background_title); 
         
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW);
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.story_image);
         
         title.setLayoutParams(params);
-        
-        View feedTitleLine = findViewById(R.id.feed_title_bottom_line);
-        feedTitleLine.setVisibility(View.GONE);
     }
 }

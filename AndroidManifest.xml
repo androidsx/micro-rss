@@ -28,9 +28,6 @@
 	    <!-- Activity that shows the basic information of a story -->
        	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" />
        	
-       	<!-- Activity that shows all the information about a story -->
-	    <activity android:name=".view.ExpandedStoryActivity" android:theme="@style/Theme.MicroRss" />
-
 		<!-- @Deprecated: activity for settings -->
         <activity
             android:name="com.androidsx.microrss.configure.SettingsActivity"

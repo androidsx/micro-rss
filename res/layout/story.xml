@@ -1,87 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	We have chosen a centered text, instead of a bottom one. Previously on the story_title it had
-	alignBottom="Image", instead we put it in the center with android:layout_centerInParent="true".
-	
-	In order to convert this layout into one with image, just do the steps with the info of each view.
- -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	android:background="@color/application_background"
-	>
+    <!--
+        We have chosen a centered text, instead of a bottom one.
+        Previously on the story_title it had alignBottom="Image",
+        instead we put it in the center with
+        android:layout_centerInParent="true". In order to convert this
+        layout into one with image, just do the steps with the info of
+        each view.
+    -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/application_background">
 
-	<!--TEXT + IMAGE -->
-	<!--
-		TEXT only: leave it like it is
-		TEXT + IMAGE: image1 - android:src="@drawable/icon"
-	-->
-	<ImageView android:id="@+id/story_image" 
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent" 
-		android:scaleType="centerCrop"
-		android:layout_centerInParent="true" />
+    <!-- Note the fadingEdge, it removes the white shadow on the top/bottom of the view -->
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:fadingEdge="none">
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-	<!-- TEXT / TEXT + IMAGE -->
-	<!--
-		TEXT only: android:layout_centerInParent="true", android:maxLines="4"
-		TEXT + IMAGE: android:layout_alignBottom="@+id/story_image", android:maxLines="3", android:background="@color/header_background"
-	-->
-	<TextView android:id="@+id/story_title"
-		android:text="Short centered fsdf sdsd fsdf  sd fsd  fsdfsda fd sdf  "
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" 
-		android:maxLines="4"
-		android:layout_centerInParent="true"
-		android:layout_centerHorizontal="true" 
-		style="@style/story_title" />
-		
-		
-	<TextView android:id="@+id/feed_title" 
-		android:text="ReadWriteWeb"
-		android:padding="1.0dip" 
-		android:visibility="visible"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:layout_marginTop="1dip"
-		android:layout_marginLeft="2dip"  
-		android:maxLines="1" 
-		style="@style/story_feed_title" />		
+            <RelativeLayout
+                android:id="@+id/story_title_wrapper"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/wimm_screen_height"
+                >
 
-	<LinearLayout android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true" 
-		android:orientation="vertical">
-		<TextView android:id="@+id/story_count" 
-			android:text="Story 1 / 3"
-			android:padding="1.0dip" 
-			android:visibility="visible"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:layout_marginTop="1dip" 
-			android:layout_marginRight="2dip"
-			android:maxLines="1" 
-			style="@style/story_feed_title" />
-		
-		<!-- TEXT / TEXT + IMAGE -->
-		<!--
-			TEXT only: android:visibility="visible"
-			TEXT + IMAGE: android:visibility="gone"
-		-->
-		<View android:id="@+id/feed_title_bottom_line"
-			android:layout_width="fill_parent"
-			android:layout_height="1dip" 
-			android:visibility="gone"
-			android:background="@color/story_separator_feed_title"/>
-     </LinearLayout>
-		
-	<ImageView android:id="@+id/story_bottom_arrow"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:src="@drawable/bottom_arrow"
-		android:paddingBottom="1dip"
-		android:baselineAligned="false" 
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true" />
-		
-</RelativeLayout>
+
+                <!--TEXT + IMAGE -->
+                <!--
+                    TEXT only: leave it like it is TEXT + IMAGE: image1
+                    - android:src="@drawable/icon"
+                -->
+                <ImageView
+                    android:id="@+id/story_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_centerInParent="false" />
+
+                <!-- TEXT / TEXT + IMAGE -->
+                <!--
+                    TEXT + IMAGE:
+                        android:layout_alignBottom="@+id/story_image",
+                        android:maxLines="5",
+                        android:background="@color/header_background"
+                -->
+                <TextView
+                    android:id="@+id/story_title"
+                    android:text="Example of a normal story title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:maxLines="6"
+                    android:layout_below="@+id/feed_title"
+                    android:gravity="left|center"
+                    style="@style/story_title" />
+
+
+                <TextView
+                    android:id="@+id/feed_title"
+                    android:text="ReadWriteWeb"
+                    android:padding="1.0dip"
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:layout_marginLeft="2dip"
+                    android:maxLines="1"
+                    style="@style/story_feed_title" />
+
+
+                <TextView
+                    android:id="@+id/story_count"
+                    android:text="Story 1 / 3"
+                    android:layout_alignParentRight="true"
+                    android:padding="1.0dip"
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:layout_marginRight="2dip"
+                    android:maxLines="1"
+                    style="@style/story_feed_title" />
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/story_separator_feed_title"
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:layout_below="@+id/story_title_wrapper"
+                android:background="@color/story_separator_feed_title" />
+
+            <TextView
+                android:id="@+id/story_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/story_separator_feed_title"
+                android:text="Jun 6, 2011"
+                android:layout_alignParentRight="true"
+                style="@style/story_timestamp" />
+
+
+            <!--
+                <ImageView android:id="@+id/story_bottom_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom_arrow"
+                android:paddingBottom="3dip"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/expanded_story_separator_feed_title"
+                />
+            -->
+
+            <TextView
+                android:id="@+id/story_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/story_timestamp"
+                android:text="Lorem Ipsum is simply dummy text of the printing and industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.	
+It was popularised in the 1960s with the release of Letraset containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                style="@style/story_description" />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
