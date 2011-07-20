@@ -1,2 +1,5 @@
-The contents of this folder are expected to be specific to this version.
+The contents of this folder are expected to fall within one of these categories:
+* Reference files, original images, etc. For instance, the original image from which the application icon was derived, which should be useful for future changes
+* Files that are specific to this version, such as screenshots, or the latest APK
+* History of files relevant to other versions. In this case, they should be namespaced with the version number (such as "1.2-main-view.png")
 
