@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.androidsx.microrss.R;
 import com.androidsx.microrss.cache.CacheImageManager;
 
 public class AnyRSSHelper {
@@ -472,7 +473,10 @@ public class AnyRSSHelper {
     
     public static Bitmap getBitmapFromCache(Context context, String url) {
         Bitmap localBitmap = null;
-        if (!url.equals("")) {
+        if (url.equals("")) {
+            return BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.rss_256_scaled_to_160_brightness_100);
+        } else {
             CacheImageManager cacheManager = new CacheImageManager(context);
             File imageFromCache = cacheManager.retrieveImage(cacheManager.getFilenameForUrl(url));
             if (imageFromCache != null && imageFromCache.exists()) {
