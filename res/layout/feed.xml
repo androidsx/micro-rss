@@ -36,7 +36,7 @@
 		android:layout_height="16dip" 
 		android:scaleType="fitXY"
 		android:layout_margin="6dip"
-        android:src="@drawable/favicon_default"
+        android:src="@drawable/favicon_default_brightness_100"
 		 />
 
 	<LinearLayout android:layout_width="wrap_content" 
