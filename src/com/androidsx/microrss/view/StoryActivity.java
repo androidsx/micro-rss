@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.view.extra.IntentDecoder;
 import com.androidsx.microrss.view.extra.IntentEncoder;
@@ -33,9 +32,12 @@ public class StoryActivity extends Activity {
         intentEncoder = new IntentEncoder(this, getIntent());
         
         if (intentDecoder.isValidIndex()) {
-            Item story = new MicroRssDao(getContentResolver()).findStory(intentDecoder.getCurrentId());
-
-            ((TextView) findViewById(R.id.feed_title)).setText("Feed name");
+            MicroRssDao dao = new MicroRssDao(getContentResolver());
+            Item story = dao.findStory(intentDecoder.getCurrentId());
+            int feedId = (new IntentDecoder(getIntent(), new FeedNavigationExtras())).getCurrentId();
+            Feed feed = dao.findFeed(feedId);
+            
+            ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
             ((TextView) findViewById(R.id.story_count)).setText(getString(R.string.story_count,
                     (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
             
