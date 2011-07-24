@@ -103,7 +103,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/story_separator_feed_title"
-                android:text="Jun 6, 2011"
                 android:layout_alignParentRight="true"
                 style="@style/story_timestamp" />
 

@@ -43,6 +43,8 @@ public class StoryActivity extends Activity {
             
             ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
             ((TextView) findViewById(R.id.story_description)).setText(AnyRSSHelper.cleanHTML(story.getContent()));
+            ((TextView) findViewById(R.id.story_timestamp)).setText(AnyRSSHelper
+                    .toRelativeDateString(story.getPubDate()));
             Bitmap storyBitmap = AnyRSSHelper.getBitmapFromCache(this, story.getThumbnail());
             if (storyBitmap != null) {
                 Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
