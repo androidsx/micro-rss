@@ -15,7 +15,7 @@
         <service android:name="com.androidsx.microrss.UpdateService" />
 
         <!-- Activity that sets up the application and dispatches to the view activities -->
-        <activity android:name=".view.InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"> 
+        <activity android:name=".view.InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:noHistory="true"> 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,10 +23,10 @@
         </activity>
         
         <!-- Activity that shows the basic information of a feed -->
-	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" />
+	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
 	    
 	    <!-- Activity that shows the basic information of a story -->
-       	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" />
+       	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
        	
 		<!-- @Deprecated: activity for settings -->
         <activity
