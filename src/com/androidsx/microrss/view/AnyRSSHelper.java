@@ -471,6 +471,9 @@ public class AnyRSSHelper {
         return result;
     }
     
+    /**
+     * TODO: once we decide the definitive layouts, do the default on XML 
+     */
     public static Bitmap getBitmapFromCache(Context context, String url) {
         Bitmap localBitmap = null;
         if (url.equals("")) {
@@ -497,6 +500,11 @@ public class AnyRSSHelper {
                     localBitmap = BitmapFactory.decodeFile(imageFromCache.getAbsolutePath());
                 }
             }
+        }
+        
+        if (localBitmap == null) {
+            return BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.rss_256_scaled_to_160_brightness_100);
         }
         return localBitmap;
     }
