@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -16,10 +18,12 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
+import com.androidsx.microrss.cache.ThumbnailUtil;
 import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
+import com.androidsx.microrss.view.AnyRSSHelper;
 
 class DefaultRssSource implements RssSource {
 
@@ -48,11 +52,12 @@ class DefaultRssSource implements RssSource {
   private static final String THUMB_TAG_2_TYPE = "type";
   private static final String THUMB_TAG_2_TYPE_SHOULD_CONTAIN = "image/"; 
   private static final String THUMB_TAG_URL = "url";
-  
 
   private static XmlPullParserFactory sFactory = null;
 
   private CacheImageManager cacheImageManager;
+  
+  private static final Pattern srcAttributePattern = Pattern.compile("src\\s*=\\s*([\\\"'])?([^ \\\"']*)");
   
   public DefaultRssSource(CacheImageManager cacheImageManager) {
     this.cacheImageManager = cacheImageManager;
@@ -281,9 +286,7 @@ class DefaultRssSource implements RssSource {
           int numAttrs = xpp.getAttributeCount();
           for (int i = 0; i < numAttrs; i++) {
               if (xpp.getAttributeName(i).equals(THUMB_TAG_URL)) {
-                  String thumb = xpp.getAttributeValue(i).trim();
-                  Log.v(TAG, "Thumbnail url by media:thumbnail = " + thumb);
-                  return thumb;
+                  return xpp.getAttributeValue(i).trim();
               }
           }
       }
@@ -304,7 +307,6 @@ class DefaultRssSource implements RssSource {
               }
           }
           if (isImage == true && !thumbUrl.equals("")) {
-              Log.v(TAG, "Thumbnail url by media:content = " + thumbUrl);
               return thumbUrl;
           }
       }
@@ -361,8 +363,14 @@ class DefaultRssSource implements RssSource {
       if (item.getURL() == null) {
         ((MutableItem) item).setUrl(rssUrl);
       }
-      if (item.getThumbnail() == null) {
-          ((MutableItem) item).setThumbnail("");
+      if (item.getThumbnail() == null || item.getThumbnail().equals("")) {
+          String firstImageURL = retrieveFirstImageURL(item.getContent());
+          if (firstImageURL != null && !firstImageURL.equals("")) { 
+              Log.v(TAG, "We have retrieved a thumbnail: " + firstImageURL + " for item: " + item.getTitle());
+              ((MutableItem) item).setThumbnail(firstImageURL);
+          } else {
+              ((MutableItem) item).setThumbnail("");
+          }
       }
     }
     Log.i(TAG, items.size() + " items have been downloaded and parsed");
@@ -374,10 +382,28 @@ class DefaultRssSource implements RssSource {
         for (Item item : items) {
             String thumbnail = item.getThumbnail();
             if (thumbnail != "") {
-                downloadedThumbs += (cacheImageManager.downloadAndSaveInCache(thumbnail, CompressFormatImage.JPEG)) ? 1 : 0;
+                CacheImageManager.Options options = new CacheImageManager.Options();
+                options.minTargetSizeToBeProcessed = ThumbnailUtil.MIN_SOURCE_SIZE_TO_BE_PROCESSED_MINI_THUMBNAIL;
+                downloadedThumbs += (cacheImageManager.downloadAndSaveInCache(thumbnail, options)) ? 1 : 0;
             }
         }
         Log.i(TAG, downloadedThumbs + " thumbnails out of " + items.size() + " items has been downloaded or hitted in the cache");
     }
 
+    /**
+     * Retrives the first {@code <img>} tag, and get the attribute {@code src} with 
+     * the URL
+     * 
+     * @param content usually a String with HTML tags
+     * @return the URL of the image or null
+     */
+    private static String retrieveFirstImageURL(String content) {
+        Pattern srcAttributePattern = Pattern.compile("src\\s*=\\s*([\\\"'])?([^ \\\"']*)");
+        Matcher m = srcAttributePattern.matcher(content);
+        if (m.find()) {
+            return m.group(2);
+        }
+        return null;
+    }
+    
 }

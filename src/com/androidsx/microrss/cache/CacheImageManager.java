@@ -1,8 +1,6 @@
 package com.androidsx.microrss.cache;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -18,70 +16,63 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 /**
- * Manages a cache for images dowloaded from the network. 
+ * Manages a cache for images downloaded from the network.
  */
 public class CacheImageManager {
 
     private static final String TAG = "CacheImageManager";
 
-    private static final int THUMB_WIDTH_PX = 250;
-
-    /** If we the size is bigger or smaller than the desired size, we allow this number of pixels */
-    private static final int THUMB_MARGIN_ERROR_PX = 30;
-
     private Context context;
-    
+
     public enum CompressFormatImage {
         PNG, JPEG
     }
-    
+
     public CacheImageManager(Context context) {
         this.context = context;
     }
 
     /**
      * Retrieves the image file that is stored in the cache
-     *
-     * @return the file where the downloaded image is located or null 
+     * 
+     * @return the file where the downloaded image is located or null
      */
     public File retrieveImage(String fileName) {
         File cacheImage = FileCacheUtil.getFileFromExternalCache(context, fileName);
         return (cacheImage != null && cacheImage.exists()) ? cacheImage : null;
     }
-    
+
     /**
      * Retrieves the image file that is stored in the cache
-     *
-     * @return the file where the downloaded image is located or null 
+     * 
+     * @return the file where the downloaded image is located or null
      */
     public void deleteImage(String fileName) {
         FileCacheUtil.deleteFileExternalCache(context, fileName);
     }
-    
+
     /**
      * Retrieves the image file that is stored in the cache
-     *
-     * @return the file where the downloaded image is located or null 
+     * 
+     * @return the file where the downloaded image is located or null
      */
     public void cleanCache() {
         FileCacheUtil.cleanExternalCache(context);
     }
 
     /**
-     * Downloads the image from the url given, then it decodes, scale and compress the image
-     * before saving it in the external cache.
+     * Downloads the image from the url given, then it decodes, scale and compress the image before
+     * saving it in the external cache. The url will be the unique identifier of the cache image (if
+     * any), we can use {@link #getFilenameForUrl} to get the filename.
      * 
-     * The url will be the unique identifier of the cache image (if any), we can use {@link #getFilenameForUrl} to 
-     * get the filename.
-     * @param compressFormat TODO
-     * 
-     * @return true if there was success saving to cache the image (or a hit in the cache), and false if not 
+     * @param options Options that control downsampling, scaling and compression.
+     * @return true if there was success saving to cache the image (or a hit in the cache), and
+     *         false if not
      */
-    public boolean downloadAndSaveInCache(String url, CompressFormatImage compressFormat) {
+    public boolean downloadAndSaveInCache(String url, Options options) {
         File cache = FileCacheUtil.getFileFromExternalCache(context, getFilenameForUrl(url));
         if (cache != null) {
             Log.d(TAG, "Trying to download an image that is already in cache, " + url);
@@ -95,7 +86,6 @@ public class CacheImageManager {
                 return false;
             }
 
-            Log.v(TAG, "Generated thubnail for url: " + url);
             FileOutputStream cacheOutputStream = null;
             try {
                 cacheOutputStream = new FileOutputStream(cacheFile);
@@ -103,27 +93,39 @@ public class CacheImageManager {
                 cacheOutputStream.close();
                 imageInputStream.close();
 
-                Bitmap imageBitmap = decodeFile(cacheFile);
-                Bitmap scaledBitmap = resizeBitmap(imageBitmap);
+                Bitmap imageBitmap = ThumbnailUtil.decodeFile(cacheFile, options.targetSize,
+                        options.minTargetSizeToBeProcessed);
+                Bitmap resultBitmap = null;
+                if (options.scaleImage) { 
+                    resultBitmap = ThumbnailUtil.extractThumbnail(imageBitmap, options.targetSize, options.targetSize,
+                                ThumbnailUtil.OPTIONS_RECYCLE_INPUT);
+                } else {
+                    resultBitmap = imageBitmap;
+                }
 
                 FileOutputStream out = new FileOutputStream(cacheFile);
-                
-                if (CompressFormatImage.PNG.equals(compressFormat)) {
-                    scaledBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+                if (CompressFormatImage.PNG.equals(options.compressFormat)) {
+                    resultBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                 } else {
-                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+                    resultBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
                 }
                 out.close();
-                
+
+                resultBitmap.recycle();
+
                 // advice the garbage collector?
-                scaledBitmap = null;
+                resultBitmap = null;
                 imageBitmap = null;
-                
+
+                Log.v(TAG, "Generated thumbnail for url: " + url);
                 return true;
             } catch (Exception e) {
-                Log.w(TAG, "Error compressing the image: " + url);
+                FileCacheUtil.deleteFileExternalCache(context, getFilenameForUrl(url));
+
+                Log.w(TAG, "Error compressing the image: " + url + ", " + e.getMessage());
                 e.printStackTrace();
-            } 
+            }
         }
         return false;
     }
@@ -135,84 +137,6 @@ public class CacheImageManager {
         return "" + url.hashCode() + ".urlimage";
     }
 
-    /**
-     * Decodes image and scales it to reduce memory consumption
-     * 
-     * @param file
-     * @return
-     */
-    private static Bitmap decodeFile(File file) {
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-
-            // We are trying to reduce the size in memory, but most likely it will always
-            // bigger than the desired width/heigh
-            options.inSampleSize = getSampleSize(new FileInputStream(file), THUMB_WIDTH_PX
-                    - THUMB_MARGIN_ERROR_PX, THUMB_WIDTH_PX - THUMB_MARGIN_ERROR_PX);
-            return BitmapFactory.decodeStream(new FileInputStream(file), null, options);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static Bitmap resizeBitmap(Bitmap imageBitmap) {
-        Bitmap scaledBitmap = imageBitmap;
-        if (imageBitmap.getWidth() > (THUMB_WIDTH_PX + THUMB_MARGIN_ERROR_PX)
-                && imageBitmap.getHeight() > (THUMB_WIDTH_PX + THUMB_MARGIN_ERROR_PX)) {
-            boolean scaleByWidth = imageBitmap.getWidth() >= imageBitmap.getHeight();
-            int widthInc = (scaleByWidth) ? imageBitmap.getWidth()
-                    / imageBitmap.getHeight() : 1;
-                    int heightInc = (scaleByWidth) ? 1 : imageBitmap.getHeight()
-                            / imageBitmap.getWidth();
-                    
-                    scaledBitmap = Bitmap.createScaledBitmap(imageBitmap,
-                            THUMB_WIDTH_PX * widthInc, THUMB_WIDTH_PX * heightInc, true);
-                    Log.v(TAG, "Escaling bitmap of " + imageBitmap.getWidth() + "*"
-                            + imageBitmap.getHeight() + "to " + THUMB_WIDTH_PX * widthInc + "*"
-                            + THUMB_WIDTH_PX * heightInc);
-        }
-        return scaledBitmap;
-    }
-
-    /**
-     * Get a good match for the sample size of the image (power of two).
-     * <p>
-     * The sample size is the number of pixels in either dimension that correspond to a single pixel
-     * in the decoded bitmap. For example, inSampleSize == 4 returns an image that is 1/4 the
-     * width/height of the original
-     * 
-     * @param is stream with the image
-     * @param sizeToStartResizing largest size allowed for the picture before it will do any
-     *            resizing
-     * @param estimatedTargetSize it will try to resample the image to this size
-     * @throws FileNotFoundException
-     */
-    private static int getSampleSize(InputStream is, final int sizeToStartResizing,
-            final int estimatedTargetSize) throws FileNotFoundException {
-        // The image won't be loaded into memory. But the outheight and
-        // outwidth properties of BitmapFactory.Options will contain
-        // the actual size params of the image specified
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(is, null, bounds);
-
-        boolean scaleByHeight = Math.abs(bounds.outHeight - estimatedTargetSize) >= Math
-                .abs(bounds.outWidth - estimatedTargetSize);
-
-        int sampleSize = 1;
-
-        // 200*200 is the largest size allowed for the picture before it will do any resizing
-        if (bounds.outHeight * bounds.outWidth >= sizeToStartResizing * sizeToStartResizing) {
-            // Load, scaling to smallest power of 2 if dimensions >= desired dimensions
-            sampleSize = scaleByHeight ? bounds.outHeight / estimatedTargetSize : bounds.outWidth
-                    / estimatedTargetSize;
-            sampleSize = (int) Math.pow(2d, Math.floor(Math.log(sampleSize) / Math.log(2d)));
-        }
-
-        return sampleSize;
-    }
-    
     /** NOTE: We should close the stream outside this method */
     private static InputStream downloadBitmap(String url) {
         final HttpClient client = new DefaultHttpClient();
@@ -229,9 +153,9 @@ public class CacheImageManager {
             final HttpEntity entity = response.getEntity();
             if (entity != null) {
                 InputStream inputStream = null;
-                    inputStream = entity.getContent();
-                    // Bug on slow connections, fixed in future release.
-                    return new FlushedInputStream(inputStream);
+                inputStream = entity.getContent();
+                // Bug on slow connections, fixed in future release.
+                return new FlushedInputStream(inputStream);
             }
         } catch (IOException e) {
             getRequest.abort();
@@ -256,7 +180,7 @@ public class CacheImageManager {
         }
         return total;
     }
-    
+
     /** An InputStream that skips the exact number of bytes provided, unless it reaches EOF. */
     private static class FlushedInputStream extends FilterInputStream {
         public FlushedInputStream(InputStream inputStream) {
@@ -281,4 +205,28 @@ public class CacheImageManager {
             return totalBytesSkipped;
         }
     }
+
+    public static class Options {
+        
+        public Options() { }
+
+        /**
+         * We will scale to this targetSize in pixels, scaling the image. Default is
+         * {@link ThumbnailUtil.TARGET_SIZE_MINI_THUMBNAIL}. 
+         * 
+         * We will always use this value, either scaling the image or downsampling it in 
+         * memory to reduce memory consumption.
+         */
+        public int targetSize = ThumbnailUtil.TARGET_SIZE_MINI_THUMBNAIL;
+
+        /** Defines whether scale the image to {@link #targetSize} or not. Default is true. */
+        public boolean scaleImage = true;
+
+        /** Minimum size of the image to be processed. Default is 0 */
+        public int minTargetSizeToBeProcessed = 0;
+
+        /** Compression method use. Default is {@link CompressFormatImage.JPEG} */
+        public CompressFormatImage compressFormat = CompressFormatImage.JPEG;
+    }
+
 }

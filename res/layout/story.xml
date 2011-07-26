@@ -40,8 +40,8 @@
                     android:id="@+id/story_image"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:scaleType="centerCrop"
-                    android:layout_centerInParent="false" />
+                    android:scaleType="center"
+                    android:layout_centerInParent="true" />
 
                 <!-- TEXT / TEXT + IMAGE -->
                 <!--

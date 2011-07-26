@@ -28,7 +28,7 @@ import android.util.Log;
 
 import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.cache.CacheImageManager;
-import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
+import com.androidsx.microrss.cache.ThumbnailUtil;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
@@ -211,8 +211,13 @@ public class WebserviceHelper {
         final String rssUrl = extractRssUrl(feedId, resolver);
 
         prepareUserAgent(context);
+        
+        CacheImageManager.Options options = new CacheImageManager.Options();
+        options.targetSize = ThumbnailUtil.TARGET_SIZE_FAVICON_THUMBNAIL;
+        options.compressFormat = CacheImageManager.CompressFormatImage.PNG;
+
         CacheImageManager cacheManager = new CacheImageManager(context);
-        boolean result = cacheManager.downloadAndSaveInCache(AnyRSSHelper.retrieveFaviconUrl(rssUrl), CompressFormatImage.PNG);
+        boolean result = cacheManager.downloadAndSaveInCache(AnyRSSHelper.retrieveFaviconUrl(rssUrl), options);
         Log.d(TAG, "Result of retrieval of favicon for feed [" + feedId + "]: " + result);
     }
     
