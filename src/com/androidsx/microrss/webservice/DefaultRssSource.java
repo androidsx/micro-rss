@@ -39,8 +39,9 @@ class DefaultRssSource implements RssSource {
   private static final String ATOM_TAG_DESCRIPTION = "content";
   private static final String ATOM_TAG_PUB_DATE = "published";
   private static final String ATOM_TAG_LINK = "id";
+  private static final String ATOM_TAG_SUMMARY = "summary";
   
-  // THUMNAIL tags (from Media RSS specification)
+  // THUMBNAIL tags (from Media RSS specification)
   public final static String MEDIA_NAMESPACE = "http://search.yahoo.com/mrss/";
   
   private static final String THUMB_TAG_1 = "thumbnail";
@@ -49,6 +50,9 @@ class DefaultRssSource implements RssSource {
   private static final String THUMB_TAG_2_TYPE = "type";
   private static final String THUMB_TAG_2_TYPE_SHOULD_CONTAIN = "image/"; 
   private static final String THUMB_TAG_URL = "url";
+
+  private static final String DEFAULT_DESCRIPTION_WHEN_EMPTY = "(no content)";
+  private static final String DEFAULT_TITLE_WHEN_EMPTY = "(no title)";
 
   private static XmlPullParserFactory sFactory = null;
 
@@ -142,7 +146,7 @@ class DefaultRssSource implements RssSource {
           thisTag = xpp.getName();
           thisNamespace = xpp.getNamespace();
           if (RSS_TAG_ITEM.equals(thisTag)) {
-            items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
+            items.add(new MutableItem(DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(), DEFAULT_TITLE_WHEN_EMPTY, "", ""));
             insideItem = true;
             thisStoryDepth = xpp.getDepth();
           }
@@ -226,7 +230,7 @@ class DefaultRssSource implements RssSource {
           thisTag = xpp.getName();
           thisNamespace = xpp.getNamespace();
           if (ATOM_TAG_ITEM.equals(thisTag)) {
-            items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
+            items.add(new MutableItem(DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(), DEFAULT_TITLE_WHEN_EMPTY, "", ""));
             insideItem = true;
             thisStoryDepth = xpp.getDepth();
           }
@@ -260,7 +264,13 @@ class DefaultRssSource implements RssSource {
           } else if (insideItem && ATOM_TAG_LINK.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
             ((MutableItem) items.get(items.size() - 1)).setUrl(xpp.getText());
-          }
+          } else if (insideItem && ATOM_TAG_SUMMARY.equals(thisTag)
+                  && xpp.getText().trim().length() > 0) {
+              MutableItem item = ((MutableItem) items.get(items.size() - 1));
+              if (item.getContent().equals(DEFAULT_DESCRIPTION_WHEN_EMPTY)) {
+                  item.setContent(xpp.getText());
+              }
+            }
         }
         try {
           eventType = xpp.next();
