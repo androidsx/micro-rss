@@ -1,10 +1,9 @@
 package com.androidsx.microrss.webservice;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,11 +18,9 @@ import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.cache.ThumbnailUtil;
-import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
-import com.androidsx.microrss.view.AnyRSSHelper;
 
 class DefaultRssSource implements RssSource {
 
@@ -103,22 +100,19 @@ class DefaultRssSource implements RssSource {
         return parseResponse;
     }
 
-  private static String inputStreamAsString(InputStream stream)
-      throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-    StringBuilder sb = new StringBuilder();
-    String line = null;
+    private static ByteArrayOutputStream inputStreamAsByteArray(InputStream stream)
+            throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[1024];
 
-    while ((line = br.readLine()) != null) {
-      sb.append(line + "\n");
+        while ((nRead = stream.read(data, 0, data.length)) != -1) {
+          buffer.write(data, 0, nRead);
+        }
+        buffer.flush();
+        
+        return buffer;
     }
-    try {
-        br.close();
-    } catch (IOException e) {
-        // Never mind
-    }
-    return sb.toString();
-  }
 
   /**
    * Parse a webservice RSS response into {@link Item} objects.
@@ -318,18 +312,18 @@ class DefaultRssSource implements RssSource {
    */
   private List<Item> parseResponse(InputStream response, int maxNumberOfItems, String rssUrl) throws FeedProcessingException {
     List<Item> items = null;
-    String responseString = "";
+    ByteArrayOutputStream responseCopy = new ByteArrayOutputStream();
     try {
-      responseString = inputStreamAsString(response);
+        responseCopy = inputStreamAsByteArray(response);
     } catch (IOException e1) {
       throw new FeedProcessingException(
-          "Can't parse the feed, it cannot be converted from stream to string",
+          "Can't parse the feed, it cannot be converted from stream to byte array output stream",
           UpdateTaskStatus.FEED_PROCESSING_EXCEPTION);
     }
 
     try {
       items =
-          parseRSSResponse(new ByteArrayInputStream(responseString.getBytes()),
+          parseRSSResponse(new ByteArrayInputStream(responseCopy.toByteArray()),
               maxNumberOfItems);
       if (items.size() == 0) {
         throw new FeedProcessingException(
@@ -340,7 +334,7 @@ class DefaultRssSource implements RssSource {
       Log.w(TAG, e.getMessage().toString());
       items =
           parseATOMResponse(
-              new ByteArrayInputStream(responseString.getBytes()),
+              new ByteArrayInputStream(responseCopy.toByteArray()),
               maxNumberOfItems);
     }
 
