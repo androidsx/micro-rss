@@ -144,11 +144,11 @@ public class UpdateService extends Service implements Runnable {
 
             areThereHumans = true; // This feed is not a zombie
 
-            Log.i(TAG, "Let's update feed [" + feedId + "]");
+            Log.i(TAG, "Proceed to update feed [" + feedId + "]");
 
             // Last update is outside throttle window, so update again
             try {
-                Log.i(TAG, "Let's ask the WebserviceHelper");
+                Log.d(TAG, "Let's ask the WebserviceHelper");
 
                 int maxItemsToStoreInDb = getMaxItemsToStoreInDb(feedId);
                 WebserviceHelper.updateForecastsAndFeeds(
