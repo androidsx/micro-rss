@@ -139,10 +139,11 @@ public class CacheImageManager {
 
     /** NOTE: We should close the stream outside this method */
     private static InputStream downloadBitmap(String url) {
-        final HttpClient client = new DefaultHttpClient();
-        final HttpGet getRequest = new HttpGet(url);
-
+        HttpClient client = null;
+        HttpGet getRequest = null;
         try {
+            client = new DefaultHttpClient();
+            getRequest = new HttpGet(url);
             HttpResponse response = client.execute(getRequest);
             final int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != HttpStatus.SC_OK) {
@@ -158,13 +159,19 @@ public class CacheImageManager {
                 return new FlushedInputStream(inputStream);
             }
         } catch (IOException e) {
-            getRequest.abort();
+            if (getRequest != null) {
+                getRequest.abort();
+            }
             Log.w(TAG, "I/O error while retrieving bitmap from " + url, e);
         } catch (IllegalStateException e) {
-            getRequest.abort();
+            if (getRequest != null) {
+                getRequest.abort();
+            }
             Log.w(TAG, "Incorrect URL: " + url);
         } catch (Exception e) {
-            getRequest.abort();
+            if (getRequest != null) {
+                getRequest.abort();
+            }
             Log.w(TAG, "Error while retrieving bitmap from " + url, e);
         }
         return null;
