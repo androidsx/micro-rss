@@ -131,6 +131,7 @@ class DefaultRssSource implements RssSource {
       boolean insideItem = false;
       String thisNamespace = null;
       String thisTag = null;
+      int thisStoryDepth = 0; // for feeds with duplicated tags in sublevels 
       xpp.setInput(response, null); // Setting null to the encoding auto-detects
                                     // encoding
       int eventType = xpp.getEventType();
@@ -143,6 +144,7 @@ class DefaultRssSource implements RssSource {
           if (RSS_TAG_ITEM.equals(thisTag)) {
             items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
             insideItem = true;
+            thisStoryDepth = xpp.getDepth();
           }
           
           if (insideItem) {
@@ -157,8 +159,10 @@ class DefaultRssSource implements RssSource {
             insideItem = false;
             thisNamespace = null;
           }
-        } else if (eventType == XmlPullParser.TEXT && ((thisNamespace != null && !thisNamespace.equalsIgnoreCase(
-                MEDIA_NAMESPACE)) || thisNamespace == null)) { // any except mediaRSS
+        }  else if (eventType == XmlPullParser.TEXT && ((thisNamespace != null && !thisNamespace.equalsIgnoreCase(
+                MEDIA_NAMESPACE)) || thisNamespace == null) && 
+                xpp.getDepth() == thisStoryDepth + 1) { 
+          // base or any namespace && on the same depth as the story (for feeds with duplicated tags in sublevels)  
           if (insideItem && RSS_TAG_TITLE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
             ((MutableItem) items.get(items.size() - 1)).setTitle(xpp.getText());
@@ -211,6 +215,7 @@ class DefaultRssSource implements RssSource {
       boolean insideItem = false;
       String thisNamespace = null;
       String thisTag = null;
+      int thisStoryDepth = 0; // for feeds with duplicated tags in sublevels
       xpp.setInput(response, null); // Setting null to the encoding auto-detects
       // encoding
       int eventType = xpp.getEventType();
@@ -223,6 +228,7 @@ class DefaultRssSource implements RssSource {
           if (ATOM_TAG_ITEM.equals(thisTag)) {
             items.add(new MutableItem("(no content)", new Date(), "(no title)", "", ""));
             insideItem = true;
+            thisStoryDepth = xpp.getDepth();
           }
           if (insideItem) {
               String thumbnail = parseThumbnailUrl(xpp, thisTag);
@@ -237,7 +243,9 @@ class DefaultRssSource implements RssSource {
             thisNamespace = null;
           }
         } else if (eventType == XmlPullParser.TEXT && ((thisNamespace != null && !thisNamespace.equalsIgnoreCase(
-                MEDIA_NAMESPACE)) || thisNamespace == null)) { // base or any namespace
+                MEDIA_NAMESPACE)) || thisNamespace == null) && 
+                xpp.getDepth() == thisStoryDepth + 1) { 
+          // base or any namespace && on the same depth as the story (for feeds with duplicated tags in sublevels)  
           if (insideItem && ATOM_TAG_TITLE.equals(thisTag)
               && xpp.getText().trim().length() > 0) {
             ((MutableItem) items.get(items.size() - 1)).setTitle(xpp.getText());
