@@ -108,7 +108,7 @@ public class CacheImageManager {
                 if (CompressFormatImage.PNG.equals(options.compressFormat)) {
                     resultBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                 } else {
-                    resultBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
+                    resultBitmap.compress(Bitmap.CompressFormat.JPEG, 42, out);
                 }
                 out.close();
 
