@@ -10,39 +10,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
-import com.androidsx.microrss.view.extra.IntentDecoder;
-import com.androidsx.microrss.view.extra.IntentEncoder;
 
 public class FeedActivity extends Activity {
     private static final String TAG = "FeedActivity";
-    private IntentDecoder intentDecoder;
-    private IntentEncoder intentEncoder;
+    private NavigationProcessor navigation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
         
-        intentDecoder = new IntentDecoder(getIntent(), new FeedNavigationExtras());
-        intentEncoder = new IntentEncoder(this, getIntent());
+        int[] ids = getIntent().getIntArrayExtra(new FeedNavigationExtras().getAllIdsKey());
+        int currentIndex = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIndexKey(), 0);
+        navigation = new NavigationProcessor(ids, currentIndex);
         
-        if (intentDecoder.isValidIndex()) {
-            Feed feed = new MicroRssDao(getContentResolver()).findFeed(intentDecoder.getCurrentId());
+        if (navigation.isValidIndex()) {
+            Feed feed = new MicroRssDao(getContentResolver()).findFeed(navigation.getCurrentId());
             
             ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
             ((TextView) findViewById(R.id.feed_count)).setText(getString(R.string.feed_count,
-                    (intentDecoder.getCurrentIndex() + 1), intentDecoder.getCount()));
+                    (navigation.getCurrentIndex() + 1), navigation.getCount()));
             
             Bitmap favicon = AnyRSSHelper.getBitmapFromCache(this, AnyRSSHelper.retrieveFaviconUrl(feed.getURL()));
             if (favicon != null) {
                 ((ImageView) findViewById(R.id.feed_image)).setImageBitmap(favicon);
             }
         } else {
-            Log.e(TAG, "Wrong index: " + intentDecoder.getCurrentIndex() + " (total: " + intentDecoder.getCount() + ")");
+            Log.e(TAG, "Wrong index: " + navigation.getCurrentIndex() + " (total: " + navigation.getCount() + ")");
             finish();
         }
     }
@@ -52,8 +51,10 @@ public class FeedActivity extends Activity {
     }
 
     public void onClickNavigationLeft(View target) {
-        if (intentDecoder.canGoLeft()) {
-            startActivity(intentEncoder.buildGoLeftIntent(FeedActivity.class, new FeedNavigationExtras()));
+        if (navigation.canGoLeft()) {
+            Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), FeedActivity.class);
+            intent.putExtra(new FeedNavigationExtras().getCurrentIndexKey(), navigation.goLeft());
+            startActivity(intent);
         } else {
             startActivity(new Intent(this, Preferences.class));
             Log.d(TAG, "Can't go left anymore. Go to Settings");
@@ -61,20 +62,25 @@ public class FeedActivity extends Activity {
     }
 
     public void onClickNavigationRight(View target) {
-        if (intentDecoder.canGoRight()) {
-            startActivity(intentEncoder.buildGoRightIntent(FeedActivity.class, new FeedNavigationExtras()));
+        if (navigation.canGoRight()) {
+            Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), FeedActivity.class);
+            intent.putExtra(new FeedNavigationExtras().getCurrentIndexKey(), navigation.goRight());
+            startActivity(intent);
         } else {
             Toast.makeText(this,
-                    "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex(),
+                    "Can't go right anymore. Already at index " + navigation.getCurrentIndex(),
                     Toast.LENGTH_SHORT).show();
             Log.w(TAG,
-                    "Can't go right anymore. Already at index " + intentDecoder.getCurrentIndex());
+                    "Can't go right anymore. Already at index " + navigation.getCurrentIndex());
         }
     }
 
     public void onClickNavigationDown(View target) {
         MicroRssDao dao = new MicroRssDao(getContentResolver());
-        int[] storyIds = dao.findStoryIds(intentDecoder.getCurrentId());
-        startActivity(intentEncoder.buildGoDownIntent(StoryActivity.class, new StoryNavigationExtras(), storyIds));
+        int[] storyIds = dao.findStoryIds(navigation.getCurrentId());
+        Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), StoryActivity.class);
+        intent.putExtra(new StoryNavigationExtras().getAllIdsKey(), storyIds);
+        intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), 0);
+        startActivity(intent);
     }
 }
