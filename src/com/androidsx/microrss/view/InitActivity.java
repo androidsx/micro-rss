@@ -105,6 +105,28 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "LifeHacker", "http://feeds.gawker.com/lifehacker/excerpts.xml");
             writeConfigToBackend(this, "Today in history", "http://feeds2.feedburner.com/historyorb/todayinhistory");
             writeConfigToBackend(this, "How stuff works","http://feeds.howstuffworks.com/DailyStuff");
+            
+            // parser tests taken from the email errors of AnyRSS
+            writeConfigToBackend(this, "test 0", "http://news.baidu.com/n?cmd=7&loc=5495&name=%B9%E3%B6%AB&tn=rss");
+            writeConfigToBackend(this, "test 1", "http://feeds.feedburner.com/Destructoid");
+            writeConfigToBackend(this, "test 2", "http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss");
+            writeConfigToBackend(this, "test 3", "http://tabnak.ir/en/rss/allnews");
+            writeConfigToBackend(this, "test 4", "http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml");
+            writeConfigToBackend(this, "test 5", "http://www.wp.pl/rss.xml?id=1");
+            writeConfigToBackend(this, "test 6", "http://www.google.com/reader/public/atom/user/01578920782114465644/label/Periodicos");
+            writeConfigToBackend(this, "test 7", "http://feeds.gawker.com/lifehacker/excerpts.xml");
+            writeConfigToBackend(this, "test 8", "http://www.quotationspage.com/data/qotd.rss");
+            writeConfigToBackend(this, "test 9", "http://news.google.co.in/news?pz=1&cf=all&ned=in&hl=en&output=rss");
+            writeConfigToBackend(this, "test 10", "http://bossip.com/feed/");
+            writeConfigToBackend(this, "test 11" + MESSAGE_ES, "http://rss.elmundo.es/rss/descarga.htm?data2=4");
+            writeConfigToBackend(this, "test 12", "http://skattershooting.blogspot.com/feeds/posts/default");
+            writeConfigToBackend(this, "test 13", "http://www.nytimes.com/services/xml/rss/nyt/Sports.xml");
+            writeConfigToBackend(this, "test 14", "http://www.ctv.ca/generic/generated/freeheadlines/rdf/MontrealHome.xml");
+            writeConfigToBackend(this, "test 15", "http://feeds.feedburner.com/blabbermouth");
+            writeConfigToBackend(this, "test 16", "http://www.Motorsport-Total.com/rss_f1.xml");
+            writeConfigToBackend(this, "test 17", "http://www.gizmodo.net/index.xml");
+            writeConfigToBackend(this, "test 18", "http://rss.feedsportal.com/c/32314/f/440274/index.rss");
+          
         }
         
         dispatchToViewActivities();
