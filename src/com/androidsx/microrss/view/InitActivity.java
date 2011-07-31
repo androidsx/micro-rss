@@ -49,25 +49,25 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "ABC" + MESSAGE_ES, "http://www.abc.es/rss/feeds/abcPortada.xml");
             writeConfigToBackend(this, "NYTimes World", "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml", false);
             writeConfigToBackend(this, "BBC World", "http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", false);
-            writeConfigToBackend(this, "CNN Top Stories", "http://rss.cnn.com/rss/edition.rss", true);
+            writeConfigToBackend(this, "CNN Top Stories", "http://rss.cnn.com/rss/edition.rss");
             writeConfigToBackend(this, "CNN Most recent", "http://rss.cnn.com/rss/cnn_latest.rss", false);
             writeConfigToBackend(this, "Wired top stories", "http://www.wired.com/news_drop/netcenter/netcenter.rdf");
             writeConfigToBackend(this, "FoxNews", "http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss");
-            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss", true);
-            writeConfigToBackend(this, "Yahoo News", "http://rss.news.yahoo.com/rss/topstories", false);
-            writeConfigToBackend(this, "Reuters", "http://feeds.reuters.com/reuters/topNews", true);
+            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss");
+            writeConfigToBackend(this, "Yahoo News", "http://rss.news.yahoo.com/rss/topstories");
+            writeConfigToBackend(this, "Reuters", "http://feeds.reuters.com/reuters/topNews");
             
             // tech
             writeConfigToBackend(this, "Barrapunto" + MESSAGE_ES, "http://barrapunto.com/index.rss");
             writeConfigToBackend(this, "Genbeta" + MESSAGE_ES, "http://feeds.weblogssl.com/genbeta");
             writeConfigToBackend(this, "An.droid.es" + MESSAGE_ES, "http://feeds.feedburner.com/AndroidEnEspanol?format=xml");
             writeConfigToBackend(this, "ALT1040" + MESSAGE_ES, "http://feeds.hipertextual.com/alt1040?format=xml");
-            writeConfigToBackend(this, "Slashdot", "http://rss.slashdot.org/slashdot/eqWf", true);
+            writeConfigToBackend(this, "Slashdot", "http://rss.slashdot.org/slashdot/eqWf");
             writeConfigToBackend(this, "Engadget", "http://www.engadget.com/rss.xml");
-            writeConfigToBackend(this, "ReadWriteWeb", "http://www.readwriteweb.com/rss.xml", true);
+            writeConfigToBackend(this, "ReadWriteWeb", "http://www.readwriteweb.com/rss.xml");
             writeConfigToBackend(this, "TechCrunch", "http://www.techcrunch.com/feed/");
-            writeConfigToBackend(this, "Gizmodo", "http://www.gizmodo.net/index.xml", true);
-            writeConfigToBackend(this, "Joel on Software", "http://www.joelonsoftware.com/rss.xml", true);
+            writeConfigToBackend(this, "Gizmodo", "http://www.gizmodo.net/index.xml");
+            writeConfigToBackend(this, "Joel on Software", "http://www.joelonsoftware.com/rss.xml");
             writeConfigToBackend(this, "Good Coders", "http://feeds.feedburner.com/catonmat?format=xml");
             writeConfigToBackend(this, "Android Blog", "http://feeds2.feedburner.com/androinica");
             
@@ -90,7 +90,7 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "The Economist", "http://www.economist.com/rss/daily_news_and_views_rss.xml");
             
             // entertainment
-            writeConfigToBackend(this, "Meneame" + MESSAGE_ES, "http://meneame.net/rss2.php", true);
+            writeConfigToBackend(this, "Meneame" + MESSAGE_ES, "http://meneame.net/rss2.php");
             writeConfigToBackend(this, "Dilbert Daily Strip", "http://feeds.feedburner.com/DilbertDailyStrip");
             writeConfigToBackend(this, "CNN entertainment", "http://rss.cnn.com/rss/edition_entertainment.rss");
             writeConfigToBackend(this, "Brain Teasers", "http://feeds.braingle.com/braingle/all");
@@ -155,17 +155,10 @@ public class InitActivity extends Activity {
     private void dispatchToViewActivities() {
         Log.i(TAG, "Dispatch to the view activities");
 
-        int[] feedIds = new MicroRssDao(this.getContentResolver()).findActiveFeedIds();
-        if (feedIds.length > 0) {
-            Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), FeedActivity.class);
-            intent.putExtra(new FeedNavigationExtras().getAllIdsKey(), feedIds);
-            intent.putExtra(new FeedNavigationExtras().getCurrentIndexKey(), 0);
-            startActivity(intent);
-            Log.i(TAG, "End of the initialization activity");
-        } else {
-            Log.w(TAG, "There are no feeds: dispatch to the NoFeedsActivity");
-            startActivity(new Intent(this, NoFeedsActivity.class));
-        }
+        Intent intent = IntentHelper
+                .createIntent(this, getIntent().getExtras(), FeedActivity.class);
+        startActivity(intent);
+        Log.i(TAG, "End of the initialization activity");
         finish();
     }
 }

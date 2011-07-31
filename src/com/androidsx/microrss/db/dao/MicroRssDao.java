@@ -111,6 +111,29 @@ public class MicroRssDao {
         }
     }
     
+    public List<Feed> findActiveFeeds() {
+        Cursor cursor = null;
+        try {
+            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
+            final String[] projection = new String[] { BaseColumns._ID, FeedColumns.TITLE,
+                    FeedColumns.FEED_URL, FeedColumns.ACTIVE, FeedColumns.LAST_UPDATE };
+            cursor = contentResolver.query(allFeedsUri, projection, FeedColumns.ACTIVE + " = 1", null,
+                    BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
+    
+            List<Feed> feeds = new LinkedList<Feed>();
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    feeds.add(feedFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+            return feeds;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
     public Feed findFeed(int id) {
         Cursor cursor = null;
         try {
@@ -136,7 +159,7 @@ public class MicroRssDao {
             final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
             final Uri allStoriesUriInFeedUri = Uri.withAppendedPath(aFeedUri, MicroRssContentProvider.TABLE_ITEMS);
             final String[] projection = new String[] { ItemColumns.TITLE, ItemColumns.CONTENT,
-                    ItemColumns.ITEM_URL, ItemColumns.DATE };
+                    ItemColumns.ITEM_URL, ItemColumns.THUMBNAIL_URL, ItemColumns.DATE };
             cursor = contentResolver.query(allStoriesUriInFeedUri, projection, null, null,
                     ItemColumns.POSITION + " DESC");
     

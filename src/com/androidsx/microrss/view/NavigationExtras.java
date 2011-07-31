@@ -4,46 +4,27 @@ package com.androidsx.microrss.view;
  * Keys of the extras that are passed around between the views to handle the navigation.
  */
 public interface NavigationExtras {
-
+  
     /**
-     * Key of the extra that contains a sorted integer array with all the IDs for the items in this
-     * level.
+     * Key of the extra that contains the id of the item that the calling view is expected to display.
      * 
-     * @return key of the extra with all the IDs
+     * @return key of the extra with the unique identifier of the current item
      */
-    String getAllIdsKey();
-
-    /**
-     * Key of the extra that contains the index of the item (that is, the position in the array
-     * given by {@link #getAllIdsKey()}) that the calling view is expected to display.
-     * 
-     * @return key of the extra with the index (position) of the current item
-     */
-    String getCurrentIndexKey();
+    String getCurrentIdKey();
 }
 
 class FeedNavigationExtras implements NavigationExtras {
 
     @Override
-    public String getAllIdsKey() {
-        return "feed-ids";
-    }
-
-    @Override
-    public String getCurrentIndexKey() {
-        return "feed-index";
+    public String getCurrentIdKey() {
+        return "feed-id";
     }
 }
 
 class StoryNavigationExtras implements NavigationExtras {
 
     @Override
-    public String getAllIdsKey() {
-        return "story-ids";
-    }
-
-    @Override
-    public String getCurrentIndexKey() {
-        return "story-index";
+    public String getCurrentIdKey() {
+        return "story-id";
     }
 }

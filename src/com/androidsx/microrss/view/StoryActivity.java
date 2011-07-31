@@ -1,6 +1,5 @@
 package com.androidsx.microrss.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,107 +15,115 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
+import com.wimm.framework.app.LauncherActivity;
+import com.wimm.framework.view.AdapterViewTray;
+import com.wimm.framework.view.MotionInterpreter;
 
-public class StoryActivity extends Activity {
+public class StoryActivity extends LauncherActivity {
     private static final String TAG = "StoryActivity";
-    private NavigationProcessor navigation;
+
+    private AdapterViewTray viewTray;
+    private int feedId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_wrapper);
 
-        int[] ids = getIntent().getIntArrayExtra(new StoryNavigationExtras().getAllIdsKey());
-        int currentIndex = getIntent().getIntExtra(new StoryNavigationExtras().getCurrentIndexKey(), 0); // FIXME: magic number
-        navigation = new NavigationProcessor(ids, currentIndex);
-        
-        if (navigation.isValidIndex()) {
+        configureViewTray((AdapterViewTray) findViewById(R.id.viewTray));
+
+        feedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
+        if (feedId != -1) {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
-            Item story = dao.findStory(navigation.getCurrentId());
-            
-            int[] feedIds = getIntent().getIntArrayExtra(new FeedNavigationExtras().getAllIdsKey());
-            int feedIndex = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIndexKey(), 0); // FIXME: magic number
-            int feedId = (new NavigationProcessor(feedIds, feedIndex)).getCurrentId();
             Feed feed = dao.findFeed(feedId);
-            
-            ((TextView) findViewById(R.id.feed_title)).setText(feed.getTitle());
-            ((TextView) findViewById(R.id.story_count)).setText(getString(R.string.story_count,
-                    (navigation.getCurrentIndex() + 1), navigation.getCount()));
-            
-            ((TextView) findViewById(R.id.story_title)).setText(story.getTitle());
-            ((TextView) findViewById(R.id.story_description)).setText(AnyRSSHelper.cleanHTML(story.getContent()));
-            ((TextView) findViewById(R.id.story_timestamp)).setText(AnyRSSHelper
-                    .toRelativeDateString(story.getPubDate()));
-            Bitmap storyBitmap = AnyRSSHelper.getBitmapFromCache(this, story.getThumbnail());
-            if (storyBitmap != null) {
-                Log.i(TAG, "Switching layout to story with image: " + story.getThumbnail());
-                switchToImageLayout(storyBitmap);
+
+            StoryAdapter storyAdapter = new StoryAdapter(this, (Item[]) dao.findStories(feedId)
+                    .toArray(new Item[0]), feed);
+            if (storyAdapter.getCount() >= 0) {
+                viewTray.setAdapter(storyAdapter);
+            } else {
+                Log.e(TAG, "There are no stories for the feed id " + feedId);
+                Toast.makeText(this, "There are no stories for the feed id " + feedId, Toast.LENGTH_SHORT).show();
+                finish(); // TODO: error message or new activity but with sliders to go to settings.
             }
         } else {
-            Log.e(TAG, "Wrong index: " + navigation.getCurrentIndex() + " (total: " + navigation.getCount() + ")");
-            finish();
+            Log.e(TAG, "Wrong feed id: " + feedId);
+            Toast.makeText(this, "Wrong feed id: " + feedId, Toast.LENGTH_SHORT).show();
+            finish(); // TODO: error message or new activity but with sliders to go to settings.
         }
     }
 
-    /** Before going up to the feed level, we clean up the extras that won't make sense any more up there. */
+    private void configureViewTray(AdapterViewTray adapterViewTray) {
+        viewTray = adapterViewTray;
+        MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
+        viewTray.setMotionAxis(scrollAxis);
+        viewTray.setCanScrollInternalView(true);
+    }
+
+    /**
+     * Shortcut to develop the logic for scroll up. Before going up to the feed level, we clean up
+     * the extras that won't make sense any more up there. TODO: do it in the right way with a swipe
+     * up/down component
+     */
+    @Override
+    public boolean dragCanExit() {
+        if (viewTray.getViewScrollY() == 0) {
+            Intent intent = IntentHelper.createIntent(this, null, FeedActivity.class);
+            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+            startActivity(intent);
+        }
+        return false;
+    }
+
     public void onClickNavigationUp(View target) {
-        Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), FeedActivity.class);
-        intent.putExtra(new StoryNavigationExtras().getAllIdsKey(), (String[]) null);
-        intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), (String) null);
+        Intent intent = IntentHelper.createIntent(this, null, FeedActivity.class);
+        intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
         startActivity(intent);
     }
 
     public void onClickNavigationLeft(View target) {
-        if (navigation.canGoLeft()) {
-            Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), StoryActivity.class);
-            intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), navigation.goLeft());
-            startActivity(intent);
+        int currentIndex = viewTray.getIndex();
+        if (currentIndex > 0) {
+            viewTray.setIndex(currentIndex - 1);
         } else {
-            Toast.makeText(this,
-                    "Can't go left anymore. Already at index " + navigation.getCurrentIndex(),
-                    Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go left anymore. Already at index " + navigation.getCurrentIndex());
+            Log.w(TAG, "Can't go left anymore. Already at index " + currentIndex);
         }
     }
 
     public void onClickNavigationRight(View target) {
-        if (navigation.canGoRight()) {
-            Intent intent = IntentHelper.createIntent(this, getIntent().getExtras(), StoryActivity.class);
-            intent.putExtra(new StoryNavigationExtras().getCurrentIndexKey(), navigation.goRight());
-            startActivity(intent);
+        int currentIndex = viewTray.getIndex();
+        if (currentIndex < viewTray.getAdapter().getCount() - 1) {
+            viewTray.setIndex(currentIndex + 1);
         } else {
-            Toast.makeText(this, "Can't go right anymore. Already at index " + navigation.getCurrentIndex(),
-                    Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "Can't go right anymore. Already at index " + navigation.getCurrentIndex());
+            Log.w(TAG, "Can't go right anymore. Already at index " + currentIndex);
         }
     }
 
     public void onClickNavigationDown(View target) {
         // Can't go further down from here
     }
-    
+
+    @Deprecated
     private void switchToImageLayout(Bitmap bitmap) {
         ImageView imageView = (ImageView) findViewById(R.id.story_image);
         imageView.setImageBitmap(bitmap);
-        
+
         TextView feed = ((TextView) findViewById(R.id.feed_title));
         feed.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
         feed.setBackgroundColor(R.color.story_background_feed_title);
-        
+
         TextView storyCount = ((TextView) findViewById(R.id.story_count));
         storyCount.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
         storyCount.setBackgroundColor(R.color.story_background_feed_title);
-        
+
         TextView title = ((TextView) findViewById(R.id.story_title));
         title.setMaxLines(5);
         title.setPadding(3, 0, 3, 3);
         title.setTextColor(getResources().getColor(R.color.story_title_with_background));
-        title.setBackgroundColor(R.color.story_background_title); 
-        
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        title.setBackgroundColor(R.color.story_background_title);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.BELOW);
-        params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.story_image);
-        
-        title.setLayoutParams(params);
     }
 }

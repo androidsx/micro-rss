@@ -7,18 +7,18 @@
         layout into one with image, just do the steps with the info of
         each view.
     -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/application_background">
 
-    <!-- Note the fadingEdge, it removes the white shadow on the top/bottom of the view -->
-    <ScrollView
+    <!-- Note:  
+          android:fadingEdge="none" removes the white shadow on the top/bottom of the view 
+          android:scrollbars="none"-->
+    <com.androidsx.microrss.view.StoryView
+    xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/application_background"
         android:fillViewport="true"
-        android:fadingEdge="none">
+        android:fadingEdge="none"
+        >
         
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -130,5 +130,4 @@ It was popularised in the 1960s with the release of Letraset containing Lorem Ip
                 style="@style/story_description" />
 
         </RelativeLayout>
-    </ScrollView>
-</LinearLayout>
+    </com.androidsx.microrss.view.StoryView>

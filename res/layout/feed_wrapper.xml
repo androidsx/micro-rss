@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 	android:layoutAnimation="@anim/fade_in_layout" -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:layoutAnimation="@anim/fade_in_layout"
 	android:background="@color/wrapper_background_color" >
 
 	<FrameLayout
@@ -11,7 +11,7 @@
 		android:layout_height="@dimen/wimm_screen_height"
 		android:layout_marginTop="10dip"
 		android:layout_centerHorizontal="true" >
-		<include layout="@layout/feed" />
+		<include layout="@layout/feed_wimm_wrapper" />
 	</FrameLayout>
 	
 	<FrameLayout
