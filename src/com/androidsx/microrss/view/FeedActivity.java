@@ -29,7 +29,7 @@ public class FeedActivity extends LauncherActivity {
 
         FeedAdapter feedAdapter = new FeedAdapter(this, (Feed[]) new MicroRssDao(
                 getContentResolver()).findActiveFeeds().toArray(new Feed[0]));
-        if (feedAdapter.getCount() >= 0) {
+        if (feedAdapter.getCount() > 0) {
             int currentId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
             int position = feedAdapter.getItemPosition(currentId, 0);
             if (position >= 0) {

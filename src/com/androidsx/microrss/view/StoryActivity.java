@@ -39,7 +39,7 @@ public class StoryActivity extends LauncherActivity {
 
             StoryAdapter storyAdapter = new StoryAdapter(this, (Item[]) dao.findStories(feedId)
                     .toArray(new Item[0]), feed);
-            if (storyAdapter.getCount() >= 0) {
+            if (storyAdapter.getCount() > 0) {
                 viewTray.setAdapter(storyAdapter);
             } else {
                 Log.e(TAG, "There are no stories for the feed id " + feedId);
