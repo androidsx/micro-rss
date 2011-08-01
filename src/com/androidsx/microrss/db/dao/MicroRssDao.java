@@ -29,7 +29,7 @@ public class MicroRssDao {
     public void updateFeed(Feed feed) {
         ContentValues values = new ContentValues();
         values.put(BaseColumns._ID, feed.getId());
-        values.put(FeedColumns.LAST_UPDATE, feed.getLastModificationDate().getDate()); // FIXME: sure?
+        values.put(FeedColumns.LAST_UPDATE, feed.getLastModificationDate().getTime()); // FIXME: sure?
         values.put(FeedColumns.TITLE, feed.getTitle());
         values.put(FeedColumns.FEED_URL, feed.getURL());
         values.put(FeedColumns.ACTIVE, feed.isActive());
