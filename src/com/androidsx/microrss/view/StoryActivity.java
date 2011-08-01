@@ -1,9 +1,11 @@
 package com.androidsx.microrss.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,14 +17,14 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
-import com.wimm.framework.app.LauncherActivity;
-import com.wimm.framework.view.AdapterViewTray;
 import com.wimm.framework.view.MotionInterpreter;
+import com.wimm.framework.view.MotionInterpreter.Direction;
+import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
-public class StoryActivity extends LauncherActivity {
+public class StoryActivity extends Activity {
     private static final String TAG = "StoryActivity";
 
-    private AdapterViewTray viewTray;
+    private CustomAdapterViewTray customViewTrayAdapter;
     private int feedId;
 
     @Override
@@ -30,7 +32,7 @@ public class StoryActivity extends LauncherActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_wrapper);
 
-        configureViewTray((AdapterViewTray) findViewById(R.id.viewTray));
+        configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper));
 
         feedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
         if (feedId != -1) {
@@ -40,7 +42,7 @@ public class StoryActivity extends LauncherActivity {
             StoryAdapter storyAdapter = new StoryAdapter(this, (Item[]) dao.findStories(feedId)
                     .toArray(new Item[0]), feed);
             if (storyAdapter.getCount() > 0) {
-                viewTray.setAdapter(storyAdapter);
+                customViewTrayAdapter.setAdapter(storyAdapter);
             } else {
                 Log.e(TAG, "There are no stories for the feed id " + feedId);
                 Toast.makeText(this, "There are no stories for the feed id " + feedId, Toast.LENGTH_SHORT).show();
@@ -53,27 +55,32 @@ public class StoryActivity extends LauncherActivity {
         }
     }
 
-    private void configureViewTray(AdapterViewTray adapterViewTray) {
-        viewTray = adapterViewTray;
+    private void configureViewTray(CustomAdapterViewTray adapterViewTray) {
+        customViewTrayAdapter = adapterViewTray;
         MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
-        viewTray.setMotionAxis(scrollAxis);
-        viewTray.setCanScrollInternalView(true);
+        customViewTrayAdapter.setMotionAxis(scrollAxis);
+        customViewTrayAdapter.setCanScrollInternalView(true);
+        customViewTrayAdapter.setOnDragEndListener(dragEndListener);
     }
-
-    /**
-     * Shortcut to develop the logic for scroll up. Before going up to the feed level, we clean up
-     * the extras that won't make sense any more up there. TODO: do it in the right way with a swipe
-     * up/down component
+    
+    /** 
+     * Controls the swipe up to go to Feed View. Before going up to the feed level, we clean up
+     * the extras that won't make sense any more up there.
      */
-    @Override
-    public boolean dragCanExit() {
-        if (viewTray.getViewScrollY() == 0) {
-            Intent intent = IntentHelper.createIntent(this, null, FeedActivity.class);
-            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-            startActivity(intent);
+    private CustomAdapterViewTray.OnDragEndListener dragEndListener = new CustomAdapterViewTray.OnDragEndListener() {
+
+        @Override
+        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, Direction arg2, float arg3) {
+            Log.v(TAG, "Detected movement " + arg1.toString() + ": " + arg2.toString());
+            
+            if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Up
+                    && customViewTrayAdapter.getViewScrollY() == 0) {
+                Intent intent = IntentHelper.createIntent(StoryActivity.this, null, FeedActivity.class);
+                intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+                startActivity(intent);
+            }
         }
-        return false;
-    }
+    };
 
     public void onClickNavigationUp(View target) {
         Intent intent = IntentHelper.createIntent(this, null, FeedActivity.class);
@@ -82,18 +89,18 @@ public class StoryActivity extends LauncherActivity {
     }
 
     public void onClickNavigationLeft(View target) {
-        int currentIndex = viewTray.getIndex();
+        int currentIndex = customViewTrayAdapter.getIndex();
         if (currentIndex > 0) {
-            viewTray.setIndex(currentIndex - 1);
+            customViewTrayAdapter.setIndex(currentIndex - 1);
         } else {
             Log.w(TAG, "Can't go left anymore. Already at index " + currentIndex);
         }
     }
 
     public void onClickNavigationRight(View target) {
-        int currentIndex = viewTray.getIndex();
-        if (currentIndex < viewTray.getAdapter().getCount() - 1) {
-            viewTray.setIndex(currentIndex + 1);
+        int currentIndex = customViewTrayAdapter.getIndex();
+        if (currentIndex < customViewTrayAdapter.getAdapter().getCount() - 1) {
+            customViewTrayAdapter.setIndex(currentIndex + 1);
         } else {
             Log.w(TAG, "Can't go right anymore. Already at index " + currentIndex);
         }

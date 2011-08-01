@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wimm.framework.view.AdapterViewTray
-    android:id="@+id/viewTray"
+<com.androidsx.microrss.view.CustomAdapterViewTray
+    android:id="@+id/custom_story_wrapper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/application_background"
     xmlns:android="http://schemas.android.com/apk/res/android" />
