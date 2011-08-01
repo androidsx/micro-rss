@@ -12,7 +12,7 @@ interface RssSource {
      * <p>
      * This is a blocking call while waiting for the webservice to return.
      */
-    List<Item> getRssItems(String rssUrl, int maxNumberOfItems)
+    List<Item> getRssItems(String rssUrl, int maxNumberOfItems, long lastFeedUpdate)
             throws FeedProcessingException;
 
 }

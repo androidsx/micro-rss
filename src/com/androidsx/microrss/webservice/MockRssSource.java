@@ -15,7 +15,7 @@ class MockRssSource implements RssSource {
     private static int itemsGeneratedSoFar = 0;
     
     @Override
-    public List<Item> getRssItems(String rssUrl, int maxNumberOfItems) throws FeedProcessingException {
+    public List<Item> getRssItems(String rssUrl, int maxNumberOfItems, long lastFeedUpdate) throws FeedProcessingException {
         return generateNewListOfItems(6);
     }
     

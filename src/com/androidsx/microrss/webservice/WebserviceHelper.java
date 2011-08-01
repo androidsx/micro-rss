@@ -50,10 +50,12 @@ public class WebserviceHelper {
     private static final String USER_AGENT_TEMPLATE = "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.1.8) Gecko/20100202 Firefox/3.5.8";
     
     private static final String[] PROJECTION_APPFEED = {
-        FeedColumns.FEED_URL
+        FeedColumns.FEED_URL, 
+        FeedColumns.LAST_UPDATE
     };
 
     private static final int COL_RSS_URL = 0;
+    private static final int COL_RSS_LAST_UPDATE = 1;
     
     /**
      * Timeout to wait for webservice to connect. Because we're in the
@@ -162,12 +164,16 @@ public class WebserviceHelper {
         Log.d(TAG, "Start to update feeds");
         prepareUserAgent(context);
         final ContentResolver resolver = context.getContentResolver();
-        final String rssUrl = extractRssUrl(feedId, resolver);
+        final Cursor feedCursor = extractFeedInfo(feedId, resolver);
+        final String rssUrl = feedCursor.getString(COL_RSS_URL);
+        final long lastFeedUpdate = feedCursor.getLong(COL_RSS_LAST_UPDATE);
+        feedCursor.close();
+        
         Log.v(TAG, "Ask the RSS source to retrieve the items from " + rssUrl);
 
         final ContentValues values = new ContentValues();
             
-        insertNewItemsIntoDb(context, resolver, feedId, rssUrl, maxItemsToStore, new SqLiteRssItemsDao());
+        insertNewItemsIntoDb(context, resolver, feedId, rssUrl, maxItemsToStore, lastFeedUpdate, new SqLiteRssItemsDao());
         
         final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, feedId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
@@ -208,7 +214,9 @@ public class WebserviceHelper {
     public static void retrieveFaviconFromFeed(Context context, int feedId) throws FeedProcessingException {
         Log.d(TAG, "Start to retrieve the favicon for [" + feedId + "]");
         final ContentResolver resolver = context.getContentResolver();
-        final String rssUrl = extractRssUrl(feedId, resolver);
+        final Cursor feedCursor = extractFeedInfo(feedId, resolver);
+        final String rssUrl = feedCursor.getString(COL_RSS_URL);
+        feedCursor.close();
 
         prepareUserAgent(context);
         
@@ -241,7 +249,7 @@ public class WebserviceHelper {
    
         prepareUserAgent(context);
         
-        List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems);
+        List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems, -1);
         DefaultItemList itemList = new DefaultItemList();
         itemList.setTitle(rssName);
         for (int i = 0; i < newRssItems.size(); i++) {
@@ -252,8 +260,8 @@ public class WebserviceHelper {
         return itemList;
     }
     
-    private static void insertNewItemsIntoDb(Context context, ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, RssItemsDao dao) throws FeedProcessingException {
-        final List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems);
+    private static void insertNewItemsIntoDb(Context context, ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, long lastFeedUpdate, RssItemsDao dao) throws FeedProcessingException {
+        final List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems, lastFeedUpdate);
         final ItemList oldRssItemsList = dao.getItemList(resolver, feedId);
         
         final DefaultItemList itemsToInsert = new DefaultItemList();
@@ -271,27 +279,23 @@ public class WebserviceHelper {
         Log.i(TAG, "Just inserted " + itemsToInsert.getNumberOfItems() + " new items into the DB");
     }
     
-    private static String extractRssUrl(int feedId,
+    /**
+     * The client should close the cursor after using it.
+     */
+    private static Cursor extractFeedInfo(int feedId,
             ContentResolver resolver) throws FeedProcessingException {
         Cursor cursor = null;
-        try {
-            Uri uri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId); 
-            
-            cursor = resolver.query(uri, PROJECTION_APPFEED, null,
-                    null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                return cursor.getString(COL_RSS_URL);
-            } else {
-                Log.e(TAG, "Fatal error: RSS URL not found");
-                throw new FeedProcessingException(
-                        "Can't find the URL for this feed. Please re-add the feed",
-                        UpdateTaskStatus.FEED_PROCESSING_EXCEPTION);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+        Uri uri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId); 
+        
+        cursor = resolver.query(uri, PROJECTION_APPFEED, null,
+                null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            return cursor;
+        } else {
+            Log.e(TAG, "Fatal error: RSS URL not found");
+            throw new FeedProcessingException(
+                    "Can't find the URL for this feed. Please re-add the feed",
+                    UpdateTaskStatus.FEED_PROCESSING_EXCEPTION);
         }
     }
-
 }
