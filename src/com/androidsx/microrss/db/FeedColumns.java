@@ -26,4 +26,9 @@ public class FeedColumns {
      * the views. The others are just in "selectable" state.
      */
     public static final String ACTIVE = "active";
+
+    /**
+     * Flag that indicates whether this feed comes from the Google Reader account of the user.
+     */
+    public static final String G_READER = "g_reader";
 }

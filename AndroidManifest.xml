@@ -27,7 +27,7 @@
         </activity>
         
         <!-- Activity that shows the basic information of a feed -->
-	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
+	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"/>
 	    
 	    <!-- Activity that shows the basic information of a story -->
        	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
@@ -43,7 +43,11 @@
         	android:label="@string/settings_title">
 		</activity>
 		<activity
-        	android:name="com.androidsx.microrss.configure.ChooseFeedsActivity"
+        	android:name="com.androidsx.microrss.configure.ChooseSampleFeedsActivity"
+        	android:label="@string/settings_title">
+		</activity>
+		<activity
+        	android:name="com.androidsx.microrss.configure.ChooseGoogleReaderFeedsActivity"
         	android:label="@string/settings_title">
 		</activity>
     </application>

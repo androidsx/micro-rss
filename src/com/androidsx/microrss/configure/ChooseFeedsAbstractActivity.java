@@ -1,6 +1,5 @@
 package com.androidsx.microrss.configure;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -13,11 +12,11 @@ import android.widget.ListView;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 
-public class ChooseFeedsActivity extends ListActivity {
-    private static final String TAG = "ChooseFeedsActivity";
+public abstract class ChooseFeedsAbstractActivity extends ListActivity {
+    private static final String TAG = "ChooseFeedsAbstractActivity";
     
     private MicroRssDao dao;
-    private List<Feed> feeds = new LinkedList<Feed>();
+    private List<Feed> feeds;
     private ListView listView;
     
     @Override
@@ -25,7 +24,7 @@ public class ChooseFeedsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         dao = new MicroRssDao(getContentResolver());
-        feeds = dao.findFeeds();
+        feeds = getFeeds();
         
         setListAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, feedToStringArray(feeds)));
@@ -60,4 +59,6 @@ public class ChooseFeedsActivity extends ListActivity {
         }
         return ret;
     }
+    
+    protected abstract List<Feed> getFeeds();
 }

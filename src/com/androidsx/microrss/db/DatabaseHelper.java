@@ -16,7 +16,7 @@ import com.flurry.android.FlurryAgent;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 15;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,11 +34,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY ," // FIXME: AUTOINCREMENT?
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + FeedColumns.FEED_URL + " TEXT,"
                 + FeedColumns.TITLE + " TEXT,"
                 + FeedColumns.ACTIVE + " BOOLEAN,"
-                + FeedColumns.LAST_UPDATE + " BIGINT);");
+                + FeedColumns.LAST_UPDATE + " BIGINT, "
+                + FeedColumns.G_READER + " BOOLEAN"
+                + ");");
 
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_ITEMS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -49,6 +51,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ItemColumns.ITEM_URL + " TEXT,"
                 + ItemColumns.THUMBNAIL_URL + " TEXT,"
                 + ItemColumns.DATE + " INTEGER);");
+        
+        db.execSQL("CREATE UNIQUE INDEX " + "INDEX_URL" + " ON " + MicroRssContentProvider.TABLE_FEEDS + " (" + FeedColumns.FEED_URL + ");");
+        
     }
 
     /**

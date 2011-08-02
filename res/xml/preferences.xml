@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
-			android:title="Feed selection">
+			android:title="Choose your feeds">
 	        <Preference
-               	android:title="List of feeds"
-                android:summary="Choose the feeds your want to read"
-                android:key="chooseFeeds" />
+               	android:title="Sample feeds"
+                android:summary=""
+                android:key="chooseSampleFeeds" />
+                
+            <Preference
+                android:title="Google Reader feeds"
+                android:summary=""
+                android:key="chooseGoogleReaderFeeds" />
+                
         </PreferenceCategory>
         
        <PreferenceCategory
@@ -20,26 +26,25 @@
 				
 			 <PreferenceScreen
 	                android:key="SecondPrefScreen"
-	                android:title="Google Reader integration"
-	                android:summary="Configure your Google Reader account"
-	                android:enabled="false">
+	                android:title="Google Reader account"
+	                android:summary="Input your credentials">
 	                <EditTextPreference
 	                        android:title="Username"
 	                        android:summary="Set your login name here"
 	                        android:persistent="true"
-	                        android:key="GoogleUserEditTextPref" />
+	                        android:key="@string/pref_google_user_name" />
 	               <EditTextPreference
 	                        android:title="Password"
 	                        android:summary=""
 	                        android:inputType="textPassword"
 	                        android:persistent="true"
-	                        android:key="GooglePasswordEditTextPref" />   
-	               <Preference
-	                	android:title="Setup Google Reader"
-	                	android:summary="Press here once you fill up your account"
-	                	android:key="checkGoogleReader" />         
-	        </PreferenceScreen>	
+	                        android:key="@string/pref_google_password" />   
+                            
+                   <Preference
+                        android:title="Sync feeds"
+                        android:summary=""
+                        android:key="syncGoogleReaderFeeds" />
+        	   </PreferenceScreen>	
         </PreferenceCategory>
-        
         
 </PreferenceScreen>

@@ -89,37 +89,31 @@ public class MicroRssDao {
     }
     
     public List<Feed> findFeeds() {
-        Cursor cursor = null;
-        try {
-            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
-            final String[] projection = new String[] { BaseColumns._ID, FeedColumns.TITLE,
-                    FeedColumns.FEED_URL, FeedColumns.ACTIVE, FeedColumns.LAST_UPDATE };
-            cursor = contentResolver.query(allFeedsUri, projection, null, null,
-                    BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
-    
-            List<Feed> feeds = new LinkedList<Feed>();
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    feeds.add(feedFromCursor(cursor));
-                } while (cursor.moveToNext());
-            }
-            return feeds;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+        return findFeeds(null);
     }
     
     public List<Feed> findActiveFeeds() {
+        return findFeeds(FeedColumns.ACTIVE + " = 1");
+    }
+    
+    public List<Feed> findGoogleReaderFeeds() {
+        return findFeeds(FeedColumns.G_READER + " = 1");
+    }
+    
+    public List<Feed> findSampleFeeds() {
+        return findFeeds(FeedColumns.G_READER + " <> 1");
+    }
+    
+    
+    private List<Feed> findFeeds(String selection) {
         Cursor cursor = null;
         try {
             final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
             final String[] projection = new String[] { BaseColumns._ID, FeedColumns.TITLE,
                     FeedColumns.FEED_URL, FeedColumns.ACTIVE, FeedColumns.LAST_UPDATE };
-            cursor = contentResolver.query(allFeedsUri, projection, FeedColumns.ACTIVE + " = 1", null,
+            cursor = contentResolver.query(allFeedsUri, projection, selection, null,
                     BaseColumns._ID + " ASC"); // FIXME: sort by feed position instead
-    
+            
             List<Feed> feeds = new LinkedList<Feed>();
             if (cursor != null && cursor.moveToFirst()) {
                 do {
