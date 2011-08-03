@@ -121,6 +121,10 @@ public class FeedActivity extends LauncherActivity {
     }
 
     public void onClickNavigationDown(View target) {
-        onFeedClick(null);
+        if (customViewTrayAdapter.getAdapter() != null
+            && customViewTrayAdapter.getAdapter().getCount() > 0
+            && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
+            onFeedClick(null);
+        }
     }
 }
