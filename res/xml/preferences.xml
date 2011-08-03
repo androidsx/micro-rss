@@ -16,14 +16,6 @@
         
        <PreferenceCategory
                 android:title="Advanced">
-             <ListPreference
-				android:key="@string/pref_update_interval"
-				android:title="Update interval"
-				android:entries="@array/update_interval"
-				android:entryValues="@array/update_interval_values"
-				android:defaultValue="60000"
-				android:dialogTitle="Update the stories every" />
-				
 			 <PreferenceScreen
 	                android:key="SecondPrefScreen"
 	                android:title="Google Reader account"
@@ -44,7 +36,20 @@
                         android:title="Sync feeds"
                         android:summary=""
                         android:key="syncGoogleReaderFeeds" />
-        	   </PreferenceScreen>	
+            	   </PreferenceScreen>
+    
+                <Preference
+                        android:title="Sync stories"
+                        android:summary=""
+                        android:key="syncStories" />
+                        
+                <ListPreference
+                    android:key="@string/pref_update_interval"
+                    android:title="Update interval"
+                    android:entries="@array/update_interval"
+                    android:entryValues="@array/update_interval_values"
+                    android:defaultValue="60000"
+                    android:dialogTitle="Update the stories every" />
         </PreferenceCategory>
         
 </PreferenceScreen>

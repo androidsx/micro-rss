@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.UpdateService;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
 
@@ -51,6 +52,19 @@ public class Preferences extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, ChooseGoogleReaderFeedsActivity.class));
+                return true;
+            }
+        });
+        
+        ((Preference) findPreference("syncStories")).setOnPreferenceClickListener(
+                new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.i(TAG, "Force the update service to start");
+                startService(new Intent(Preferences.this, UpdateService.class)); 
+                
+                Toast.makeText(Preferences.this, "Start sync", Toast.LENGTH_LONG).show();
+
                 return true;
             }
         });
