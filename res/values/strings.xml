@@ -9,8 +9,8 @@
     <string name="label_tiny">Micro RSS tiny</string>
     <string name="label_large">Micro RSS large</string>
 
-    <string name="app_name">Micro RSS</string>
-    <string name="app_descrip">Remember that text you shouldn\'t have sent last night? We do.</string>
+    <string name="app_name">News Reader</string>
+    <string name="app_descrip"></string>
 
 	<string name="pref_update_interval">updateInterval</string>
 

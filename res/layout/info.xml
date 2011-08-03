@@ -69,13 +69,6 @@
 				android:layout_marginLeft="5dip"
 				android:layout_marginRight="5dip" />
      
-			<ImageView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:layout_marginLeft="5dip"
-                android:layout_marginRight="5dip"
-				android:src="@drawable/tfln_info_refresh_button"/>
 
 		    <View android:layout_width="wrap_content" android:layout_height="15dip" />
 		    <TextView 
