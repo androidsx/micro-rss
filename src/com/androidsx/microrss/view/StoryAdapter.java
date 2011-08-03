@@ -104,6 +104,9 @@ public class StoryAdapter extends BaseAdapter {
             holder.storyTitle.setLayoutParams(params);
         }
         
+        // it recicle the views even with the scroll! So sometimes the 8º item appears scrolled.
+        rowView.scrollTo(0, 0);
+        
         return rowView;
     }
     

@@ -18,6 +18,7 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
+import com.wimm.framework.view.ViewTray;
 import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
@@ -72,6 +73,17 @@ public class StoryActivity extends Activity {
         customViewTrayAdapter.setMotionAxis(scrollAxis);
         customViewTrayAdapter.setCanScrollInternalView(true);
         customViewTrayAdapter.setOnDragEndListener(dragEndListener);
+    }
+    
+    public void onStoryClick(View target) {
+        try {
+            int scrollY = target.findViewById(R.id.story_title).getTop();
+            customViewTrayAdapter.getActiveView().scrollTo(0, scrollY);
+        } catch (Exception e) {
+            // no need to make any action
+            Log.e(TAG, "Can't scroll to title " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
     /** 
