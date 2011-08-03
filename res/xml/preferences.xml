@@ -16,28 +16,12 @@
         
        <PreferenceCategory
                 android:title="Advanced">
-			 <PreferenceScreen
-	                android:key="SecondPrefScreen"
-	                android:title="Google Reader account"
-	                android:summary="Input your credentials">
-	                <EditTextPreference
-	                        android:title="Username"
-	                        android:summary="Set your login name here"
-	                        android:persistent="true"
-	                        android:key="@string/pref_google_user_name" />
-	               <EditTextPreference
-	                        android:title="Password"
-	                        android:summary=""
-	                        android:inputType="textPassword"
-	                        android:persistent="true"
-	                        android:key="@string/pref_google_password" />   
-                            
-                   <Preference
-                        android:title="Sync feeds"
+			
+                <Preference
+                        android:title="Google Reader Account"
                         android:summary=""
-                        android:key="syncGoogleReaderFeeds" />
-            	   </PreferenceScreen>
-    
+                        android:key="googleReaderAccount" />
+                        
                 <Preference
                         android:title="Sync stories"
                         android:summary=""

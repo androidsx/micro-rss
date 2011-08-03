@@ -3,12 +3,15 @@ package com.androidsx.microrss.configure;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.androidsx.commons.helper.IntentHelper;
+import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 
@@ -22,7 +25,8 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.wrapper_list_goback);
+        
         dao = new MicroRssDao(getContentResolver());
         feeds = getFeeds();
         
@@ -36,6 +40,12 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         for (int i = 0; i < feeds.size(); i++) {
             listView.setItemChecked(i, feeds.get(i).isActive());
         }
+    }
+    
+    public void onGoBackClick(View target) {
+        Intent intent = IntentHelper.createIntent(ChooseFeedsAbstractActivity.this, null,
+                Preferences.class);
+        startActivity(intent);
     }
     
     /**

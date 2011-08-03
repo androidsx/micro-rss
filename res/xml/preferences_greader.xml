@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Google Reader">
+        <EditTextPreference
+            android:title="Username"
+            android:summary="Set your login name here"
+            android:persistent="true"
+            android:key="@string/pref_google_user_name" />
+        <EditTextPreference
+            android:title="Password"
+            android:summary=""
+            android:inputType="textPassword"
+            android:persistent="true"
+            android:key="@string/pref_google_password" />
+
+        <Preference
+            android:title="Sync feeds"
+            android:summary=""
+            android:key="syncGoogleReaderFeeds" />
+    </PreferenceCategory>
+</PreferenceScreen>
+    
