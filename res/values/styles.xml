@@ -349,6 +349,25 @@
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
     </style>
+    
+    <style name="error_message">
+        <item name="android:textSize">17.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/error_message_warning</item>
+        <item name="android:paddingLeft">3.0dip</item>
+        <item name="android:paddingRight">3.0dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:paddingTop">15dip</item>
+    </style>
+
+    <style name="error_message_detailed">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">@color/error_message_warning</item>
+        <item name="android:paddingLeft">3.0dip</item>
+        <item name="android:paddingRight">3.0dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:paddingTop">5dip</item>
+    </style>
 
     <style name="Theme.MicroRss" parent="@android:style/Theme.Black">
         <item name="android:windowNoTitle">true</item>

@@ -41,13 +41,20 @@ public class FeedActivity extends LauncherActivity {
                 customViewTrayAdapter.setIndex(position);
             } else {
                 Log.e(TAG, "Wrong feed id: " + currentId);
-                Toast.makeText(this, "Wrong feed id: " + currentId, Toast.LENGTH_SHORT).show();
-                finish(); // TODO: error message or new activity but with sliders to go to settings.
+                
+                ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
+                        R.string.error_message_feed_unexpected_id_detailed,
+                        R.drawable.warning);
+                customViewTrayAdapter.setAdapter(errorAdapter);
             }
         } else {
             Log.e(TAG, "There are no active feeds");
-            Toast.makeText(this, "There are no active feeds", Toast.LENGTH_SHORT).show();
-            finish(); // TODO: error message or new activity but with sliders to go to settings.
+            
+            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_no_active,
+                    R.string.error_message_feed_no_active_detailed,
+                    R.drawable.information,
+                    R.color.error_message_info);
+            customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }
 
@@ -83,7 +90,8 @@ public class FeedActivity extends LauncherActivity {
                 Log.d(TAG, "Can't go left anymore. Go to Settings");
             } else if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Down
                     && customViewTrayAdapter.getAdapter() != null
-                    && customViewTrayAdapter.getAdapter().getCount() > 0) {
+                    && customViewTrayAdapter.getAdapter().getCount() > 0
+                    && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
                 onFeedClick(null);
             }
         }

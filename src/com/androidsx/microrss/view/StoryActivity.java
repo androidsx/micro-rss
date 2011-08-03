@@ -45,13 +45,24 @@ public class StoryActivity extends Activity {
                 customViewTrayAdapter.setAdapter(storyAdapter);
             } else {
                 Log.e(TAG, "There are no stories for the feed id " + feedId);
-                Toast.makeText(this, "There are no stories for the feed id " + feedId, Toast.LENGTH_SHORT).show();
-                finish(); // TODO: error message or new activity but with sliders to go to settings.
+                
+                customViewTrayAdapter.setCanScrollInternalView(false);
+                
+                ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_story_no_items,
+                        R.string.error_message_story_no_items_detailed,
+                        R.drawable.information,
+                        R.color.error_message_info);
+                customViewTrayAdapter.setAdapter(errorAdapter);
             }
         } else {
             Log.e(TAG, "Wrong feed id: " + feedId);
-            Toast.makeText(this, "Wrong feed id: " + feedId, Toast.LENGTH_SHORT).show();
-            finish(); // TODO: error message or new activity but with sliders to go to settings.
+
+            customViewTrayAdapter.setCanScrollInternalView(false);
+            
+            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
+                    R.string.error_message_feed_unexpected_id_detailed,
+                    R.drawable.warning);
+            customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }
 
