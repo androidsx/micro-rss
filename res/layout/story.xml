@@ -22,12 +22,14 @@
         
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            >
 
             <RelativeLayout
                 android:id="@+id/story_title_wrapper"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/wimm_screen_height"
+                android:onClick="onStoryClick"
                 >
 
 
