@@ -41,7 +41,7 @@ public class UpdateService extends Service implements Runnable {
      * Default update interval, in milliseconds. Every update period, the update service wakes up,
      * checks whether any feed needs updating, sets a new alarm, and sleeps again.
      */
-    private static final long DEFAULT_UPDATE_INTERVAL_MILLIS = 3 * DateUtils.HOUR_IN_MILLIS;
+    private static final long DEFAULT_UPDATE_INTERVAL_MILLIS = 6 * DateUtils.HOUR_IN_MILLIS;
 
     /**
      * Specific {@link Intent#setAction(String)} used when performing a full update of all feeds,

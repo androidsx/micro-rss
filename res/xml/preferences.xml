@@ -32,7 +32,7 @@
                     android:title="Update interval"
                     android:entries="@array/update_interval"
                     android:entryValues="@array/update_interval_values"
-                    android:defaultValue="60000"
+                    android:defaultValue="21600000"
                     android:dialogTitle="Update the stories every" />
         </PreferenceCategory>
         
