@@ -12,6 +12,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -39,45 +40,8 @@ public class GReaderPreferences extends PreferenceActivity {
                 new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                try {
-                    GoogleReaderClient gReader = new GoogleReaderClient(getApplicationContext());
-                    
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(GReaderPreferences.this);
-                    String user = sharedPrefs.getString(getResources().getString(R.string.pref_google_user_name), "");
-                    String password = sharedPrefs.getString(getResources().getString(R.string.pref_google_password), "");
-                    
-                    gReader.login(user, password);
-                    
-                    gReader.handleSubList(new ReaderClient.SubListHandler() {
-                        @Override
-                        public boolean subscription(Subscription sub)
-                                throws ReaderException {
-                            if (sub.getUid().startsWith("feed/")) {
-                                String url = sub.getUid().replaceFirst("feed/", "");
-                                String title = sub.getTitle();
-                                writeConfigToBackend(getApplication(), title, url, false);
-                            }
-                            return true;
-                        }
-                    }, System.currentTimeMillis());
-                    
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean(getResources().getString(R.string.pref_synced_with_google_reader), true);
-                    editor.commit();
-
-                    Toast.makeText(GReaderPreferences.this, "Done", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Log.e(TAG, "IOException: " + e);
-                    Toast.makeText(GReaderPreferences.this, "Can't connect: login error", Toast.LENGTH_LONG).show();
-                } catch (ReaderException e) {
-                    /*// TODO: This gets us a very nasty inflater exception. A bug in wimm?
-                    Dialog dialog = new Dialog(Preferences.this);
-                    dialog.setTitle("Can't connect: log-in error");
-                    dialog.show();*/
-                    Toast.makeText(GReaderPreferences.this, "Can't connect: login error", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "ReaderException: " + e);
-                }
-
+                new SyncGoogleReaderTask().execute((Void) null);
+                
                 return true;
             }
         });
@@ -108,4 +72,66 @@ public class GReaderPreferences extends PreferenceActivity {
         resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
     }
     
+    public class SyncGoogleReaderTask extends AsyncTask<Void, Void, String> {
+        
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(GReaderPreferences.this, "Starting syncronization", Toast.LENGTH_SHORT).show();
+        }
+        
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = "";
+            try {
+                GoogleReaderClient gReader = new GoogleReaderClient(getApplicationContext());
+                
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(GReaderPreferences.this);
+                String user = sharedPrefs.getString(getResources().getString(R.string.pref_google_user_name), "");
+                String password = sharedPrefs.getString(getResources().getString(R.string.pref_google_password), "");
+                
+                if (user.equals("") || password.equals("")) {
+                    return "Input your credentials";
+                }
+                
+                gReader.login(user, password);
+                
+                gReader.handleSubList(new ReaderClient.SubListHandler() {
+                    @Override
+                    public boolean subscription(Subscription sub)
+                            throws ReaderException {
+                        if (sub.getUid().startsWith("feed/")) {
+                            String url = sub.getUid().replaceFirst("feed/", "");
+                            String title = sub.getTitle();
+                            writeConfigToBackend(getApplication(), title, url, false);
+                        }
+                        return true;
+                    }
+                }, System.currentTimeMillis());
+                
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean(getResources().getString(R.string.pref_synced_with_google_reader), true);
+                editor.commit();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException: " + e);
+                result = "Can't connect: login error";
+            } catch (ReaderException e) {
+                /*// TODO: This gets us a very nasty inflater exception. A bug in wimm?
+                Dialog dialog = new Dialog(Preferences.this);
+                dialog.setTitle("Can't connect: log-in error");
+                dialog.show();*/
+                Log.e(TAG, "ReaderException: " + e);
+                result = "Can't connect: login error";
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals("")) {
+                result = "Completed feed syncronization";
+            }
+            Toast.makeText(GReaderPreferences.this, result, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
