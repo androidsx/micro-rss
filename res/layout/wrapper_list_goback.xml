@@ -9,7 +9,7 @@
         android:id="@+id/back_button"
         android:layout_width="fill_parent"
         android:text="Go back"
-        android:layout_height="wrap_content"
+        android:layout_height="35dip"
         android:onClick="onGoBackClick" />
        
     <ListView
