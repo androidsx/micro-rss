@@ -63,7 +63,7 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "An.droid.es" + MESSAGE_ES, "http://feeds.feedburner.com/AndroidEnEspanol?format=xml");
             writeConfigToBackend(this, "ALT1040" + MESSAGE_ES, "http://feeds.hipertextual.com/alt1040?format=xml");
             writeConfigToBackend(this, "Slashdot", "http://rss.slashdot.org/slashdot/eqWf");
-            writeConfigToBackend(this, "LifeHacker", "http://lifehacker.com/index.xml", true);
+            writeConfigToBackend(this, "LifeHacker", "http://lifehacker.com/index.xml");
             writeConfigToBackend(this, "Engadget", "http://www.engadget.com/rss.xml");
             writeConfigToBackend(this, "ReadWriteWeb", "http://www.readwriteweb.com/rss.xml");
 //            writeConfigToBackend(this, "TechCrunch", "http://www.techcrunch.com/feed/");

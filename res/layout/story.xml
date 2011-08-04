@@ -10,7 +10,7 @@
 
     <!-- Note:  
           android:fadingEdge="none" removes the white shadow on the top/bottom of the view 
-          android:scrollbars="none"-->
+          android:scrollbars="none"-->    
     <com.androidsx.microrss.view.StoryView
     xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -131,5 +131,14 @@ It has survived not only five centuries, but also the leap into electronic types
 It was popularised in the 1960s with the release of Letraset containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
                 style="@style/story_description" />
 
+
+			<Button
+			    android:id="@+id/go_feed"
+			    android:layout_width="fill_parent"
+			    android:text="Go to feed view"
+			    android:layout_below="@+id/story_description"
+			    android:layout_height="35dip"
+			    android:onClick="onGoFeedClick" />
+
         </RelativeLayout>
-    </com.androidsx.microrss.view.StoryView>
+</com.androidsx.microrss.view.StoryView>

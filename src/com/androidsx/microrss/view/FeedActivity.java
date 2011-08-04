@@ -13,10 +13,10 @@ import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.wimm.framework.app.LauncherActivity;
-import com.wimm.framework.view.AdapterViewTray;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
+import com.wimm.framework.view.ViewTray;
 
 public class FeedActivity extends LauncherActivity {
     private static final String TAG = "FeedActivity";
@@ -26,7 +26,7 @@ public class FeedActivity extends LauncherActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed_wrapper);
+        setContentView(R.layout.feed_wimm_wrapper);
 
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
@@ -72,6 +72,11 @@ public class FeedActivity extends LauncherActivity {
 
         int feedId = (int) customViewTrayAdapter.getAdapter().getItemId(customViewTrayAdapter.getIndex());
         intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+        startActivity(intent);
+    }
+    
+    public void onGoSettingsClick(View target) {
+        Intent intent = IntentHelper.createIntent(this, null, Preferences.class);
         startActivity(intent);
     }
 

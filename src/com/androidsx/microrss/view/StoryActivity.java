@@ -10,20 +10,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
-import com.wimm.framework.view.ViewTray;
 import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 public class StoryActivity extends Activity {
-    private static final String TAG = "StoryActivity";
+	
+	private static final String TAG = "StoryActivity";
 
     private CustomAdapterViewTray customViewTrayAdapter;
     private int feedId;
@@ -31,7 +31,7 @@ public class StoryActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.story_wrapper);
+        setContentView(R.layout.story_wimm_wrapper);
 
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper));
 
@@ -84,6 +84,17 @@ public class StoryActivity extends Activity {
             Log.e(TAG, "Can't scroll to title " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    public void onGoFeedClick(View target) {
+    	   Intent intent = IntentHelper.createIntent(StoryActivity.this, null, FeedActivity.class);
+           intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+           startActivity(intent);
+    }
+    
+    public void onGoSettingsClick(View target) {
+        Intent intent = IntentHelper.createIntent(this, null, Preferences.class);
+        startActivity(intent);
     }
     
     /** 

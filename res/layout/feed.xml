@@ -5,12 +5,27 @@
 	
 	In order to convert this layout into one with image, just do the steps with the info of each view.
  -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
-	android:background="@color/application_background"
-    android:onClick="onFeedClick"
+	android:orientation="vertical"
 	>
+	
+<Button
+    android:id="@+id/go_settings"
+    android:layout_width="fill_parent"
+    android:text="Go settings"
+    android:layout_height="35dip"
+    android:onClick="onGoSettingsClick" />
+	
+<RelativeLayout
+  	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@color/application_background"
+    android:onClick="onFeedClick">
+
+
+
 
 	<!-- TEXT / TEXT + IMAGE -->
 	<!--
@@ -77,3 +92,4 @@
 		android:layout_centerHorizontal="true" />
 		
 </RelativeLayout>
+</LinearLayout>

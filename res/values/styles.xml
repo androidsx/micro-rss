@@ -357,7 +357,7 @@
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
-        <item name="android:paddingTop">15dip</item>
+        <item name="android:paddingTop">0dip</item>
     </style>
 
     <style name="error_message_detailed">
@@ -366,7 +366,7 @@
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
-        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingTop">0dip</item>
     </style>
 
     <style name="Theme.MicroRss" parent="@android:style/Theme.Black">
