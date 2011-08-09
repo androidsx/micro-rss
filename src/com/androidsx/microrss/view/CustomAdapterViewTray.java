@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.wimm.framework.view.AdapterViewTray;
-import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 /**
@@ -28,10 +27,10 @@ public class CustomAdapterViewTray extends AdapterViewTray {
     }
 
     @Override
-    public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, Direction arg2, float arg3) {
-        super.onDragEnd(arg0, arg1, arg2, arg3);
+    public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, float arg3) {
+        super.onDragEnd(arg0, arg1, arg3);
         if (dragEndListener != null) {
-            dragEndListener.onDragEnd(arg0, arg1, arg2, arg3);
+            dragEndListener.onDragEnd(arg0, arg1, arg3);
         }
     }
 
@@ -40,7 +39,7 @@ public class CustomAdapterViewTray extends AdapterViewTray {
     }
 
     public static interface OnDragEndListener {
-        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, Direction arg2, float arg3);
+        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, float arg3);
     }
 
 }

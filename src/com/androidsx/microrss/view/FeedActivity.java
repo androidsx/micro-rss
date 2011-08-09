@@ -14,9 +14,7 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
-import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
-import com.wimm.framework.view.ViewTray;
 
 public class FeedActivity extends LauncherActivity {
     private static final String TAG = "FeedActivity";
@@ -86,19 +84,18 @@ public class FeedActivity extends LauncherActivity {
     private CustomAdapterViewTray.OnDragEndListener dragEndListener = new CustomAdapterViewTray.OnDragEndListener() {
 
         @Override
-        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, Direction arg2, float arg3) {
-            Log.v(TAG, "Detected movement " + arg1.toString() + ": " + arg2.toString());
-            
-            if (arg1 == ScrollAxis.LeftRight && arg2 == Direction.Left
-                    && customViewTrayAdapter.getIndex() == 0) {
-                startActivity(new Intent(FeedActivity.this, Preferences.class));
-                Log.d(TAG, "Can't go left anymore. Go to Settings");
-            } else if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Down
-                    && customViewTrayAdapter.getAdapter() != null
-                    && customViewTrayAdapter.getAdapter().getCount() > 0
-                    && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
-                onFeedClick(null);
-            }
+        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, float arg3) {
+            Log.v(TAG, "Detected movement " + arg1.toString() + ": index " + customViewTrayAdapter.getIndex());
+//            if (arg1 == ScrollAxis.LeftRight && arg2 == Direction.Left
+//                    && customViewTrayAdapter.getIndex() == 0) {
+//                startActivity(new Intent(FeedActivity.this, Preferences.class));
+//                Log.d(TAG, "Can't go left anymore. Go to Settings");
+//            } else if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Down
+//                    && customViewTrayAdapter.getAdapter() != null
+//                    && customViewTrayAdapter.getAdapter().getCount() > 0
+//                    && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
+//                onFeedClick(null);
+//            }
         }
     };
 

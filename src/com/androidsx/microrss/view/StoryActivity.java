@@ -18,7 +18,6 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
-import com.wimm.framework.view.MotionInterpreter.Direction;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 public class StoryActivity extends Activity {
@@ -104,15 +103,14 @@ public class StoryActivity extends Activity {
     private CustomAdapterViewTray.OnDragEndListener dragEndListener = new CustomAdapterViewTray.OnDragEndListener() {
 
         @Override
-        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, Direction arg2, float arg3) {
-            Log.v(TAG, "Detected movement " + arg1.toString() + ": " + arg2.toString());
-            
-            if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Up
-                    && customViewTrayAdapter.getViewScrollY() == 0) {
-                Intent intent = IntentHelper.createIntent(StoryActivity.this, null, FeedActivity.class);
-                intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-                startActivity(intent);
-            }
+        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, float arg3) {
+            Log.v(TAG, "Detected movement " + arg1.toString() + ": index " + customViewTrayAdapter.getIndex());            
+//            if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Up
+//                    && customViewTrayAdapter.getViewScrollY() == 0) {
+//                Intent intent = IntentHelper.createIntent(StoryActivity.this, null, FeedActivity.class);
+//                intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+//                startActivity(intent);
+//            }
         }
     };
 
