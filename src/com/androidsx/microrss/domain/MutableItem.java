@@ -7,6 +7,7 @@ public class MutableItem implements Item {
 
     private static final long serialVersionUID = 1L;
     
+    int id;
     String content;
     Date pubDate;
     String title;
@@ -16,13 +17,19 @@ public class MutableItem implements Item {
     public MutableItem() {
     }
     
-    public MutableItem(String content, Date pubDate, String title, String url, String thumbnail) {
+    public MutableItem(int id, String content, Date pubDate, String title, String url, String thumbnail) {
         super();
+        this.id = id;
         this.content = content;
         this.pubDate = pubDate;
         this.title = title;
         this.url = url;
         this.thumbnail = thumbnail;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -68,6 +75,10 @@ public class MutableItem implements Item {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

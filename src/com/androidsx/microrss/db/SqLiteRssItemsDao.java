@@ -138,12 +138,13 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
             while (cursor != null && cursor.moveToNext()) {
                 int index = cursor.getInt(COL_POSITION);
+                int id = cursor.getInt(COL_ID);
                 String content = cursor.getString(COL_CONTENT);
                 String title = cursor.getString(COL_ITEM_TITLE);
                 String url = cursor.getString(COL_ITEM_URL);
                 String thumbnail = cursor.getString(COL_ITEM_THUMBNAIL);
                 long date = cursor.getLong(COL_DATE);
-                DefaultItem item = new DefaultItem(title, content, url,
+                DefaultItem item = new DefaultItem(id, title, content, url,
                         new Date(date), thumbnail);
                 itemList.addItem(item);
                 Log.v(TAG, "Read from cursor item #" + index + ": " + item);

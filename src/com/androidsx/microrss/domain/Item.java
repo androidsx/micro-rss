@@ -15,6 +15,13 @@ import java.util.Date;
 public interface Item extends Serializable {
 
   /**
+   * Unique identifier of this story, that generally corresponds to its database ID
+   * 
+   * @return ID of this story
+   */
+  int getId();
+
+  /**
    * Plain text representation of the title of the item
    * 
    * @return title of the item

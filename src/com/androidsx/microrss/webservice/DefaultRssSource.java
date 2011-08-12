@@ -54,6 +54,7 @@ class DefaultRssSource implements RssSource {
   private static final String THUMB_TAG_2_TYPE_SHOULD_CONTAIN = "image/"; 
   private static final String THUMB_TAG_URL = "url";
 
+  private static final int DEFAULT_ID_WHEN_EMPTY = -1;
   private static final String DEFAULT_DESCRIPTION_WHEN_EMPTY = "(no content)";
   private static final String DEFAULT_TITLE_WHEN_EMPTY = "(no title)";
 
@@ -155,7 +156,7 @@ class DefaultRssSource implements RssSource {
                     thisTag = xpp.getName();
                     thisNamespace = xpp.getNamespace();
                     if (RSS_TAG_ITEM.equals(thisTag)) {
-                        items.add(new MutableItem(DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(),
+                        items.add(new MutableItem(DEFAULT_ID_WHEN_EMPTY, DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(),
                                 DEFAULT_TITLE_WHEN_EMPTY, "", ""));
                         insideItem = true;
                         thisStoryDepth = xpp.getDepth();
@@ -254,7 +255,7 @@ class DefaultRssSource implements RssSource {
                     thisTag = xpp.getName();
                     thisNamespace = xpp.getNamespace();
                     if (ATOM_TAG_ITEM.equals(thisTag)) {
-                        items.add(new MutableItem(DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(),
+                        items.add(new MutableItem(DEFAULT_ID_WHEN_EMPTY, DEFAULT_DESCRIPTION_WHEN_EMPTY, new Date(),
                                 DEFAULT_TITLE_WHEN_EMPTY, "", ""));
                         insideItem = true;
                         thisStoryDepth = xpp.getDepth();

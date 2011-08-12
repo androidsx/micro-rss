@@ -14,13 +14,15 @@ public class DefaultItem implements Item {
 
   private static final long serialVersionUID = 7526472295622776145L;
   
+  private final int id;
   private final String title;
   private final String description;
   private final String URL;
   private final Date pubDate;
   private final String thumbnail;
 
-  public DefaultItem(String title, String description, String URL, Date pubDate, String thumbnail) {
+  public DefaultItem(int id, String title, String description, String URL, Date pubDate, String thumbnail) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.URL = URL;
@@ -54,6 +56,11 @@ public class DefaultItem implements Item {
   }
 
   @Override
+  public int getId() {
+      return id;
+  }
+  
+  @Override
   public String toString() {
     return "[" + title.replace('\n', ' ') + ", " + description.substring(0, Math.min(20, description.length())).replace('\n', ' ') + " thumb: " + thumbnail + "]";
   }
@@ -76,6 +83,7 @@ public class DefaultItem implements Item {
             .equals(otherItem.getURL()));
   }
   
+  @Override
   public int hashCode() {
     return HashItemHelper.createHash(title, URL, description);
   }
