@@ -32,6 +32,8 @@
 	    <!-- Activity that shows the basic information of a story -->
        	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
        	
+       	<activity android:name=".view.StoryTitleActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"/>
+       	
 		<!-- @Deprecated: activity for settings -->
         <activity
             android:name="com.androidsx.microrss.configure.SettingsActivity"

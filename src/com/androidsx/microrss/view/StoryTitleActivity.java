@@ -20,9 +20,14 @@ import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
-public class StoryActivity extends Activity {
-	
-	private static final String TAG = "StoryActivity";
+/**
+ * Shows the titles of the stories in a vertical list. On click, the full story is displayed.
+ * <p>
+ * COPIED FROM StoryActivity: keep only one when we decide which way to go. Only minor differences.
+ */
+public class StoryTitleActivity extends Activity {
+    
+    private static final String TAG = "StoryTitleActivity";
 
     private CustomAdapterViewTray customViewTrayAdapter;
     private int feedId;
@@ -39,7 +44,7 @@ public class StoryActivity extends Activity {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
             Feed feed = dao.findFeed(feedId);
 
-            StoryAdapter storyAdapter = new StoryAdapter(this, (Item[]) dao.findStories(feedId)
+            StoryTitleAdapter storyAdapter = new StoryTitleAdapter(this, dao.findStories(feedId)
                     .toArray(new Item[0]), feed);
             if (storyAdapter.getCount() > 0) {
                 customViewTrayAdapter.setAdapter(storyAdapter);
@@ -68,7 +73,7 @@ public class StoryActivity extends Activity {
 
     private void configureViewTray(CustomAdapterViewTray adapterViewTray) {
         customViewTrayAdapter = adapterViewTray;
-        MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
+        MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.UpDown;
         customViewTrayAdapter.setMotionAxis(scrollAxis);
         customViewTrayAdapter.setCanScrollInternalView(true);
         customViewTrayAdapter.setOnDragEndListener(dragEndListener);
@@ -86,7 +91,7 @@ public class StoryActivity extends Activity {
     }
     
     public void onGoFeedClick(View target) {
-    	   Intent intent = IntentHelper.createIntent(StoryActivity.this, null, FeedActivity.class);
+           Intent intent = IntentHelper.createIntent(StoryTitleActivity.this, null, FeedActivity.class);
            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
            startActivity(intent);
     }

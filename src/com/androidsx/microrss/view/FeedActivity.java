@@ -24,11 +24,11 @@ public class FeedActivity extends LauncherActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed_wimm_wrapper);
+        setContentView(R.layout.feed_wrapper);
 
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
-        FeedAdapter feedAdapter = new FeedAdapter(this, (Feed[]) new MicroRssDao(
+        FeedAdapter feedAdapter = new FeedAdapter(this, new MicroRssDao(
                 getContentResolver()).findActiveFeeds().toArray(new Feed[0]));
         if (feedAdapter.getCount() > 0) {
             int currentId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(),
@@ -78,6 +78,13 @@ public class FeedActivity extends LauncherActivity {
         startActivity(intent);
     }
 
+    public void onGoVerticalClick(View target) {
+        Intent intent = IntentHelper.createIntent(this, null, StoryTitleActivity.class);
+        int feedId = (int) customViewTrayAdapter.getAdapter().getItemId(customViewTrayAdapter.getIndex());
+        intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+        startActivity(intent);
+    }
+    
     /** 
      * Controls the swipe down to go to Story View, and the swipe left on the first feed to go to Settings.
      */

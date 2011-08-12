@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+        We have chosen a centered text, instead of a bottom one.
+        Previously on the story_title it had alignBottom="Image",
+        instead we put it in the center with
+        android:layout_centerInParent="true". In order to convert this
+        layout into one with image, just do the steps with the info of
+        each view.
+    -->
+
+    <!-- Note:  
+          android:fadingEdge="none" removes the white shadow on the top/bottom of the view 
+          android:scrollbars="none"-->    
+    <com.androidsx.microrss.view.StoryView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/application_background"
+        android:fillViewport="true"
+        android:fadingEdge="none"
+        >
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+
+            <RelativeLayout
+                android:id="@+id/story_title_wrapper"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:onClick="onStoryClick"
+                >
+
+
+                <!--TEXT + IMAGE -->
+                <!--
+                    TEXT only: leave it like it is TEXT + IMAGE: image1
+                    - android:src="@drawable/icon"
+                -->
+                <ImageView
+                    android:id="@+id/story_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="center"
+                    android:layout_centerInParent="true" />
+
+                <!-- TEXT / TEXT + IMAGE -->
+                <!--
+                    TEXT + IMAGE:
+                        android:layout_alignBottom="@+id/story_image",
+                        android:maxLines="5",
+                        android:background="@color/header_background"
+                -->
+                <TextView
+                    android:id="@+id/story_title"
+                    android:text=""
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:maxLines="6"
+                    android:layout_below="@+id/feed_title"
+                    android:gravity="left|center"
+                    style="@style/story_title" />
+
+
+                <TextView
+                    android:id="@+id/feed_title"
+                    android:text=""
+                    android:padding="1.0dip"
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:layout_marginLeft="2dip"
+                    android:maxLines="1"
+                    style="@style/story_feed_title" />
+
+
+                <TextView
+                    android:id="@+id/story_count"
+                    android:text=""
+                    android:layout_alignParentRight="true"
+                    android:padding="1.0dip"
+                    android:visibility="visible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:layout_marginRight="2dip"
+                    android:maxLines="1"
+                    style="@style/story_feed_title" />
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+</com.androidsx.microrss.view.StoryView>

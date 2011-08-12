@@ -18,6 +18,13 @@
     android:layout_height="35dip"
     android:onClick="onGoSettingsClick" />
 	
+<Button
+    android:id="@+id/go_vertical"
+    android:layout_width="fill_parent"
+    android:text="Go vertical"
+    android:layout_height="35dip"
+    android:onClick="onGoVerticalClick" />
+    
 <RelativeLayout
   	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
