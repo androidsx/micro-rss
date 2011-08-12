@@ -42,6 +42,7 @@
 
 
     <style name="Text">
+        <item name="android:textSize">12.0dp</item>
     </style>
 
     <style name="Text.SpinnerNormalItem">
@@ -348,6 +349,26 @@
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">3.0dip</item>
         <item name="android:paddingBottom">5dip</item>
+    </style>
+    
+    <style name="Text.Feed">
+    </style>
+    
+    <style name="Text.Feed.UpperBar">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="Text.Feed.UpperBar.Secondary">
+        <item name="android:textSize">11.0dp</item>
+    </style>
+    
+    <style name="Text.Feed.UpperBar.Highlighted">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="Text.Feed.UpperBar.Highlighted.Arrows">
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingRight">1dp</item>
     </style>
     
     <style name="error_message">

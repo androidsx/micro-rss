@@ -10,93 +10,71 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
 	>
-	
+
+<!-- FIXME: Temporary button, remove before the release-->
 <Button
     android:id="@+id/go_settings"
     android:layout_width="fill_parent"
     android:text="Go settings"
     android:layout_height="35dip"
-    android:onClick="onGoSettingsClick" />
+    android:onClick="onGoSettingsClick"
+    android:visibility="gone" />
 	
-<Button
-    android:id="@+id/go_vertical"
-    android:layout_width="fill_parent"
-    android:text="Go vertical"
-    android:layout_height="35dip"
-    android:onClick="onGoVerticalClick" />
+<!-- Title of the feed, together with the favicon and the feed count -->    
+<LinearLayout
+    android:layout_width="fill_parent" 
+    android:layout_height="20dip"
+    android:background="@color/feed_title"
+    android:padding="1dip"
+    >
+
+    <ImageView android:id="@+id/feed_image" 
+        android:layout_width="16dip" 
+        android:layout_height="16dip" 
+        android:src="@drawable/favicon_default_brightness_100" />
+
+    <TextView android:id="@+id/feed_title"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content" 
+         android:layout_weight="1"
+         android:gravity="center"
+         android:maxLines="1"
+         style="@style/Text.Feed.UpperBar.Highlighted" />
+
+    <TextView  
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:maxLines="1" 
+        android:textColor="@color/white"
+        android:text="@string/left_arrow_disabled"
+        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+        
+    <TextView android:id="@+id/feed_count" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:maxLines="1" 
+        android:textColor="@color/white"
+        style="@style/Text.Feed.UpperBar.Secondary" />
+        
+    <TextView  
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:maxLines="1" 
+        android:textColor="@color/white"
+        android:text="@string/right_arrow_disabled"
+        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+</LinearLayout>
+
+
+    <!-- FIXME: put this inside a scroll view. I just can't grr -->
+    <ListView
+        android:id="@+id/story_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="fill"
+        >
     
-<RelativeLayout
-  	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	android:background="@color/application_background"
-    android:onClick="onFeedClick">
+    </ListView>
 
-
-
-
-	<!-- TEXT / TEXT + IMAGE -->
-	<!--
-		TEXT only: android:layout_centerInParent="true", android:maxLines="4"
-		TEXT + IMAGE: android:layout_alignBottom="@+id/story_image", android:maxLines="3", android:background="@color/header_background"
-	-->
-	<TextView android:id="@+id/feed_title"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" 
-		android:maxLines="4"
-		android:gravity="center"
-		android:layout_centerInParent="true"
-		android:layout_centerHorizontal="true"
-		android:text="Feed title (2)" 
-		style="@style/feed_title" />
-
-	<!--TEXT + IMAGE -->
-	<!--
-		TEXT only: leave it like it is
-		TEXT + IMAGE: image1 - android:src="@drawable/icon"
-	-->
-	<ImageView android:id="@+id/feed_image" 
-		android:layout_width="16dip" 
-		android:layout_height="16dip" 
-		android:scaleType="fitXY"
-		android:layout_margin="6dip"
-        android:src="@drawable/favicon_default_brightness_100"
-		 />
-
-	<LinearLayout android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true" 
-		android:orientation="vertical">
-		<TextView android:id="@+id/feed_count" 
-			android:text="Mock feed 1 of 1"
-			android:padding="1.0dip" 
-			android:visibility="visible"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:layout_marginTop="1dip" 
-			android:maxLines="1" 
-			android:layout_marginRight="2dip"
-			style="@style/story_feed_title" />
-		
-		<!-- TEXT / TEXT + IMAGE -->
-		<!--
-			TEXT only: android:visibility="visible"
-			TEXT + IMAGE: android:visibility="gone"
-		-->
-		<View android:id="@+id/feed_title_bottom_line"
-			android:layout_width="fill_parent"
-			android:layout_height="1dip" 
-			android:visibility="gone"
-			android:background="@color/story_separator_feed_title"/>
-     </LinearLayout>
-		
-	<ImageView android:id="@+id/feed_bottom_arrow"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:src="@drawable/bottom_arrow"
-		android:paddingBottom="1dip"
-		android:baselineAligned="false" 
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true" />
-		
-</RelativeLayout>
 </LinearLayout>

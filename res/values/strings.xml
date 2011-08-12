@@ -208,4 +208,9 @@ v1.4 (19.01.2010)\n
     
     <string name="no_feeds_configured">No feeds have been configured yet</string>
     
+    <string name="left_arrow_enabled">&#9664;</string>
+    <string name="left_arrow_disabled">&#9665;</string>
+    <string name="right_arrow_enabled">&#9654;</string>
+    <string name="right_arrow_disabled">&#9655;</string>
+    
 </resources>

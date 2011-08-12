@@ -16,6 +16,10 @@ import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
+/**
+ * List of feeds: left-right to change feeds. Scroll up-down to see the titles of the stories of the
+ * current feed. 
+ */
 public class FeedActivity extends LauncherActivity {
     private static final String TAG = "FeedActivity";
 
@@ -25,21 +29,21 @@ public class FeedActivity extends LauncherActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wrapper);
-
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
-        FeedAdapter feedAdapter = new FeedAdapter(this, new MicroRssDao(
-                getContentResolver()).findActiveFeeds().toArray(new Feed[0]));
-        if (feedAdapter.getCount() > 0) {
-            int currentId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(),
-                    -1);
-            int position = feedAdapter.getItemPosition(currentId, 0);
+        MicroRssDao dao = new MicroRssDao(getContentResolver());
+        Feed[] activeFeeds = dao.findActiveFeeds().toArray(new Feed[0]);
+        
+        if (activeFeeds.length > 0) {
+            FeedAdapter feedAdapter = new FeedAdapter(this, activeFeeds);
+            int currentFeedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
+            int position = feedAdapter.getItemPosition(currentFeedId, 0);
             if (position >= 0) {
                 customViewTrayAdapter.setAdapter(feedAdapter);
                 customViewTrayAdapter.setIndex(position);
             } else {
-                Log.e(TAG, "Wrong feed id: " + currentId);
-                
+                Log.e(TAG, "Wrong feed id: " + currentFeedId);
+                // FIXME: Why don't we just log it and move to the first position?
                 ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
                         R.string.error_message_feed_unexpected_id_detailed,
                         R.drawable.warning);
@@ -47,10 +51,10 @@ public class FeedActivity extends LauncherActivity {
             }
         } else {
             Log.e(TAG, "There are no active feeds");
-            
-            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_no_active,
-                    R.string.error_message_feed_no_active_detailed,
-                    R.drawable.information,
+
+            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this,
+                    R.string.error_message_feed_no_active,
+                    R.string.error_message_feed_no_active_detailed, R.drawable.information,
                     R.color.error_message_info);
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
@@ -60,11 +64,12 @@ public class FeedActivity extends LauncherActivity {
         customViewTrayAdapter = adapterViewTray;
         MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
         customViewTrayAdapter.setMotionAxis(scrollAxis);
-        customViewTrayAdapter.setCanScrollInternalView(false);
+        //customViewTrayAdapter.setCanScrollInternalView(false);
         customViewTrayAdapter.setCanLoop(false);
         customViewTrayAdapter.setOnDragEndListener(dragEndListener);
     }
 
+    @Deprecated
     public void onFeedClick(View target) {
         Intent intent = IntentHelper.createIntent(this, null, StoryActivity.class);
 
@@ -78,13 +83,6 @@ public class FeedActivity extends LauncherActivity {
         startActivity(intent);
     }
 
-    public void onGoVerticalClick(View target) {
-        Intent intent = IntentHelper.createIntent(this, null, StoryTitleActivity.class);
-        int feedId = (int) customViewTrayAdapter.getAdapter().getItemId(customViewTrayAdapter.getIndex());
-        intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-        startActivity(intent);
-    }
-    
     /** 
      * Controls the swipe down to go to Story View, and the swipe left on the first feed to go to Settings.
      */

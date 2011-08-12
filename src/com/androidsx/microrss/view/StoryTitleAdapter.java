@@ -1,109 +1,65 @@
 package com.androidsx.microrss.view;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 
-/**
- * TODO: Almost verbatim copy from {@link StoryAdapter}.
- */
-public class StoryTitleAdapter extends BaseAdapter {
-    private Activity contextActivity;
-    private Item[] stories;
-    private Feed feed;
-    
-    static class ViewHolder {
-        public ImageView storyImage;
-        public TextView storyTitle;
-        public TextView storyCount;
-        public TextView feedTitle;
-    }
+public final class StoryTitleAdapter extends BaseAdapter {
+    private final Activity contextActivity;
+    private final List<Item> stories;
 
-    public StoryTitleAdapter(Activity contextActivity, Item[] stories, Feed feed) {
-        this.stories = stories;
+    private static final class StoryViewHolder {
+        public TextView storyTitle;
+    }
+    
+    public StoryTitleAdapter(Activity contextActivity, List<Item> stories) {
         this.contextActivity = contextActivity;
-        this.feed = feed;
+        this.stories = stories;
     }
 
     @Override
     public int getCount() {
-        return this.stories.length;
+        return stories.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this.stories[position];
+        return stories.get(position);
     }
 
-    /** TODO: Return the Database ID */
     @Override
     public long getItemId(int position) {
-        return position;
+        return stories.get(position).getId();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
+        StoryViewHolder holder;
+        
         // Recycle existing view if passed as parameter
         View rowView = convertView;
         if (rowView == null) {
             LayoutInflater inflater = contextActivity.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.story_title, null, true);
-            holder = new ViewHolder();
-            holder.feedTitle = (TextView) rowView.findViewById(R.id.feed_title);
-            holder.storyCount = (TextView) rowView.findViewById(R.id.story_count);
+            rowView = inflater.inflate(R.layout.story_list_row, null, true);
+            holder = new StoryViewHolder();
             holder.storyTitle = (TextView) rowView.findViewById(R.id.story_title);
-            holder.storyImage = (ImageView) rowView.findViewById(R.id.story_image);
             rowView.setTag(holder);
         } else {
-            holder = (ViewHolder) rowView.getTag();
+            holder = (StoryViewHolder) rowView.getTag();
         }
         
         Item story = (Item) getItem(position);
-        
         holder.storyTitle.setText(story.getTitle());
-        holder.feedTitle.setText(feed.getTitle());
-        holder.storyCount.setText(contextActivity.getString(R.string.story_count,
-                (position + 1), getCount()));
         
-        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail());
-        if (favicon != null) {
-            holder.storyImage.setImageBitmap(favicon);
-            
-            // TODO: duplicated code, refactor it in XML
-            holder.feedTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
-            holder.feedTitle.setBackgroundColor(R.color.story_background_feed_title);
-            
-            holder.storyCount.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
-            holder.storyCount.setBackgroundColor(R.color.story_background_feed_title);
-            
-            holder.storyTitle.setMaxLines(5);
-            holder.storyTitle.setPadding(3, 0, 3, 3);
-            holder.storyTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_title_with_background));
-            holder.storyTitle.setBackgroundColor(R.color.story_background_title); 
-            
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.BELOW);
-            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.story_image);
-            
-            holder.storyTitle.setLayoutParams(params);
-        }
-        
-        // it recicle the views even with the scroll! So sometimes the 8º item appears scrolled.
-        rowView.scrollTo(0, 0);
-        
+        rowView.setTag(holder);
         return rowView;
     }
-    
 }

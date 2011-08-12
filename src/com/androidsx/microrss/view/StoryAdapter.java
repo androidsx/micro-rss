@@ -110,4 +110,21 @@ public class StoryAdapter extends BaseAdapter {
         return rowView;
     }
     
+    /**
+     * Get the row position associated with the specified row id in the list.
+     * 
+     * @param id row id of the list
+     * @param defaultValue the value if not found
+     * @return the position in the adapter or {@link defaultValue} if not found
+     */
+    public int getItemPosition(int id, int defaultPosition) {
+        int position = 0;
+        for (Item story : stories) {
+            if (story.getId() == id) {
+                return position;
+            }
+            position++;
+        }
+        return defaultPosition;
+    }
 }

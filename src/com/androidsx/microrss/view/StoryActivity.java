@@ -39,10 +39,17 @@ public class StoryActivity extends Activity {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
             Feed feed = dao.findFeed(feedId);
 
-            StoryAdapter storyAdapter = new StoryAdapter(this, (Item[]) dao.findStories(feedId)
+            StoryAdapter storyAdapter = new StoryAdapter(this, dao.findStories(feedId)
                     .toArray(new Item[0]), feed);
             if (storyAdapter.getCount() > 0) {
                 customViewTrayAdapter.setAdapter(storyAdapter);
+                int currentStoryId = getIntent().getIntExtra(new StoryNavigationExtras().getCurrentIdKey(), -1);
+                int position = storyAdapter.getItemPosition(currentStoryId, 0);
+                if (position >= 0) {
+                    customViewTrayAdapter.setIndex(position);
+                } else {
+                    Log.e(TAG, "Wrong story id: " + currentStoryId);
+                }
             } else {
                 Log.e(TAG, "There are no stories for the feed id " + feedId);
                 
