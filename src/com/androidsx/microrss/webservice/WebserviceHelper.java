@@ -1,5 +1,6 @@
 package com.androidsx.microrss.webservice;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -102,7 +104,7 @@ public class WebserviceHelper {
      * Open a request to the given URL, returning a {@link InputStream} across the
      * response from that API.
      */
-    static InputStream queryApi(String url) throws FeedProcessingException {
+    static InputStream queryApi(String url) throws IOException {
         if (sUserAgent == null) {
             // This should never happen in production 
             throw new RuntimeException("Must prepare user agent string");
@@ -127,17 +129,13 @@ public class WebserviceHelper {
         
         HttpClient client = new DefaultHttpClient(httpParams);
 
+        HttpResponse response;
         try {
-            HttpResponse response = client.execute(request);
+            response = client.execute(request);
             HttpEntity entity = response.getEntity();
             stream = entity.getContent();
-        } catch (Exception e) {
-            // FIXME: well... maybe shouldn't be an exception? we WON'T end up in the error view
-            // FIXME: easy to reproduce: start a new DB without internet connection
-            throw new FeedProcessingException(
-                "Can't download the feed! Either the network connection or the server is down",
-              e,
-              UpdateTaskStatus.FEED_PROCESSING_EXCEPTION_NO_EMAIL);
+        } catch (ClientProtocolException e) {
+            Log.w(TAG, "Network exception. Do we have connection to the internet?");
         }
         
         return stream;

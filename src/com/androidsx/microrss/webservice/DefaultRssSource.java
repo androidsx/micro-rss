@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,6 +95,11 @@ class DefaultRssSource implements RssSource {
             stream = WebserviceHelper.queryApi(rssUrl);
             parseResponse = parseResponse(stream, maxNumberOfItems, rssUrl, lastFeedUpdate);
             retrieveThumbnails(parseResponse);
+        } catch (FeedProcessingException e) {
+            throw e; // FIXME: Does this still happen at all?
+        } catch (Exception e) {
+            Log.e(TAG, "Error while grabbing and processing the feeds", e);
+            parseResponse = new ArrayList<Item>();
         } finally {
             try {
                 if (stream != null) {
