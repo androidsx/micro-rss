@@ -42,6 +42,7 @@
          style="@style/Text.Feed.UpperBar.Highlighted" />
 
     <TextView  
+        android:id="@+id/arrow_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:maxLines="1" 
@@ -57,6 +58,7 @@
         style="@style/Text.Feed.UpperBar.Secondary" />
         
     <TextView  
+        android:id="@+id/arrow_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:maxLines="1" 

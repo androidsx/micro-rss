@@ -104,6 +104,8 @@ public class FeedAdapter extends BaseAdapter {
             holder.feedImage.setImageBitmap(favicon);
         }
         
+        updateArrows(rowView, position, 0, getCount());
+        
         return rowView;
     }
 
@@ -123,5 +125,34 @@ public class FeedAdapter extends BaseAdapter {
             position++;
         }
         return defaultPosition;
+    }
+
+    /**
+     * Updates the style of the left-right arrows that provide a visual clue to the user that
+     * side-navigation is possible. Currently, we just hide the arrows that don't make sense, but
+     * we could also use the "dark" arrows for that.
+     */
+    private void updateArrows(View view, int position, int minPosition, int maxPosition) {
+        String leftEnabled = contextActivity.getString(R.string.left_arrow_enabled);
+        String leftDisabled = contextActivity.getString(R.string.left_arrow_disabled);
+        String rightEnabled = contextActivity.getString(R.string.right_arrow_enabled);
+        String rightDisabled = contextActivity.getString(R.string.right_arrow_disabled);
+        
+        if (position == minPosition) {
+            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftDisabled);
+            view.findViewById(R.id.arrow_left).setVisibility(View.INVISIBLE);
+            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
+            view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+        } else if (position + 1 == maxPosition) {
+            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftEnabled);
+            view.findViewById(R.id.arrow_left).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightDisabled);
+            view.findViewById(R.id.arrow_right).setVisibility(View.INVISIBLE);
+        } else {
+            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftEnabled);
+            view.findViewById(R.id.arrow_left).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
+            view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+        }
     }
 }
