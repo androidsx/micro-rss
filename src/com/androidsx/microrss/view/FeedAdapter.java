@@ -118,6 +118,9 @@ public class FeedAdapter extends BaseAdapter {
         
         updateArrows(rowView, position, 0, getCount());
         
+        // it recicle the views even with the scroll! So sometimes the 8º item appears scrolled.
+        rowView.scrollTo(0, 0);
+        
         return rowView;
     }
 
