@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <!-- Title of the feed, together with the favicon and the feed count -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="23dip"
+    android:background="@color/feed_title"
+    android:padding="1dip">
+
+    <TextView
+        android:id="@+id/feed_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:maxLength="16"
+        android:singleLine="true"
+        android:layout_centerInParent="true"
+        style="@style/Text.Feed.UpperBar.Highlighted" />
+
+    <ImageView
+        android:id="@+id/feed_image"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="2dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginTop="3dip"
+        android:layout_marginBottom="3dip"
+        android:src="@drawable/favicon_default_brightness_100"
+        android:layout_toLeftOf="@+id/feed_title" />
+
+    <TextView
+        android:id="@+id/arrow_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:text="@string/left_arrow_disabled"
+        android:layout_alignParentLeft="true"
+        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+
+    <TextView
+        android:id="@+id/feed_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        style="@style/Text.Feed.UpperBar.Secondary" />
+
+    <TextView
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:text="@string/right_arrow_disabled"
+        android:layout_alignParentRight="true"
+        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+</RelativeLayout>
+

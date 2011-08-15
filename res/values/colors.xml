@@ -30,8 +30,8 @@
 
 	<!-- Feed colors -->
     
-    <!-- old blue: 849cd9 -->
-    <color name="feed_title">#2545c2</color>
+    <!-- old blue: 849cd9, 2545c2 -->
+    <color name="feed_title">#5a81cd</color>
     
     <!-- Wrapper for WIMM layouts -->
     <color name="wrapper_background_color">#333333</color>

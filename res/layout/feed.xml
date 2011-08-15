@@ -30,54 +30,7 @@
             android:onClick="onGoSettingsClick"
             android:visibility="gone" />
 	
-        <!-- Title of the feed, together with the favicon and the feed count -->    
-        <LinearLayout
-            android:layout_width="fill_parent" 
-            android:layout_height="20dip"
-            android:background="@color/feed_title"
-            android:padding="1dip"
-            >
-        
-            <ImageView android:id="@+id/feed_image" 
-                android:layout_width="16dip" 
-                android:layout_height="16dip" 
-                android:src="@drawable/favicon_default_brightness_100" />
-        
-            <TextView android:id="@+id/feed_title"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content" 
-                 android:layout_weight="1"
-                 android:gravity="center"
-                 android:maxLines="1"
-                 style="@style/Text.Feed.UpperBar.Highlighted" />
-        
-            <TextView  
-                android:id="@+id/arrow_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:maxLines="1" 
-                android:textColor="@color/white"
-                android:text="@string/left_arrow_disabled"
-                style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
-                
-            <TextView android:id="@+id/feed_count" 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:maxLines="1" 
-                android:textColor="@color/white"
-                style="@style/Text.Feed.UpperBar.Secondary" />
-                
-            <TextView  
-                android:id="@+id/arrow_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:maxLines="1" 
-                android:textColor="@color/white"
-                android:text="@string/right_arrow_disabled"
-                style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
-        </LinearLayout>
-
-
+        <include layout="@layout/feed_header" />
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
