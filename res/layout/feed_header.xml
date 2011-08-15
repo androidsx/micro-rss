@@ -6,7 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="23dip"
-    android:background="@color/feed_title"
+    android:background="@drawable/feed_header"
     android:padding="1dip">
 
     <TextView
