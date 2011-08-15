@@ -5,12 +5,16 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
+import com.wimm.framework.view.ScrollView;
 
 public class FeedAdapter extends BaseAdapter {
     private final Activity contextActivity;
@@ -31,7 +36,8 @@ public class FeedAdapter extends BaseAdapter {
         public ImageView feedImage;
         public TextView feedTitle;
         public TextView feedCount;
-        public ListView storyList;
+        public ScrollView storyList;
+        public LinearLayout storyListWrapper;
     }
 
     public FeedAdapter(Activity contextActivity, Feed[] feeds) {
@@ -72,22 +78,28 @@ public class FeedAdapter extends BaseAdapter {
             final int feedId = (int) getItemId(position);
             
             // This DAO call is only done when the view is invalidated, which is nice
-            holder.storyList = (ListView) rowView.findViewById(R.id.story_list);
+            holder.storyList = (ScrollView) rowView.findViewById(R.id.story_list);
+            holder.storyListWrapper = (LinearLayout) rowView.findViewById(R.id.story_list_wrapper);
+            
             List<Item> stories = dao.findStories(feedId);
-            ListAdapter storyTitleAdapter = new StoryTitleAdapter(contextActivity, stories);
-            holder.storyList.setAdapter(storyTitleAdapter);
-            holder.storyList.setOnItemClickListener(new OnItemClickListener() {
+            for (Item item : stories) {
+                ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null, true);
                 
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-                    int storyId = (int) adapterView.getItemIdAtPosition(position);
-                    Intent intent = IntentHelper.createIntent(contextActivity, null, StoryActivity.class);
-                    intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-                    intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
-                    contextActivity.startActivity(intent);
-                }
-                
-            });
+                final int storyId = item.getId();
+                TextView textView = (TextView) feedRowView.findViewById(R.id.title);
+                textView.setText(item.getTitle());
+                feedRowView.setOnClickListener(new OnClickListener() {
+                    
+                    @Override
+                    public void onClick(View v) {
+                          Intent intent = IntentHelper.createIntent(contextActivity, null, StoryActivity.class);
+                          intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+                          intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
+                          contextActivity.startActivity(intent);
+                    }
+                });
+                holder.storyListWrapper.addView(feedRowView);
+            }
             rowView.setTag(holder);
         } else {
             holder = (FeedViewHolder) rowView.getTag();

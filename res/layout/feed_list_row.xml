@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_wrapper"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -8,9 +9,18 @@
         android:layout_width="fill_parent"
         android:layout_weight="1.0"
         android:layout_height="wrap_content" 
-        android:textSize="8pt" 
-        android:layout_marginLeft="20px" 
-        android:paddingTop="13px" 
-        android:paddingBottom="13px" />
+        android:textSize="13sp" 
+        android:layout_marginLeft="10px" 
+        android:textColor="@color/black"
+        android:paddingBottom="3px"
+        android:paddingTop="2px" />
+        
+      <ImageView
+        android:src="@drawable/separator_item_mode"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/title"
+      />        
 
 </RelativeLayout>

@@ -59,12 +59,17 @@ public class FeedActivity extends LauncherActivity {
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }
+    
+    @Override
+    public boolean dragCanExit() {
+        return customViewTrayAdapter.getActiveView().getScrollY() == 0 ? super.dragCanExit() : false;
+    }
 
     private void configureViewTray(CustomAdapterViewTray adapterViewTray) {
         customViewTrayAdapter = adapterViewTray;
         MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
         customViewTrayAdapter.setMotionAxis(scrollAxis);
-        //customViewTrayAdapter.setCanScrollInternalView(false);
+        customViewTrayAdapter.setCanScrollInternalView(true);
         customViewTrayAdapter.setCanLoop(false);
         customViewTrayAdapter.setOnDragEndListener(dragEndListener);
     }

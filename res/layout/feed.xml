@@ -5,78 +5,86 @@
 	
 	In order to convert this layout into one with image, just do the steps with the info of each view.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	>
-
-<!-- FIXME: Temporary button, remove before the release-->
-<Button
-    android:id="@+id/go_settings"
+<com.androidsx.microrss.view.FeedScrollableView
+    android:id="@+id/story_list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:text="Go settings"
-    android:layout_height="35dip"
-    android:onClick="onGoSettingsClick"
-    android:visibility="gone" />
-	
-<!-- Title of the feed, together with the favicon and the feed count -->    
-<LinearLayout
-    android:layout_width="fill_parent" 
-    android:layout_height="20dip"
-    android:background="@color/feed_title"
-    android:padding="1dip"
-    >
+    android:layout_height="fill_parent"
+    android:background="@color/application_background"
+    android:fillViewport="true"
+    android:fadingEdge="none">
 
-    <ImageView android:id="@+id/feed_image" 
-        android:layout_width="16dip" 
-        android:layout_height="16dip" 
-        android:src="@drawable/favicon_default_brightness_100" />
-
-    <TextView android:id="@+id/feed_title"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content" 
-         android:layout_weight="1"
-         android:gravity="center"
-         android:maxLines="1"
-         style="@style/Text.Feed.UpperBar.Highlighted" />
-
-    <TextView  
-        android:id="@+id/arrow_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:maxLines="1" 
-        android:textColor="@color/white"
-        android:text="@string/left_arrow_disabled"
-        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
-        
-    <TextView android:id="@+id/feed_count" 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:maxLines="1" 
-        android:textColor="@color/white"
-        style="@style/Text.Feed.UpperBar.Secondary" />
-        
-    <TextView  
-        android:id="@+id/arrow_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:maxLines="1" 
-        android:textColor="@color/white"
-        android:text="@string/right_arrow_disabled"
-        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
-</LinearLayout>
-
-
-    <!-- FIXME: put this inside a scroll view. I just can't grr -->
-    <ListView
-        android:id="@+id/story_list"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="fill"
-        >
-    
-    </ListView>
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        
 
-</LinearLayout>
+        <!-- FIXME: Temporary button, remove before the release-->
+        <Button
+            android:id="@+id/go_settings"
+            android:layout_width="fill_parent"
+            android:text="Go settings"
+            android:layout_height="35dip"
+            android:onClick="onGoSettingsClick"
+            android:visibility="gone" />
+	
+        <!-- Title of the feed, together with the favicon and the feed count -->    
+        <LinearLayout
+            android:layout_width="fill_parent" 
+            android:layout_height="20dip"
+            android:background="@color/feed_title"
+            android:padding="1dip"
+            >
+        
+            <ImageView android:id="@+id/feed_image" 
+                android:layout_width="16dip" 
+                android:layout_height="16dip" 
+                android:src="@drawable/favicon_default_brightness_100" />
+        
+            <TextView android:id="@+id/feed_title"
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content" 
+                 android:layout_weight="1"
+                 android:gravity="center"
+                 android:maxLines="1"
+                 style="@style/Text.Feed.UpperBar.Highlighted" />
+        
+            <TextView  
+                android:id="@+id/arrow_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:maxLines="1" 
+                android:textColor="@color/white"
+                android:text="@string/left_arrow_disabled"
+                style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+                
+            <TextView android:id="@+id/feed_count" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:maxLines="1" 
+                android:textColor="@color/white"
+                style="@style/Text.Feed.UpperBar.Secondary" />
+                
+            <TextView  
+                android:id="@+id/arrow_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:maxLines="1" 
+                android:textColor="@color/white"
+                android:text="@string/right_arrow_disabled"
+                style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/story_list_wrapper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    
+    </LinearLayout>
+</com.androidsx.microrss.view.FeedScrollableView>
