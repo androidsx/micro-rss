@@ -28,7 +28,8 @@
         </activity>
         
         <!-- Activity that shows the basic information of a feed -->
-	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false" >
+	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"
+        android:launchMode="singleTask" >
             <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
         </activity>
 	    
