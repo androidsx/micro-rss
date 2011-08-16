@@ -20,6 +20,7 @@
 
         <!-- Activity that sets up the application and dispatches to the view activities -->
         <activity android:name=".view.InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:noHistory="true"> 
+            <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,7 +28,9 @@
         </activity>
         
         <!-- Activity that shows the basic information of a feed -->
-	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"/>
+	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false" >
+            <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
+        </activity>
 	    
 	    <!-- Activity that shows the basic information of a story -->
        	<activity android:name=".view.StoryActivity" android:theme="@style/Theme.MicroRss" android:noHistory="true"/>
