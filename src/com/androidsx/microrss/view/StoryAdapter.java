@@ -1,15 +1,18 @@
 package com.androidsx.microrss.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
@@ -25,7 +28,9 @@ public class StoryAdapter extends BaseAdapter {
         public TextView storyDescription;
         public TextView storyTimestamp;
         public TextView storyCount;
+        public TextView storyHeader;
         public TextView feedTitle;
+        public ViewGroup storyHeaderWrapper;
     }
 
     public StoryAdapter(Activity contextActivity, Item[] stories, Feed feed) {
@@ -62,10 +67,12 @@ public class StoryAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.feedTitle = (TextView) rowView.findViewById(R.id.feed_title);
             holder.storyCount = (TextView) rowView.findViewById(R.id.story_count);
+            holder.storyHeader = (TextView) rowView.findViewById(R.id.story_header);
             holder.storyDescription = (TextView) rowView.findViewById(R.id.story_description);
             holder.storyTimestamp = (TextView) rowView.findViewById(R.id.story_timestamp);
             holder.storyTitle = (TextView) rowView.findViewById(R.id.story_title);
             holder.storyImage = (ImageView) rowView.findViewById(R.id.story_image);
+            holder.storyHeaderWrapper = (ViewGroup) rowView.findViewById(R.id.header_wrapper);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -78,8 +85,11 @@ public class StoryAdapter extends BaseAdapter {
         holder.storyTimestamp.setText(AnyRSSHelper
                 .toRelativeDateString(story.getPubDate()));
         holder.feedTitle.setText(feed.getTitle());
-        holder.storyCount.setText(contextActivity.getString(R.string.story_count,
+        holder.storyHeader.setText(contextActivity.getString(R.string.story_count,
                 (position + 1), getCount()));
+        holder.storyHeaderWrapper.setOnClickListener(onClickHeaderListener);
+        //holder.storyCount.setText(contextActivity.getString(R.string.story_count,
+        //        (position + 1), getCount()));
         
         Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail());
         if (favicon != null) {
@@ -89,8 +99,8 @@ public class StoryAdapter extends BaseAdapter {
             holder.feedTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
             holder.feedTitle.setBackgroundColor(R.color.story_background_feed_title);
             
-            holder.storyCount.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
-            holder.storyCount.setBackgroundColor(R.color.story_background_feed_title);
+            //holder.storyCount.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
+            //holder.storyCount.setBackgroundColor(R.color.story_background_feed_title);
             
             holder.storyTitle.setMaxLines(5);
             holder.storyTitle.setPadding(3, 0, 3, 3);
@@ -127,4 +137,15 @@ public class StoryAdapter extends BaseAdapter {
         }
         return defaultPosition;
     }
+    
+    private OnClickListener onClickHeaderListener = new OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            Intent intent = IntentHelper.createIntent(contextActivity, null, FeedActivity.class);
+            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feed.getId());
+            contextActivity.startActivity(intent);
+        }
+    };
+    
 }

@@ -11,14 +11,22 @@
     <!-- Note:  
           android:fadingEdge="none" removes the white shadow on the top/bottom of the view 
           android:scrollbars="none"-->    
-    <com.androidsx.microrss.view.StoryView
+<com.androidsx.microrss.view.StoryView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    android:fadingEdge="none"
+    android:scrollbars="none"
+    android:background="@color/application_background" >
+        
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/application_background"
-        android:fillViewport="true"
-        android:fadingEdge="none"
-        >
+        android:orientation="vertical" >
+        
+        <include layout="@layout/story_header" />
         
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -28,10 +36,8 @@
             <RelativeLayout
                 android:id="@+id/story_title_wrapper"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/wimm_screen_height"
-                android:onClick="onStoryClick"
-                >
-
+                android:layout_height="@dimen/wimm_screen_story_height"
+                android:onClick="onStoryClick">
 
                 <!--TEXT + IMAGE -->
                 <!--
@@ -61,8 +67,7 @@
                     android:layout_below="@+id/feed_title"
                     android:gravity="left|center"
                     style="@style/story_title" />
-
-
+                    
                 <TextView
                     android:id="@+id/feed_title"
                     android:text="ReadWriteWeb"
@@ -73,6 +78,7 @@
                     android:layout_marginTop="1dip"
                     android:layout_marginLeft="2dip"
                     android:maxLines="1"
+                    android:layout_alignParentRight="true"
                     style="@style/story_feed_title" />
 
 
@@ -81,15 +87,14 @@
                     android:text="Story 1 / 3"
                     android:layout_alignParentRight="true"
                     android:padding="1.0dip"
-                    android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dip"
                     android:layout_marginRight="2dip"
                     android:maxLines="1"
+                    android:visibility="gone"
                     style="@style/story_feed_title" />
-
-
+                    
             </RelativeLayout>
 
 
@@ -141,4 +146,6 @@ It was popularised in the 1960s with the release of Letraset containing Lorem Ip
 			    android:onClick="onGoFeedClick" />
 
         </RelativeLayout>
+        
+   </LinearLayout>
 </com.androidsx.microrss.view.StoryView>

@@ -22,7 +22,9 @@ import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 public class StoryActivity extends Activity {
 	
-	private static final String TAG = "StoryActivity";
+	private static final int HEADER_HEIGHT = 23;
+
+    private static final String TAG = "StoryActivity";
 
     private CustomAdapterViewTray customViewTrayAdapter;
     private int feedId;
@@ -33,7 +35,7 @@ public class StoryActivity extends Activity {
         setContentView(R.layout.story_wrapper);
 
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper));
-
+        
         feedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
         if (feedId != -1) {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
@@ -84,7 +86,7 @@ public class StoryActivity extends Activity {
     
     public void onStoryClick(View target) {
         try {
-            int scrollY = target.findViewById(R.id.story_title).getTop();
+            int scrollY = target.findViewById(R.id.story_title).getTop() + HEADER_HEIGHT;
             customViewTrayAdapter.getActiveView().scrollTo(0, scrollY);
         } catch (Exception e) {
             // no need to make any action

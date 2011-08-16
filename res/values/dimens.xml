@@ -5,4 +5,7 @@
     <!-- WIMM layouts -->
     <dimen name="wimm_screen_width">160.0dip</dimen>
     <dimen name="wimm_screen_height">160.0dip</dimen>
+
+    <!-- Inside a dialog with margin -->
+    <dimen name="wimm_screen_story_height">137.0dip</dimen>
 </resources>
