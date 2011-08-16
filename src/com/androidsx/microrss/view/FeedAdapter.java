@@ -120,7 +120,8 @@ public class FeedAdapter extends BaseAdapter {
         holder.feedCount.setText(contextActivity.getString(R.string.feed_count,
                 (position + 1), getCount()));
         
-        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, AnyRSSHelper.retrieveFaviconUrl(feed.getURL()));
+        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, AnyRSSHelper.retrieveFaviconUrl(feed.getURL()), 
+                R.drawable.favicon_default_brightness_100);
         if (favicon != null) {
             holder.feedImage.setImageBitmap(favicon);
         }
@@ -165,8 +166,13 @@ public class FeedAdapter extends BaseAdapter {
         if (position == minPosition) {
             ((TextView) view.findViewById(R.id.arrow_left)).setText(leftDisabled);
             view.findViewById(R.id.arrow_left).setVisibility(View.INVISIBLE);
-            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
-            view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+            if ((position + 1) == maxPosition) {
+                ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
+                view.findViewById(R.id.arrow_right).setVisibility(View.INVISIBLE);
+            } else {
+                ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
+                view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+            }
         } else if (position + 1 == maxPosition) {
             ((TextView) view.findViewById(R.id.arrow_left)).setText(leftEnabled);
             view.findViewById(R.id.arrow_left).setVisibility(View.VISIBLE);
