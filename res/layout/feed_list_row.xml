@@ -15,8 +15,8 @@
         android:textSize="13sp"
         android:layout_marginLeft="10px"
         android:textColor="@color/black"
-        android:paddingBottom="3px"
-        android:paddingTop="2px" />
+        android:paddingBottom="4px"
+        android:paddingTop="4px" />
 
     <View
         android:layout_width="fill_parent"
