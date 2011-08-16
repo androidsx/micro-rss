@@ -472,14 +472,14 @@ public class AnyRSSHelper {
     }
     
     /**
-     * TODO: once we decide the definitive layouts, do the default on XML 
+     * TODO: once we decide the definitive layouts, do the default on XML
+     * 
+     *  @param defaultResDrawable the default drawable (android resource) if no bitmap found, if
+     *  value is -1 it will return null when bitmap not found
      */
-    public static Bitmap getBitmapFromCache(Context context, String url) {
+    public static Bitmap getBitmapFromCache(Context context, String url, int defaultResDrawable) {
         Bitmap localBitmap = null;
-        if (url.equals("")) {
-            return BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.rss_256_scaled_to_160_brightness_100);
-        } else {
+        if (!url.equals("")) {
             CacheImageManager cacheManager = new CacheImageManager(context);
             File imageFromCache = cacheManager.retrieveImage(cacheManager.getFilenameForUrl(url));
             if (imageFromCache != null && imageFromCache.exists()) {
@@ -502,9 +502,8 @@ public class AnyRSSHelper {
             }
         }
         
-        if (localBitmap == null) {
-            return BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.rss_256_scaled_to_160_brightness_100);
+        if (localBitmap == null && defaultResDrawable != -1) {
+            return BitmapFactory.decodeResource(context.getResources(), defaultResDrawable);
         }
         return localBitmap;
     }

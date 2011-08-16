@@ -91,7 +91,8 @@ public class StoryAdapter extends BaseAdapter {
         //holder.storyCount.setText(contextActivity.getString(R.string.story_count,
         //        (position + 1), getCount()));
         
-        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail());
+        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail(), 
+                R.drawable.rss_256_scaled_to_160_brightness_100);
         if (favicon != null) {
             holder.storyImage.setImageBitmap(favicon);
             
