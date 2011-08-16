@@ -5,20 +5,14 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
@@ -67,7 +61,7 @@ public class FeedAdapter extends BaseAdapter {
 
         // Recycle existing view if passed as parameter
         View rowView = convertView;
-        if (rowView == null) {
+        if (rowView == null || rowView.getTag() == null) {
             LayoutInflater inflater = contextActivity.getLayoutInflater();
             rowView = inflater.inflate(R.layout.feed, null, true);
             holder = new FeedViewHolder();
@@ -82,23 +76,38 @@ public class FeedAdapter extends BaseAdapter {
             holder.storyListWrapper = (LinearLayout) rowView.findViewById(R.id.story_list_wrapper);
             
             List<Item> stories = dao.findStories(feedId);
-            for (Item item : stories) {
-                ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null, true);
+            if (stories.size() == 0) {
+                ViewGroup noItemsfeedRowView = (ViewGroup) inflater.inflate(R.layout.error_message, null, true);
                 
-                final int storyId = item.getId();
-                TextView textView = (TextView) feedRowView.findViewById(R.id.title);
-                textView.setText(item.getTitle());
-                feedRowView.setOnClickListener(new OnClickListener() {
+                TextView errorMsg = (TextView) noItemsfeedRowView.findViewById(R.id.error_message);
+                TextView errorMsgDetailed = (TextView) noItemsfeedRowView.findViewById(R.id.error_message_detailed);
+
+                errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
+                errorMsg.setTextColor(R.color.error_message_info);
+
+                errorMsgDetailed.setText(contextActivity.getString(R.string.error_message_feed_no_items_detailed));
+                errorMsgDetailed.setTextColor(R.color.error_message_info);
+
+                holder.storyListWrapper.addView(noItemsfeedRowView);
+            } else {
+                for (Item item : stories) {
+                    ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null, true);
                     
-                    @Override
-                    public void onClick(View v) {
-                          Intent intent = IntentHelper.createIntent(contextActivity, null, StoryActivity.class);
-                          intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-                          intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
-                          contextActivity.startActivity(intent);
-                    }
-                });
-                holder.storyListWrapper.addView(feedRowView);
+                    final int storyId = item.getId();
+                    TextView textView = (TextView) feedRowView.findViewById(R.id.title);
+                    textView.setText(item.getTitle());
+                    feedRowView.setOnClickListener(new OnClickListener() {
+                        
+                        @Override
+                        public void onClick(View v) {
+                              Intent intent = IntentHelper.createIntent(contextActivity, null, StoryActivity.class);
+                              intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+                              intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
+                              contextActivity.startActivity(intent);
+                        }
+                    });
+                    holder.storyListWrapper.addView(feedRowView);
+                }
             }
             rowView.setTag(holder);
         } else {

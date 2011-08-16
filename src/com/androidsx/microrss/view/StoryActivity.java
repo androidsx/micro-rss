@@ -68,7 +68,8 @@ public class StoryActivity extends Activity {
             
             ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
                     R.string.error_message_feed_unexpected_id_detailed,
-                    R.drawable.warning);
+                    R.drawable.warning,
+                    R.color.error_message_warning);
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }

@@ -40,7 +40,7 @@ public class InitActivity extends Activity {
             // wimm tests
             writeConfigToBackend(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch", true);    
             writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml", true);
-            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol", true);
+            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol");
             writeConfigToBackend(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml");
             
             // news 
@@ -53,7 +53,7 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "CNN Most recent", "http://rss.cnn.com/rss/cnn_latest.rss");
             writeConfigToBackend(this, "Wired top stories", "http://www.wired.com/news_drop/netcenter/netcenter.rdf");
             writeConfigToBackend(this, "FoxNews", "http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss");
-            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss", true);
+            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss");
             writeConfigToBackend(this, "Yahoo News", "http://rss.news.yahoo.com/rss/topstories");
             writeConfigToBackend(this, "Reuters", "http://feeds.reuters.com/reuters/topNews");
             

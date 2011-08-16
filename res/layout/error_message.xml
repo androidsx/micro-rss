@@ -16,7 +16,7 @@
 	<ImageView android:id="@+id/error_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
-		android:src="@drawable/warning"
+		android:src="@drawable/information"
 		android:paddingTop="0dip"
 		android:layout_below="@+id/go_settings"
         android:layout_centerHorizontal="true" />
@@ -27,7 +27,7 @@
 		android:gravity="center"
 		android:layout_centerHorizontal="true"
         android:layout_below="@+id/error_image"
-		android:text="No active feeds" 
+		android:text="@string/error_message_feed_no_active" 
 		style="@style/error_message" />
         
     <TextView android:id="@+id/error_message_detailed"
@@ -36,7 +36,7 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/error_message"
-        android:text="Please select at least one in Settings" 
+        android:text="@string/error_message_feed_no_active_detailed" 
         style="@style/error_message_detailed" />        
 
 
