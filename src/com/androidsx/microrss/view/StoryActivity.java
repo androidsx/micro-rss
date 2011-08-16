@@ -1,6 +1,5 @@
 package com.androidsx.microrss.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -18,9 +17,10 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
+import com.wimm.framework.view.ScrollView;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
-public class StoryActivity extends Activity {
+public class StoryActivity extends ScrollAwareLauncherActivity {
 	
 	private static final int HEADER_HEIGHT = 23;
 
@@ -34,7 +34,8 @@ public class StoryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_wrapper);
 
-        configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper));
+        customViewTrayAdapter = (CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper);
+        configureViewTray(customViewTrayAdapter);
         
         feedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
         if (feedId != -1) {
@@ -43,6 +44,7 @@ public class StoryActivity extends Activity {
 
             StoryAdapter storyAdapter = new StoryAdapter(this, dao.findStories(feedId)
                     .toArray(new Item[0]), feed);
+            setDragable(storyAdapter);
             if (storyAdapter.getCount() > 0) {
                 customViewTrayAdapter.setAdapter(storyAdapter);
                 int currentStoryId = getIntent().getIntExtra(new StoryNavigationExtras().getCurrentIdKey(), -1);
@@ -77,11 +79,10 @@ public class StoryActivity extends Activity {
     }
 
     private void configureViewTray(CustomAdapterViewTray adapterViewTray) {
-        customViewTrayAdapter = adapterViewTray;
         MotionInterpreter.ScrollAxis scrollAxis = MotionInterpreter.ScrollAxis.LeftRight;
-        customViewTrayAdapter.setMotionAxis(scrollAxis);
-        customViewTrayAdapter.setCanScrollInternalView(true);
-        customViewTrayAdapter.setOnDragEndListener(dragEndListener);
+        adapterViewTray.setMotionAxis(scrollAxis);
+        adapterViewTray.setCanScrollInternalView(true);
+        adapterViewTray.setOnDragEndListener(dragEndListener);
     }
     
     public void onStoryClick(View target) {
@@ -110,6 +111,7 @@ public class StoryActivity extends Activity {
      * Controls the swipe up to go to Feed View. Before going up to the feed level, we clean up
      * the extras that won't make sense any more up there.
      */
+    @Deprecated
     private CustomAdapterViewTray.OnDragEndListener dragEndListener = new CustomAdapterViewTray.OnDragEndListener() {
 
         @Override

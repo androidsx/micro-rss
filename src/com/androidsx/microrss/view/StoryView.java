@@ -3,6 +3,7 @@ package com.androidsx.microrss.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.LinearInterpolator;
@@ -10,7 +11,7 @@ import android.view.animation.LinearInterpolator;
 import com.androidsx.microrss.R;
 import com.wimm.framework.view.ScrollView;
 
-public class StoryView extends ScrollView {
+public class StoryView extends DragAwareScrollView {
     private boolean pendingAnimation = false;
 
     public StoryView(Context paramContext) {
@@ -35,18 +36,27 @@ public class StoryView extends ScrollView {
         localAlphaAnimation.startNow();
     }
 
+    @Override
     protected void onAttachedToWindow() {
         this.pendingAnimation = true;
     }
 
+    @Override
     public void onDraw(Canvas paramCanvas) {
         if (this.pendingAnimation)
             animateIn();
         super.onDraw(paramCanvas);
     }
 
+    @Override
     public boolean onTouchEvent(MotionEvent paramMotionEvent) {
         return false;
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        boolean onInterceptTouchEvent = super.onInterceptTouchEvent(ev);
+        //Log.e("SCROLL", "on intercept " + ev + ", " + ev.getRawX() + ", " + ev.getRawY() + ", " + ev.getX() + ", " + ev.getY());
+        return onInterceptTouchEvent;
+    }
 }

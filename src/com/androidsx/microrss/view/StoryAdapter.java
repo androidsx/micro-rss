@@ -17,10 +17,11 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 
-public class StoryAdapter extends BaseAdapter {
+public class StoryAdapter extends BaseAdapter implements Draggable {
     private Activity contextActivity;
     private Item[] stories;
     private Feed feed;
+    private int currentPosition = 0;
     
     static class ViewHolder {
         public ImageView storyImage;
@@ -57,6 +58,7 @@ public class StoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        currentPosition  = position;
         ViewHolder holder;
 
         // Recycle existing view if passed as parameter
@@ -138,6 +140,13 @@ public class StoryAdapter extends BaseAdapter {
         }
         return defaultPosition;
     }
+
+    @Override
+    public boolean dragCanExit() {
+        View currentView = getView(currentPosition, null, null);
+        StoryView storyView = (StoryView) currentView.findViewById(R.id.main_scroll_story);
+        return storyView.dragCanExit();
+    }
     
     private OnClickListener onClickHeaderListener = new OnClickListener() {
         
@@ -148,5 +157,4 @@ public class StoryAdapter extends BaseAdapter {
             contextActivity.startActivity(intent);
         }
     };
-    
 }
