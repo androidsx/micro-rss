@@ -369,7 +369,7 @@
     <style name="Text.Feed.UpperBar.Highlighted.Arrows">
         <item name="android:paddingLeft">0dip</item>
         <item name="android:paddingRight">0dip</item>
-        <item name="android:layout_marginTop">-4dip</item>
+        <item name="android:layout_marginTop">-5dip</item>
     </style>
     
     <style name="error_message">
