@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +26,32 @@ public class FeedAdapter extends BaseAdapter {
     private final Activity contextActivity;
     private final Feed[] feeds;
     private MicroRssDao dao;
+    private LayoutInflater inflater;
     
+    private String leftEnabledArrow;
+    private String leftDisabledArrow;
+    private String rightEnabledArrow;
+    private String rightDisabledArrow;
+
     private static final class FeedViewHolder {
         public ImageView feedImage;
         public TextView feedTitle;
         public TextView feedCount;
-        public ScrollView storyList;
         public LinearLayout storyListWrapper;
+        public TextView leftArrow;
+        public TextView rightArrow;
     }
 
     public FeedAdapter(Activity contextActivity, Feed[] feeds) {
         this.feeds = feeds;
         this.contextActivity = contextActivity;
         dao = new MicroRssDao(contextActivity.getContentResolver());
+        inflater = contextActivity.getLayoutInflater();
+        
+        leftEnabledArrow = contextActivity.getString(R.string.left_arrow_enabled);
+        leftDisabledArrow = contextActivity.getString(R.string.left_arrow_disabled);
+        rightEnabledArrow = contextActivity.getString(R.string.right_arrow_enabled);
+        rightDisabledArrow = contextActivity.getString(R.string.right_arrow_disabled);
     }
 
     @Override
@@ -54,83 +68,91 @@ public class FeedAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return this.feeds[position].getId();
     }
-    
+
+    /**
+     * TODO: implement a layer of caching on dao side or something not to
+     * ask DB so many times.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         FeedViewHolder holder;
 
         // Recycle existing view if passed as parameter
         View rowView = convertView;
-        if (rowView == null || rowView.getTag() == null) {
-            LayoutInflater inflater = contextActivity.getLayoutInflater();
+        if (rowView == null) {
             rowView = inflater.inflate(R.layout.feed, null, true);
             holder = new FeedViewHolder();
             holder.feedTitle = (TextView) rowView.findViewById(R.id.feed_title);
             holder.feedCount = (TextView) rowView.findViewById(R.id.feed_count);
             holder.feedImage = (ImageView) rowView.findViewById(R.id.feed_image);
-            
-            final int feedId = (int) getItemId(position);
-            
-            // This DAO call is only done when the view is invalidated, which is nice
-            holder.storyList = (ScrollView) rowView.findViewById(R.id.story_list);
+            holder.rightArrow = (TextView) rowView.findViewById(R.id.arrow_right);
+            holder.leftArrow = (TextView) rowView.findViewById(R.id.arrow_left);
             holder.storyListWrapper = (LinearLayout) rowView.findViewById(R.id.story_list_wrapper);
-            
-            List<Item> stories = dao.findStories(feedId);
-            if (stories.size() == 0) {
-                ViewGroup noItemsfeedRowView = (ViewGroup) inflater.inflate(R.layout.error_message, null, true);
-                
-                TextView errorMsg = (TextView) noItemsfeedRowView.findViewById(R.id.error_message);
-                TextView errorMsgDetailed = (TextView) noItemsfeedRowView.findViewById(R.id.error_message_detailed);
 
-                errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
-                errorMsg.setTextColor(R.color.error_message_info);
-
-                errorMsgDetailed.setText(contextActivity.getString(R.string.error_message_feed_no_items_detailed));
-                errorMsgDetailed.setTextColor(R.color.error_message_info);
-
-                holder.storyListWrapper.addView(noItemsfeedRowView);
-            } else {
-                for (Item item : stories) {
-                    ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null, true);
-                    
-                    final int storyId = item.getId();
-                    TextView textView = (TextView) feedRowView.findViewById(R.id.title);
-                    textView.setText(item.getTitle());
-                    feedRowView.setOnClickListener(new OnClickListener() {
-                        
-                        @Override
-                        public void onClick(View v) {
-                              Intent intent = IntentHelper.createIntent(contextActivity, null, StoryActivity.class);
-                              intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-                              intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
-                              contextActivity.startActivity(intent);
-                        }
-                    });
-                    holder.storyListWrapper.addView(feedRowView);
-                }
-            }
             rowView.setTag(holder);
         } else {
             holder = (FeedViewHolder) rowView.getTag();
         }
-        
+
         Feed feed = (Feed) getItem(position);
-        
+
         holder.feedTitle.setText(feed.getTitle());
-        holder.feedCount.setText(contextActivity.getString(R.string.feed_count,
-                (position + 1), getCount()));
-        
-        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, AnyRSSHelper.retrieveFaviconUrl(feed.getURL()), 
-                R.drawable.favicon_default_brightness_100);
+        holder.feedCount.setText(contextActivity.getString(R.string.feed_count, (position + 1),
+                getCount()));
+
+        Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, AnyRSSHelper
+                .retrieveFaviconUrl(feed.getURL()), R.drawable.favicon_default_brightness_100);
         if (favicon != null) {
             holder.feedImage.setImageBitmap(favicon);
         }
-        
-        updateArrows(rowView, position, 0, getCount());
-        
+
+        final int feedId = (int) getItemId(position);
+        List<Item> stories = dao.findStories(feedId);
+        holder.storyListWrapper.removeAllViews();
+        if (stories.size() == 0) {
+            ViewGroup noItemsfeedRowView = (ViewGroup) inflater.inflate(R.layout.error_message,
+                    null, true);
+
+            TextView errorMsg = (TextView) noItemsfeedRowView.findViewById(R.id.error_message);
+            TextView errorMsgDetailed = (TextView) noItemsfeedRowView
+                    .findViewById(R.id.error_message_detailed);
+
+            errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
+            errorMsg.setTextColor(R.color.error_message_info);
+
+            errorMsgDetailed.setText(contextActivity
+                    .getString(R.string.error_message_feed_no_items_detailed));
+            errorMsgDetailed.setTextColor(R.color.error_message_info);
+
+            holder.storyListWrapper.addView(noItemsfeedRowView);
+        } else {
+            for (Item item : stories) {
+                ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null,
+                        true);
+
+                final int storyId = item.getId();
+                TextView textView = (TextView) feedRowView.findViewById(R.id.title);
+                textView.setText(item.getTitle());
+                feedRowView.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = IntentHelper.createIntent(contextActivity, null,
+                                StoryActivity.class);
+                        intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+                        intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
+                        contextActivity.startActivity(intent);
+                    }
+                });
+                holder.storyListWrapper.addView(feedRowView);
+            }
+        }
+
+        updateArrows(position, 0, getCount(), holder);
+
         // it recicle the views even with the scroll! So sometimes the 8º item appears scrolled.
         rowView.scrollTo(0, 0);
-        
+
         return rowView;
     }
 
@@ -154,35 +176,30 @@ public class FeedAdapter extends BaseAdapter {
 
     /**
      * Updates the style of the left-right arrows that provide a visual clue to the user that
-     * side-navigation is possible. Currently, we just hide the arrows that don't make sense, but
-     * we could also use the "dark" arrows for that.
+     * side-navigation is possible. Currently, we just hide the arrows that don't make sense, but we
+     * could also use the "dark" arrows for that.
      */
-    private void updateArrows(View view, int position, int minPosition, int maxPosition) {
-        String leftEnabled = contextActivity.getString(R.string.left_arrow_enabled);
-        String leftDisabled = contextActivity.getString(R.string.left_arrow_disabled);
-        String rightEnabled = contextActivity.getString(R.string.right_arrow_enabled);
-        String rightDisabled = contextActivity.getString(R.string.right_arrow_disabled);
-        
+    private void updateArrows(int position, int minPosition, int maxPosition, FeedViewHolder holder) {
         if (position == minPosition) {
-            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftDisabled);
-            view.findViewById(R.id.arrow_left).setVisibility(View.INVISIBLE);
+            holder.leftArrow.setText(leftDisabledArrow);
+            holder.leftArrow.setVisibility(View.INVISIBLE);
             if ((position + 1) == maxPosition) {
-                ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
-                view.findViewById(R.id.arrow_right).setVisibility(View.INVISIBLE);
+                holder.rightArrow.setText(rightEnabledArrow);
+                holder.rightArrow.setVisibility(View.INVISIBLE);
             } else {
-                ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
-                view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+                holder.rightArrow.setText(rightEnabledArrow);
+                holder.rightArrow.setVisibility(View.VISIBLE);
             }
         } else if (position + 1 == maxPosition) {
-            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftEnabled);
-            view.findViewById(R.id.arrow_left).setVisibility(View.VISIBLE);
-            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightDisabled);
-            view.findViewById(R.id.arrow_right).setVisibility(View.INVISIBLE);
+            holder.leftArrow.setText(leftEnabledArrow);
+            holder.leftArrow.setVisibility(View.VISIBLE);
+            holder.rightArrow.setText(rightDisabledArrow);
+            holder.rightArrow.setVisibility(View.INVISIBLE);
         } else {
-            ((TextView) view.findViewById(R.id.arrow_left)).setText(leftEnabled);
-            view.findViewById(R.id.arrow_left).setVisibility(View.VISIBLE);
-            ((TextView) view.findViewById(R.id.arrow_right)).setText(rightEnabled);
-            view.findViewById(R.id.arrow_right).setVisibility(View.VISIBLE);
+            holder.leftArrow.setText(leftEnabledArrow);
+            holder.leftArrow.setVisibility(View.VISIBLE);
+            holder.rightArrow.setText(rightEnabledArrow);
+            holder.rightArrow.setVisibility(View.VISIBLE);
         }
     }
 }
