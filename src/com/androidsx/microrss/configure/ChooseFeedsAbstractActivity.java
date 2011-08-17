@@ -31,7 +31,7 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         feeds = getFeeds();
         
         setListAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, feedToStringArray(feeds)));
+                R.layout.custom_simple_list_item_multiple_choice, feedToStringArray(feeds)));
 
         listView = getListView();
         listView.setItemsCanFocus(false);
