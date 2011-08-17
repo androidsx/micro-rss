@@ -20,15 +20,18 @@
         -->     
         <Preference
             android:title="Username"
-            android:key="@string/pref_google_user_name" />
+            android:key="@string/pref_google_user_name"
+            android:layout="@layout/preferences_row" />
         <Preference
             android:title="Password"
             android:summary=""
-            android:key="@string/pref_google_password" />
+            android:key="@string/pref_google_password"
+            android:layout="@layout/preferences_row" />
         <Preference
             android:title="Sync feeds"
             android:summary=""
-            android:key="syncGoogleReaderFeeds" />
+            android:key="syncGoogleReaderFeeds"
+            android:layout="@layout/preferences_row" />
     </PreferenceCategory>
 </PreferenceScreen>
     

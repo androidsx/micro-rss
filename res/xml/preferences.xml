@@ -5,12 +5,14 @@
 	        <Preference
                	android:title="Sample feeds"
                 android:summary=""
-                android:key="chooseSampleFeeds" />
+                android:key="chooseSampleFeeds"
+                android:layout="@layout/preferences_row" />
                 
             <Preference
                 android:title="Google Reader feeds"
                 android:summary=""
-                android:key="chooseGoogleReaderFeeds" />
+                android:key="chooseGoogleReaderFeeds"
+                android:layout="@layout/preferences_row" />
                 
         </PreferenceCategory>
         
@@ -20,12 +22,14 @@
                 <Preference
                         android:title="Google Reader Account"
                         android:summary=""
-                        android:key="googleReaderAccount" />
+                        android:key="googleReaderAccount"
+                        android:layout="@layout/preferences_row" />
                         
                 <Preference
                         android:title="Sync stories"
                         android:summary=""
-                        android:key="syncStories" />
+                        android:key="syncStories"
+                        android:layout="@layout/preferences_row" />
                         
                 <ListPreference
                     android:key="@string/pref_update_interval"
@@ -33,7 +37,9 @@
                     android:entries="@array/update_interval"
                     android:entryValues="@array/update_interval_values"
                     android:defaultValue="21600000"
-                    android:dialogTitle="Update the stories every" />
+                    android:dialogTitle="Update the stories every"
+                    android:layout="@layout/preferences_row"
+                    android:enabled="false" />
         </PreferenceCategory>
         
 </PreferenceScreen>
