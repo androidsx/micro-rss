@@ -13,7 +13,14 @@ import java.util.Date;
  * Feed represents the source of information for a given set of stories.
  */
 public interface Feed extends Serializable {
-
+  
+  /**
+   * A feed with this ID must be treated as the settings activity, not an ordinary feed.
+   * <p>
+   * FIXME: This is the ugliest thing we've done, get rid of this soon please  
+   */
+  public static final int SETTINGS_ID = -2;
+  
   /**
    * Database ID for this feed.
    * 

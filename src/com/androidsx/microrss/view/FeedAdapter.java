@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
-import com.wimm.framework.view.ScrollView;
 
 public class FeedAdapter extends BaseAdapter {
     private final Activity contextActivity;
@@ -107,44 +105,50 @@ public class FeedAdapter extends BaseAdapter {
         }
 
         final int feedId = (int) getItemId(position);
-        List<Item> stories = dao.findStories(feedId);
         holder.storyListWrapper.removeAllViews();
-        if (stories.size() == 0) {
-            ViewGroup noItemsfeedRowView = (ViewGroup) inflater.inflate(R.layout.error_message,
-                    null, true);
-
-            TextView errorMsg = (TextView) noItemsfeedRowView.findViewById(R.id.error_message);
-            TextView errorMsgDetailed = (TextView) noItemsfeedRowView
-                    .findViewById(R.id.error_message_detailed);
-
-            errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
-            errorMsg.setTextColor(R.color.error_message_info);
-
-            errorMsgDetailed.setText(contextActivity
-                    .getString(R.string.error_message_feed_no_items_detailed));
-            errorMsgDetailed.setTextColor(R.color.error_message_info);
-
-            holder.storyListWrapper.addView(noItemsfeedRowView);
+        if (feedId == Feed.SETTINGS_ID) { 
+            ViewGroup settingsRowView = (ViewGroup) inflater.inflate(R.layout.button_to_settings, null, true);
+            holder.storyListWrapper.addView(settingsRowView);
         } else {
-            for (Item item : stories) {
-                ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null,
-                        true);
-
-                final int storyId = item.getId();
-                TextView textView = (TextView) feedRowView.findViewById(R.id.title);
-                textView.setText(item.getTitle());
-                feedRowView.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = IntentHelper.createIntent(contextActivity, null,
-                                StoryActivity.class);
-                        intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
-                        intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
-                        contextActivity.startActivity(intent);
-                    }
-                });
-                holder.storyListWrapper.addView(feedRowView);
+            List<Item> stories = dao.findStories(feedId);
+            
+            if (stories.size() == 0) {
+                ViewGroup noItemsfeedRowView = (ViewGroup) inflater.inflate(R.layout.error_message,
+                        null, true);
+    
+                TextView errorMsg = (TextView) noItemsfeedRowView.findViewById(R.id.error_message);
+                TextView errorMsgDetailed = (TextView) noItemsfeedRowView
+                        .findViewById(R.id.error_message_detailed);
+    
+                errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
+                errorMsg.setTextColor(R.color.error_message_info);
+    
+                errorMsgDetailed.setText(contextActivity
+                        .getString(R.string.error_message_feed_no_items_detailed));
+                errorMsgDetailed.setTextColor(R.color.error_message_info);
+    
+                holder.storyListWrapper.addView(noItemsfeedRowView);
+            } else {
+                for (Item item : stories) {
+                    ViewGroup feedRowView = (ViewGroup) inflater.inflate(R.layout.feed_list_row, null,
+                            true);
+    
+                    final int storyId = item.getId();
+                    TextView textView = (TextView) feedRowView.findViewById(R.id.title);
+                    textView.setText(item.getTitle());
+                    feedRowView.setOnClickListener(new OnClickListener() {
+    
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = IntentHelper.createIntent(contextActivity, null,
+                                    StoryActivity.class);
+                            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feedId);
+                            intent.putExtra(new StoryNavigationExtras().getCurrentIdKey(), storyId);
+                            contextActivity.startActivity(intent);
+                        }
+                    });
+                    holder.storyListWrapper.addView(feedRowView);
+                }
             }
         }
 
@@ -154,6 +158,11 @@ public class FeedAdapter extends BaseAdapter {
         rowView.scrollTo(0, 0);
 
         return rowView;
+    }
+
+    private View createSettingsView() {
+        View view = inflater.inflate(R.layout.settings, null, true);
+        return view;
     }
 
     /**

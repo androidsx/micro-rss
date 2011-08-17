@@ -1,5 +1,8 @@
 package com.androidsx.microrss.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +14,7 @@ import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.Feed;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
@@ -32,12 +36,13 @@ public class FeedActivity extends LauncherActivity {
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
         MicroRssDao dao = new MicroRssDao(getContentResolver());
-        Feed[] activeFeeds = dao.findActiveFeeds().toArray(new Feed[0]);
+        List<Feed> feedList = dao.findActiveFeeds();
         
-        if (activeFeeds.length > 0) {
-            FeedAdapter feedAdapter = new FeedAdapter(this, activeFeeds);
+        if (feedList.size() > 0) {
+            List<Feed> feedsWithSettings = insertEmptyFeedForSettings(feedList);
+            FeedAdapter feedAdapter = new FeedAdapter(this, feedsWithSettings.toArray(new Feed[0]));
             int currentFeedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
-            int position = feedAdapter.getItemPosition(currentFeedId, 0);
+            int position = feedAdapter.getItemPosition(currentFeedId, 1); // Default position is 1, due to the settings
             if (position >= 0) {
                 customViewTrayAdapter.setAdapter(feedAdapter);
                 customViewTrayAdapter.setIndex(position);
@@ -60,6 +65,13 @@ public class FeedActivity extends LauncherActivity {
         }
     }
     
+    private List<Feed> insertEmptyFeedForSettings(List<Feed> before) {
+        List<Feed> after = new ArrayList<Feed>();
+        after.add(new DefaultFeed(Feed.SETTINGS_ID, "", "", true, new java.util.Date()));
+        after.addAll(before);
+        return after;
+    }
+
     @Override
     public boolean dragCanExit() {
         return customViewTrayAdapter.getActiveView().getScrollY() == 0 ? super.dragCanExit() : false;

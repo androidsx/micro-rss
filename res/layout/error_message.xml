@@ -8,10 +8,9 @@
 	<Button
 	    android:id="@+id/go_settings"
 	    android:layout_width="fill_parent"
-	    android:text="Go settings"
+	    android:text="@string/go_settings"
 	    android:layout_height="35dip"
 	    android:onClick="onGoSettingsClick" />
-	
 	
 	<ImageView android:id="@+id/error_image"
 		android:layout_width="wrap_content"

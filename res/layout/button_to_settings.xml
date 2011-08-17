@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@color/application_background"
+	>
+
+    <TextView android:id="@+id/go_settings_long_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="@string/go_settings_long_message" 
+        style="@style/error_message_detailed" />        
+
+    <Button
+        android:id="@+id/go_settings"
+        android:layout_width="fill_parent"
+        android:text="@string/go_settings"
+        android:layout_height="35dip"
+        android:layout_below="@+id/go_settings_long_message"
+        android:onClick="onGoSettingsClick" />
+
+</RelativeLayout>
