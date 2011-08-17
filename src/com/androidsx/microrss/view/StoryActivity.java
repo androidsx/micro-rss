@@ -85,6 +85,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
         adapterViewTray.setOnDragEndListener(dragEndListener);
     }
     
+    @Deprecated
     public void onStoryClick(View target) {
         try {
             int scrollY = target.findViewById(R.id.story_title).getTop() + HEADER_HEIGHT;

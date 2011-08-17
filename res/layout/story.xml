@@ -34,11 +34,11 @@
             android:layout_height="fill_parent"
             >
 
+            <!-- android:onClick="onStoryClick" -->
             <RelativeLayout
                 android:id="@+id/story_title_wrapper"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/wimm_screen_story_height"
-                android:onClick="onStoryClick">
+                android:layout_height="@dimen/wimm_screen_story_height" >
 
                 <!--TEXT + IMAGE -->
                 <!--
