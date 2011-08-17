@@ -4,7 +4,9 @@
 
     <PreferenceCategory
         android:title="Google Reader">
-        <EditTextPreference
+
+       <!-- If later we want to test with mobile
+           <EditTextPreference
             android:title="Username"
             android:summary="Set your login name here"
             android:persistent="true"
@@ -15,7 +17,14 @@
             android:inputType="textPassword"
             android:persistent="true"
             android:key="@string/pref_google_password" />
-
+        -->     
+        <Preference
+            android:title="Username"
+            android:key="@string/pref_google_user_name" />
+        <Preference
+            android:title="Password"
+            android:summary=""
+            android:key="@string/pref_google_password" />
         <Preference
             android:title="Sync feeds"
             android:summary=""
