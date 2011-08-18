@@ -13,11 +13,12 @@
         android:text="@string/go_settings_long_message" 
         style="@style/error_message_detailed" />        
 
-    <Button
+    <com.wimm.framework.widget.Button
         android:id="@+id/go_settings"
         android:layout_width="fill_parent"
         android:text="@string/go_settings"
-        android:layout_height="35dip"
+        android:layout_height="37dip"
+        android:layout_margin="4dip"
         android:layout_below="@+id/go_settings_long_message"
         android:onClick="onGoSettingsClick" />
 

@@ -30,6 +30,8 @@ public class FeedAdapter extends BaseAdapter {
     private String leftDisabledArrow;
     private String rightEnabledArrow;
     private String rightDisabledArrow;
+    private int arrowsNormalColor;
+    private int arrowsSettingsColor;
 
     private static final class FeedViewHolder {
         public ImageView feedImage;
@@ -50,6 +52,9 @@ public class FeedAdapter extends BaseAdapter {
         leftDisabledArrow = contextActivity.getString(R.string.left_arrow_disabled);
         rightEnabledArrow = contextActivity.getString(R.string.right_arrow_enabled);
         rightDisabledArrow = contextActivity.getString(R.string.right_arrow_disabled);
+        
+        arrowsNormalColor = contextActivity.getResources().getColor(R.color.white);
+        arrowsSettingsColor = contextActivity.getResources().getColor(R.color.almost_white);
     }
 
     @Override
@@ -109,6 +114,7 @@ public class FeedAdapter extends BaseAdapter {
         if (feedId == Feed.SETTINGS_ID) { 
             ViewGroup settingsRowView = (ViewGroup) inflater.inflate(R.layout.button_to_settings, null, true);
             holder.storyListWrapper.addView(settingsRowView);
+            holder.feedImage.setImageBitmap(null);
         } else {
             List<Item> stories = dao.findStories(feedId);
             
@@ -152,7 +158,7 @@ public class FeedAdapter extends BaseAdapter {
             }
         }
 
-        updateArrows(position, 0, getCount(), holder);
+        updateArrows(position, 0, getCount(), holder, feedId == Feed.SETTINGS_ID);
 
         // it recicle the views even with the scroll! So sometimes the 8º item appears scrolled.
         rowView.scrollTo(0, 0);
@@ -188,7 +194,7 @@ public class FeedAdapter extends BaseAdapter {
      * side-navigation is possible. Currently, we just hide the arrows that don't make sense, but we
      * could also use the "dark" arrows for that.
      */
-    private void updateArrows(int position, int minPosition, int maxPosition, FeedViewHolder holder) {
+    private void updateArrows(int position, int minPosition, int maxPosition, FeedViewHolder holder, boolean isSettingsFeed) {
         if (position == minPosition) {
             holder.leftArrow.setText(leftDisabledArrow);
             holder.leftArrow.setVisibility(View.INVISIBLE);
@@ -209,6 +215,17 @@ public class FeedAdapter extends BaseAdapter {
             holder.leftArrow.setVisibility(View.VISIBLE);
             holder.rightArrow.setText(rightEnabledArrow);
             holder.rightArrow.setVisibility(View.VISIBLE);
+        }
+        
+        if (isSettingsFeed) {
+            holder.leftArrow.setTextColor(arrowsNormalColor);
+            holder.rightArrow.setTextColor(arrowsSettingsColor);
+        } else if (position == 1) {
+            holder.leftArrow.setTextColor(arrowsSettingsColor);
+            holder.rightArrow.setTextColor(arrowsNormalColor);
+        } else {
+            holder.leftArrow.setTextColor(arrowsNormalColor);
+            holder.rightArrow.setTextColor(arrowsNormalColor);
         }
     }
 }

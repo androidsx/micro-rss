@@ -3,6 +3,7 @@
     <color name="black">#f000</color>
     <color name="white">#ffff</color>
     <color name="semi_white">#f888</color>
+    <color name="almost_white">#fCCC</color>
     <color name="light_grey">#dbdbdb</color>
     <color name="semi_black">#f666</color>
     

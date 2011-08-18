@@ -5,11 +5,11 @@
     android:layout_width="fill_parent"
     android:id="@+id/wrapper">
 
-    <Button
+    <com.wimm.framework.widget.Button
         android:id="@+id/back_button"
         android:layout_width="fill_parent"
         android:text="Go back"
-        android:layout_height="35dip"
+        android:layout_height="33dip"
         android:onClick="onGoBackClick" />
        
     <ListView
