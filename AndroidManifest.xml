@@ -48,19 +48,23 @@
         
         <activity
         	android:name="com.androidsx.microrss.configure.Preferences"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light"
+            android:noHistory="true">
 		</activity>
         <activity
             android:name="com.androidsx.microrss.configure.GReaderPreferences"
-            android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
+            android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light"
+            android:noHistory="true">
         </activity>
 		<activity
         	android:name="com.androidsx.microrss.configure.ChooseSampleFeedsActivity"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light"
+            android:noHistory="true">
 		</activity>
 		<activity
         	android:name="com.androidsx.microrss.configure.ChooseGoogleReaderFeedsActivity"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light"
+            android:noHistory="true">
 		</activity>
     </application>
 

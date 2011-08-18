@@ -160,9 +160,12 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
         
         @Override
         public void onClick(View v) {
-            Intent intent = IntentHelper.createIntent(contextActivity, null, FeedActivity.class);
-            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feed.getId());
-            contextActivity.startActivity(intent);
+//            Intent intent = IntentHelper.createIntent(contextActivity, null, FeedActivity.class);
+//            intent.putExtra(new FeedNavigationExtras().getCurrentIdKey(), feed.getId());
+//            contextActivity.startActivity(intent);
+            
+            // TODO: Android always will have the other activity on the top of the stack?
+            contextActivity.finish();
         }
     };
 }

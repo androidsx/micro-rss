@@ -35,6 +35,10 @@ public class FeedActivity extends LauncherActivity {
         setContentView(R.layout.feed_wimm_wrapper);
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
+        configureAdapter();
+    }
+
+    private void configureAdapter() {
         MicroRssDao dao = new MicroRssDao(getContentResolver());
         List<Feed> feedList = dao.findActiveFeeds();
         
@@ -65,11 +69,12 @@ public class FeedActivity extends LauncherActivity {
         }
     }
     
-    private List<Feed> insertEmptyFeedForSettings(List<Feed> before) {
-        List<Feed> after = new ArrayList<Feed>();
-        after.add(new DefaultFeed(Feed.SETTINGS_ID, "", "", true, new java.util.Date()));
-        after.addAll(before);
-        return after;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        
+        setIntent(intent);
+        configureAdapter();
     }
 
     @Override
@@ -98,6 +103,13 @@ public class FeedActivity extends LauncherActivity {
     public void onGoSettingsClick(View target) {
         Intent intent = IntentHelper.createIntent(this, null, Preferences.class);
         startActivity(intent);
+    }
+    
+    private List<Feed> insertEmptyFeedForSettings(List<Feed> before) {
+        List<Feed> after = new ArrayList<Feed>();
+        after.add(new DefaultFeed(Feed.SETTINGS_ID, "", "", true, new java.util.Date()));
+        after.addAll(before);
+        return after;
     }
 
     /** 
