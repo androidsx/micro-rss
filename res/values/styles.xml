@@ -308,7 +308,7 @@
 	<!-- Story view: to be in the center in the view we need to put some 
         bottom padding, as much as the feed_title could take up -->
     <style name="story_title">
-        <item name="android:textSize">15.0sp</item>
+        <item name="android:textSize">14.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/story_title</item>
         <item name="android:paddingLeft">3.0dip</item>

@@ -38,7 +38,7 @@
             <RelativeLayout
                 android:id="@+id/story_title_wrapper"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/wimm_screen_story_height" >
+                android:layout_height="wrap_content" >
 
                 <!--TEXT + IMAGE -->
                 <!--
@@ -50,7 +50,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:scaleType="center"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
 
                 <!-- TEXT / TEXT + IMAGE -->
                 <!--
@@ -62,8 +63,8 @@
                 <TextView
                     android:id="@+id/story_title"
                     android:text="Example of a normal story title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:maxLines="6"
                     android:layout_below="@+id/feed_title"
                     android:gravity="left|center"

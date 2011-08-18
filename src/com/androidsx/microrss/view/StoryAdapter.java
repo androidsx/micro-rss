@@ -3,6 +3,7 @@ package com.androidsx.microrss.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
         public TextView storyHeader;
         public TextView feedTitle;
         public ViewGroup storyHeaderWrapper;
+        public ViewGroup storyTitleWrapper;
     }
 
     public StoryAdapter(Activity contextActivity, Item[] stories, Feed feed) {
@@ -75,6 +77,7 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
             holder.storyTitle = (TextView) rowView.findViewById(R.id.story_title);
             holder.storyImage = (ImageView) rowView.findViewById(R.id.story_image);
             holder.storyHeaderWrapper = (ViewGroup) rowView.findViewById(R.id.header_wrapper);
+            holder.storyTitleWrapper = (ViewGroup) rowView.findViewById(R.id.story_title_wrapper);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -94,9 +97,14 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
         //        (position + 1), getCount()));
         
         Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail(), 
-                R.drawable.rss_256_scaled_to_160_brightness_100);
+                -1);
         if (favicon != null) {
             holder.storyImage.setImageBitmap(favicon);
+            holder.storyImage.setVisibility(View.VISIBLE);
+            
+            RelativeLayout.LayoutParams paramsStoryTitleWrapper = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.FILL_PARENT, 137); //FIXME: refactor this
+            holder.storyTitleWrapper.setLayoutParams(paramsStoryTitleWrapper);
             
             // TODO: duplicated code, refactor it in XML
             holder.feedTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
