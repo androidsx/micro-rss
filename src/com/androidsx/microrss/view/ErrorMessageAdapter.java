@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.androidsx.microrss.R;
 
-public class ErrorMessageAdapter extends BaseAdapter {
+public class ErrorMessageAdapter extends BaseAdapter implements Draggable {
 
     private final int messageRes;
     private final int messageDetailedRes;
@@ -87,6 +87,11 @@ public class ErrorMessageAdapter extends BaseAdapter {
         holder.errorImage.setImageResource(imageDrawableRes);
 
         return rowView;
+    }
+
+    @Override
+    public boolean dragCanExit() {
+        return true;
     }
 
 }

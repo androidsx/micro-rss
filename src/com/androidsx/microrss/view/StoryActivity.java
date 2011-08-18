@@ -64,6 +64,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
                         R.drawable.information,
                         R.color.error_message_info);
                 customViewTrayAdapter.setAdapter(errorAdapter);
+                setDragable(errorAdapter);
             }
         } else {
             Log.e(TAG, "Wrong feed id: " + feedId);
@@ -75,6 +76,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
                     R.drawable.warning,
                     R.color.error_message_warning);
             customViewTrayAdapter.setAdapter(errorAdapter);
+            setDragable(errorAdapter);
         }
     }
 
