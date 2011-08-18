@@ -29,7 +29,7 @@
         
         <!-- Activity that shows the basic information of a feed -->
 	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"
-        android:launchMode="singleTask" >
+         android:launchMode="singleTask" >
             <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
         </activity>
 	    
@@ -44,19 +44,19 @@
         
         <activity
         	android:name="com.androidsx.microrss.configure.Preferences"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
 		</activity>
         <activity
             android:name="com.androidsx.microrss.configure.GReaderPreferences"
-            android:label="@string/settings_title" android:theme="@style/Theme.MicroRss">
+            android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
         </activity>
 		<activity
         	android:name="com.androidsx.microrss.configure.ChooseSampleFeedsActivity"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
 		</activity>
 		<activity
         	android:name="com.androidsx.microrss.configure.ChooseGoogleReaderFeedsActivity"
-        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss">
+        	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light">
 		</activity>
     </application>
 

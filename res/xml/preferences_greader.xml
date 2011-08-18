@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Google Reader">
+        android:title="Google Reader"
+        android:layout="@layout/custom_preference_category">
 
        <!-- If later we want to test with mobile
            <EditTextPreference
@@ -21,17 +22,17 @@
         <Preference
             android:title="Username"
             android:key="@string/pref_google_user_name"
-            android:layout="@layout/preferences_row" />
+            android:layout="@layout/custom_preferences_row" />
         <Preference
             android:title="Password"
             android:summary=""
             android:key="@string/pref_google_password"
-            android:layout="@layout/preferences_row" />
+            android:layout="@layout/custom_preferences_row" />
         <Preference
             android:title="Sync feeds"
             android:summary=""
             android:key="syncGoogleReaderFeeds"
-            android:layout="@layout/preferences_row" />
+            android:layout="@layout/custom_preferences_row" />
     </PreferenceCategory>
 </PreferenceScreen>
     

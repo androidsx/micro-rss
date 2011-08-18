@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
-			android:title="Choose your feeds">
+			android:title="Choose your feeds"
+            android:layout="@layout/custom_preference_category">
 	        <Preference
                	android:title="Sample feeds"
                 android:summary=""
                 android:key="chooseSampleFeeds"
-                android:layout="@layout/preferences_row" />
+                android:layout="@layout/custom_preferences_row" />
                 
             <Preference
                 android:title="Google Reader feeds"
                 android:summary=""
                 android:key="chooseGoogleReaderFeeds"
-                android:layout="@layout/preferences_row" />
+                android:layout="@layout/custom_preferences_row" />
                 
         </PreferenceCategory>
         
        <PreferenceCategory
-                android:title="Advanced">
+                android:title="Advanced"
+                android:layout="@layout/custom_preference_category">
 			
                 <Preference
                         android:title="Google Reader Account"
                         android:summary=""
                         android:key="googleReaderAccount"
-                        android:layout="@layout/preferences_row" />
+                        android:layout="@layout/custom_preferences_row" />
                         
                 <Preference
                         android:title="Sync stories"
                         android:summary=""
                         android:key="syncStories"
-                        android:layout="@layout/preferences_row" />
+                        android:layout="@layout/custom_preferences_row" />
                         
                 <ListPreference
                     android:key="@string/pref_update_interval"
@@ -38,7 +40,7 @@
                     android:entryValues="@array/update_interval_values"
                     android:defaultValue="21600000"
                     android:dialogTitle="Update the stories every"
-                    android:layout="@layout/preferences_row"
+                    android:layout="@layout/custom_preferences_row"
                     android:enabled="false" />
         </PreferenceCategory>
         

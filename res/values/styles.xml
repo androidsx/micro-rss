@@ -395,4 +395,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:scrollbarThumbVertical">@drawable/scrollbar_handle_vertical</item>
     </style>
+    
+    <style name="Theme.MicroRss.Light" parent="@android:style/Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>
