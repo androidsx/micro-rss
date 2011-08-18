@@ -39,21 +39,21 @@ public class InitActivity extends Activity {
             
             // wimm tests
             writeConfigToBackend(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch", true);    
-            writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml", true);
-            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol");
+            writeConfigToBackend(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml");
+            writeConfigToBackend(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol", true);
             writeConfigToBackend(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml");
             
             // news 
 //            writeConfigToBackend(this, "El mundo" + MESSAGE_ES, "http://rss.elmundo.es/rss/descarga.htm?data2=4");
 //            writeConfigToBackend(this, "El país" + MESSAGE_ES, "http://www.elpais.com/rss/feed.html?feedId=1022");
 //            writeConfigToBackend(this, "ABC" + MESSAGE_ES, "http://www.abc.es/rss/feeds/abcPortada.xml");
-            writeConfigToBackend(this, "NYTimes World", "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml");
-            writeConfigToBackend(this, "BBC World", "http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml");
+            writeConfigToBackend(this, "NYTimes World", "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml", true);
+            writeConfigToBackend(this, "BBC World", "http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", true);
             writeConfigToBackend(this, "CNN Top Stories", "http://rss.cnn.com/rss/edition.rss");
             writeConfigToBackend(this, "CNN Most recent", "http://rss.cnn.com/rss/cnn_latest.rss");
             writeConfigToBackend(this, "Wired top stories", "http://www.wired.com/news_drop/netcenter/netcenter.rdf");
             writeConfigToBackend(this, "FoxNews", "http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss");
-            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss");
+            writeConfigToBackend(this, "Google News", "http://news.google.com/news?ned=us&topic=h&output=rss", true);
             writeConfigToBackend(this, "Yahoo News", "http://rss.news.yahoo.com/rss/topstories");
             writeConfigToBackend(this, "Reuters", "http://feeds.reuters.com/reuters/topNews");
             
@@ -63,7 +63,7 @@ public class InitActivity extends Activity {
             writeConfigToBackend(this, "An.droid.es" + MESSAGE_ES, "http://feeds.feedburner.com/AndroidEnEspanol?format=xml");
             writeConfigToBackend(this, "ALT1040" + MESSAGE_ES, "http://feeds.hipertextual.com/alt1040?format=xml");
             writeConfigToBackend(this, "Slashdot", "http://rss.slashdot.org/slashdot/eqWf");
-            writeConfigToBackend(this, "LifeHacker", "http://lifehacker.com/index.xml");
+            writeConfigToBackend(this, "LifeHacker", "http://lifehacker.com/index.xml", true);
             writeConfigToBackend(this, "Engadget", "http://www.engadget.com/rss.xml");
             writeConfigToBackend(this, "ReadWriteWeb", "http://www.readwriteweb.com/rss.xml");
 //            writeConfigToBackend(this, "TechCrunch", "http://www.techcrunch.com/feed/");
