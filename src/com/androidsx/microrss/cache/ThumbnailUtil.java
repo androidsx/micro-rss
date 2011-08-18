@@ -49,14 +49,14 @@ public class ThumbnailUtil {
      * 
      * TODO: Should be 240 in hdpi devices, in testing phase. WIMM device is 160 dip - 1px 1dip
      */
-    public static final int TARGET_SIZE_MINI_THUMBNAIL = 240; 
+    public static final int TARGET_SIZE_MINI_THUMBNAIL = 160; 
 
     /**
      * Constant used to indicate the dimension of a favicon
      * 
      * TODO: Should be 24 in hdpi devices, in testing phase. WIMM device is 160 dip - 1px 1dip
      */
-    public static final int TARGET_SIZE_FAVICON_THUMBNAIL = 24;
+    public static final int TARGET_SIZE_FAVICON_THUMBNAIL = 16;
 
     public static final int MIN_SOURCE_SIZE_TO_BE_PROCESSED_MINI_THUMBNAIL = 75;
 

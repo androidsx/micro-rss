@@ -32,7 +32,7 @@ public class FeedActivity extends LauncherActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed_wrapper);
+        setContentView(R.layout.feed_wimm_wrapper);
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
 
         MicroRssDao dao = new MicroRssDao(getContentResolver());

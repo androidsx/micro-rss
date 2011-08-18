@@ -32,7 +32,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.story_wrapper);
+        setContentView(R.layout.story_wimm_wrapper);
 
         customViewTrayAdapter = (CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper);
         configureViewTray(customViewTrayAdapter);
