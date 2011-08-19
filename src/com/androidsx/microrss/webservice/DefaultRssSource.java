@@ -99,8 +99,13 @@ class DefaultRssSource implements RssSource {
         } catch (FeedProcessingException e) {
             throw e; // FIXME: Does this still happen at all?
         } catch (Exception e) {
-            Log.e(TAG, "Error while grabbing and processing the feeds", e);
-            parseResponse = new ArrayList<Item>();
+            Log.e(TAG, "Error while grabbing and processing the feed: " + rssUrl, e);
+            //parseResponse = new ArrayList<Item>();
+            // why the line above? it gives an error and we continue like nothing:
+            //   it updates the last update date every time there is an error, making
+            //   imposible to retrieve any item if the first update was unsuccesful
+            //   and there is no new items since then
+            throw new FeedProcessingException("Error while grabbing and processing the feed: " + rssUrl, e, UpdateTaskStatus.DONT_KNOW);
         } finally {
             try {
                 if (stream != null) {
@@ -200,6 +205,7 @@ class DefaultRssSource implements RssSource {
                             if (lastFeedUpdate > DateParser.parseDateInRfc822(xpp.getText())
                                     .getTime()) {
                                 Log.i(TAG, "Stop processing de feed, it has not been updated since last retrieval");
+                                Log.i(TAG, "Last update feed: " + DateParser.parseDateInRfc822(xpp.getText()));
                                 return items;
                             } else {
                                 Log.i(TAG, "Process the feed, it has been updated since last retrieval");
