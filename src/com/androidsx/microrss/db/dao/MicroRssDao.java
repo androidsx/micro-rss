@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -26,6 +27,19 @@ public class MicroRssDao {
         this.contentResolver = contentResolver;
     }
 
+    public void persistFeed(Context context, String title, String feedUrl, boolean active,
+            boolean gReader) {
+        ContentValues values = new ContentValues();
+        values.put(FeedColumns.LAST_UPDATE, -1);
+        values.put(FeedColumns.TITLE, title);
+        values.put(FeedColumns.FEED_URL, feedUrl);
+        values.put(FeedColumns.ACTIVE, active);
+        values.put(FeedColumns.G_READER, gReader);
+
+        ContentResolver resolver = context.getContentResolver();
+        resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
+    }
+    
     public void updateFeed(Feed feed) {
         ContentValues values = new ContentValues();
         values.put(BaseColumns._ID, feed.getId());

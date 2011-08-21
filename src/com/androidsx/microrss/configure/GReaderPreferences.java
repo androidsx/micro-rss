@@ -1,6 +1,7 @@
 package com.androidsx.microrss.configure;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.jarx.android.reader.GoogleReaderClient;
 import org.jarx.android.reader.ReaderClient;
@@ -29,6 +30,9 @@ import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
+import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.domain.DefaultFeed;
+import com.androidsx.microrss.domain.Feed;
 import com.wimm.framework.app.TextInputDialog;
 
 public class GReaderPreferences extends PreferenceActivity {
@@ -37,12 +41,14 @@ public class GReaderPreferences extends PreferenceActivity {
     /** FIXME: workaround: it will be true if the TextDialog has been cancelled */
     private boolean dialogHasBeenCancelled = false;
 
+    private MicroRssDao dao;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_greader);
         setContentView(R.layout.wrapper_list_goback);
-
+        dao = new MicroRssDao(getContentResolver());
         ((Preference) findPreference("syncGoogleReaderFeeds"))
                 .setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
@@ -145,23 +151,6 @@ public class GReaderPreferences extends PreferenceActivity {
         startActivity(intent);
     }
 
-    // FIXME: copy-pasted from InitActivity.And, besides, broken (should update instead of insert
-    // sometimes)
-    private static void writeConfigToBackend(Context context, String title, String feedUrl,
-            boolean active) {
-
-        ContentValues values = new ContentValues();
-        values.put(FeedColumns.LAST_UPDATE, -1);
-        values.put(FeedColumns.TITLE, title);
-        values.put(FeedColumns.FEED_URL, feedUrl);
-        values.put(FeedColumns.ACTIVE, active);
-        values.put(FeedColumns.G_READER, true);
-
-        // TODO: update instead of insert if editing an existing feed
-        ContentResolver resolver = context.getContentResolver();
-        resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
-    }
-
     public class SyncGoogleReaderTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -191,11 +180,11 @@ public class GReaderPreferences extends PreferenceActivity {
 
                 gReader.handleSubList(new ReaderClient.SubListHandler() {
                     @Override
-                    public boolean subscription(Subscription sub) throws ReaderException {
+                    public boolean subscription(Subscription sub) {
                         if (sub.getUid().startsWith("feed/")) {
                             String url = sub.getUid().replaceFirst("feed/", "");
                             String title = sub.getTitle();
-                            writeConfigToBackend(getApplication(), title, url, false);
+                            dao.persistFeed(GReaderPreferences.this, title, url, false, true);
                         }
                         return true;
                     }
