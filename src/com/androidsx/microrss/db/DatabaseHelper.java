@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
+        //FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("

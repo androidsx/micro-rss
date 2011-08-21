@@ -93,7 +93,7 @@ public class WebserviceHelper {
                 
             } catch(NameNotFoundException e) {
                 Log.e(TAG, "Couldn't find package information in PackageManager", e);
-                FlurryAgent.onError(FlurryConstants.ERROR_ID_PACKAGE_MANAGER, "Package manager is corrupt", e.getClass().toString());
+                //FlurryAgent.onError(FlurryConstants.ERROR_ID_PACKAGE_MANAGER, "Package manager is corrupt", e.getClass().toString());
             }
         } else {
             // It is done already
