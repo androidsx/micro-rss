@@ -6,13 +6,15 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.UpdateService;
+import com.androidsx.microrss.WIMMCompatibleHelper;
+import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.view.FeedActivity;
 
 public class Preferences extends PreferenceActivity {
@@ -60,11 +62,26 @@ public class Preferences extends PreferenceActivity {
                 new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Log.i(TAG, "Force the update service to start");
-                startService(new Intent(Preferences.this, UpdateService.class)); 
+                Log.i(TAG, "Force the syncronization");
                 
-                Toast.makeText(Preferences.this, "Start updating stories", Toast.LENGTH_LONG).show();
-
+                SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(Preferences.this);
+                if ( syncIntervalPrefs.isSyncing() ) {
+                    Log.i(TAG, "We are already syncing");
+                    Toast.makeText(Preferences.this, "We are already syncing", Toast.LENGTH_SHORT).show();
+                } else {
+                    long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
+                    if ( syncTime != 0 ) {
+                        Time t = new Time();
+                        t.set(syncTime);
+                        Log.i(TAG, "Last sync success: " + t.format("%H:%M:%S") + " " +  t.format("%m/%d/%Y"));
+                    } else {
+                        Log.i(TAG, "We have never succeed to sync");
+                    }
+                    
+                    Toast.makeText(Preferences.this, "Force the sync, it may take a while", Toast.LENGTH_SHORT).show();
+                    WIMMCompatibleHelper.requestSync(Preferences.this);
+                }
+                
                 return true;
             }
         });

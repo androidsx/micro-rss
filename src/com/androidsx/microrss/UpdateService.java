@@ -6,20 +6,25 @@ import java.util.Queue;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
 import com.flurry.android.FlurryAgent;
+import com.wimm.framework.service.NetworkService;
 
 /**
  * Background service to build any requested feed updates. Uses a single background thread to walk
@@ -41,7 +46,7 @@ public class UpdateService extends Service implements Runnable {
      * Default update interval, in milliseconds. Every update period, the update service wakes up,
      * checks whether any feed needs updating, sets a new alarm, and sleeps again.
      */
-    private static final long DEFAULT_UPDATE_INTERVAL_MILLIS = 6 * DateUtils.HOUR_IN_MILLIS;
+    public static final long DEFAULT_UPDATE_INTERVAL_MILLIS = 6 * DateUtils.HOUR_IN_MILLIS;
 
     /**
      * Specific {@link Intent#setAction(String)} used when performing a full update of all feeds,
@@ -66,7 +71,13 @@ public class UpdateService extends Service implements Runnable {
      * correctly synchronized.
      */
     private static Queue<Integer> queuedFeedIds = new LinkedList<Integer>();
-
+    
+    /** Used to postpone the network connection if the background tasks has not been finished */
+    private NetworkService networkService;
+    
+    /** Stores sync information */
+    private SyncIntervalPrefs syncPrefs;
+    
     /**
      * Request updates for the given feeds. Will only queue them up, you are still responsible for
      * starting a processing thread if needed, usually by starting the parent service.
@@ -104,6 +115,18 @@ public class UpdateService extends Service implements Runnable {
             return queuedFeedIds.poll();
         }
     }
+    
+    @Override
+    public void onCreate() {
+        Log.d(TAG, "onCreate~");
+        super.onCreate();
+        
+        networkService = new NetworkService(this);
+        syncPrefs = new SyncIntervalPrefs(this);
+        
+        Log.d(TAG, "Registering com.wimm.action.NETWORK_TAKEDOWN for network connection");
+        registerReceiver(networkTakedownReceiver, new IntentFilter(NetworkService.ACTION_NETWORK_TAKEDOWN));
+    }
 
     /**
      * Start this service, creating a background processing thread, if not already running. If
@@ -112,9 +135,9 @@ public class UpdateService extends Service implements Runnable {
      */
     @Override
     public void onStart(Intent intent, int startId) {
-        Log.d(TAG, "update service starting up");
+        Log.d(TAG, "Update service starting up");
         super.onStart(intent, startId);
-
+        
         // Only start processing thread if not already running
         // TODO: use an async task
         synchronized (queueLock) {
@@ -123,6 +146,16 @@ public class UpdateService extends Service implements Runnable {
                 new Thread(this).start();
             }
         }
+    }
+    
+    // unregister for network takedown intents
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy~");
+        super.onDestroy();
+        
+        Log.d(TAG, "Unregistering com.wimm.action.NETWORK_TAKEDOWN, we no longer need the connection");
+        unregisterReceiver(networkTakedownReceiver);
     }
 
     /**
@@ -134,8 +167,11 @@ public class UpdateService extends Service implements Runnable {
      */
     @Override
     public void run() {
-        Log.d(TAG, "Processing thread of the update service started");
-
+        Log.i(TAG, "Processing thread of the update service started");
+        
+        boolean success = true;
+        syncPrefs.willBeginSync();
+        
         requestUpdate(new MicroRssDao(getContentResolver()).findActiveFeedIds());
 
         boolean areThereHumans = false; // ie, are there feeds that are not zombies?
@@ -160,20 +196,35 @@ public class UpdateService extends Service implements Runnable {
             } catch (FeedProcessingException e) {
                 Log.e(TAG, "Exception while processing content for the feed " + feedId
                         + ". We'll end up in the error view.", e);
+                success = false;
             } catch (Exception e) { // Let's try to avoid an ANR no matter how!
                 Log.e(TAG, "Unknown problem. Feed " + feedId
                         + ". We'll end up in the error view.", e);
                 FlurryAgent.onError(FlurryConstants.ERROR_ID_UPDATE_SERVICE,
                         "Update service fails unexpectedly", e.getClass().toString());
+                success = false;
             }
         } // end of "while there are more updates"
 
+        // schedule alarm only for non-wimm devices
+        if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == false) {
+            scheduleNextSync(areThereHumans);
+        }
+        
+        syncPrefs.didCompleteSync(success);
+        
+        // No updates remaining, so stop service
+        Log.i(TAG, "Stop the service, we have finished the sync: " + success);
+        stopSelf();
+    }
+
+    private void scheduleNextSync(boolean areThereHumans) {
         if (areThereHumans) {
             // Schedule next update alarm
             Intent updateIntent = new Intent(ACTION_UPDATE_ALL);
             updateIntent.setClass(this, this.getClass());
             PendingIntent pendingIntent = PendingIntent.getService(this, 0, updateIntent, 0);
-
+   
             // Schedule alarm, and force the device awake for this update
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.set(AlarmManager.RTC_WAKEUP, timeForNextUpdateAlarm(getUpdateIntervalMillis()),
@@ -181,9 +232,6 @@ public class UpdateService extends Service implements Runnable {
         } else {
             Log.i(TAG, "There are no more feeds in the home screen, so no need to set an alarm");
         }
-
-        // No updates remaining, so stop service
-        stopSelf();
     }
 
     /** Fetches the update interval from the shared preferences, or returns a reasonable default value */
@@ -247,4 +295,19 @@ public class UpdateService extends Service implements Runnable {
                 R.string.max_num_items_saved_prefs_name).getMaxNumItemsSaved(this, feedId);
 
     }
+    
+    private BroadcastReceiver networkTakedownReceiver = new BroadcastReceiver() {
+
+        private static final String TAG = "NetworkTakedownReceiver";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received com.wimm.action.NETWORK_TAKEDOWN broadcast");
+
+            if (threadIsRunning) {
+                networkService.postponeNetworkTakedown();
+                Log.i(TAG, "Postpone network takedown, we are still doing network operations");
+            }
+        }
+    };
 }

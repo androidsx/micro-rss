@@ -7,7 +7,8 @@
     
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="com.wimm.permission.NETWORK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.wimm.permission.ICON_SERVICE" />
     
     <!-- This is useful to be commented in order to test on the mobile phone
@@ -66,6 +67,13 @@
         	android:label="@string/settings_title" android:theme="@style/Theme.MicroRss.Light"
             android:noHistory="true">
 		</activity>
+        
+         <receiver android:name="com.androidsx.microrss.sync.NetworkAvailableReceiver">
+            <intent-filter>
+                <action android:name="com.wimm.action.NETWORK_AVAILABLE"></action>
+            </intent-filter>
+        </receiver>
+        
     </application>
 
 </manifest>
