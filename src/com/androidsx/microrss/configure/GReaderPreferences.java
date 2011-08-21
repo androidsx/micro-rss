@@ -112,7 +112,7 @@ public class GReaderPreferences extends PreferenceActivity {
                                             .getDefaultSharedPreferences(GReaderPreferences.this);
                                     SharedPreferences.Editor editor = sharedPrefs.edit();
                                     editor.putString(getResources().getString(
-                                            R.string.pref_google_user_name), textInput.getText());
+                                            R.string.pref_google_password), textInput.getText());
                                     editor.commit();
                                 } else {
                                     dialogHasBeenCancelled = false;
