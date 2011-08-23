@@ -27,12 +27,7 @@
                         android:key="googleReaderAccount"
                         android:layout="@layout/custom_preferences_row" />
                         
-                <Preference
-                        android:title="Sync stories"
-                        android:summary=""
-                        android:key="syncStories"
-                        android:layout="@layout/custom_preferences_row" />
-                        
+                 <!--      
                 <ListPreference
                     android:key="@string/pref_update_interval"
                     android:title="Update interval"
@@ -42,6 +37,20 @@
                     android:dialogTitle="Update the stories every"
                     android:layout="@layout/custom_preferences_row"
                     android:enabled="false" />
+				-->   
+                <Preference
+                        android:title="Force sync"
+                        android:summary=""
+                        android:key="syncStories"
+                        android:layout="@layout/custom_preferences_row" />
+                        
+                <Preference
+                        android:title=""
+                        android:summary=""
+                        android:key="syncStoriesMessage"
+                        android:enabled="false"
+                        android:layout="@layout/custom_preferences_row_thin" />          
+                        
         </PreferenceCategory>
         
 </PreferenceScreen>

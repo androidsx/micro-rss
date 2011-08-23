@@ -1,11 +1,13 @@
 package com.androidsx.microrss.configure;
 
+import java.util.Date;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
+import com.androidsx.microrss.view.AnyRSSHelper;
 import com.androidsx.microrss.view.FeedActivity;
 
 public class Preferences extends PreferenceActivity {
@@ -86,6 +89,8 @@ public class Preferences extends PreferenceActivity {
             }
         });
         
+        ((Preference) findPreference("syncStoriesMessage")).setTitle(getLastSyncMessage());
+        
         // FIXME: Missing: when we change the update interval, do some kind of refresh. For instance, 
         // if it is set to 24 hours and you change it down to 3 minutes, you have to wait another 17 hours
         // to get your 3 minutes! Maybe with WIMM this will radically change
@@ -96,5 +101,23 @@ public class Preferences extends PreferenceActivity {
         Intent intent = IntentHelper.createIntent(Preferences.this, null, FeedActivity.class);
         startActivity(intent);
     }
+    
+	private String getLastSyncMessage() {
+		String msg = "";
+		SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(
+				Preferences.this);
+		if (syncIntervalPrefs.isSyncing()) {
+			msg = "Syncronizing...";
+		} else {
+			long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
+			if (syncTime != 0) {
+				msg = "Last sync: "
+						+ AnyRSSHelper.toRelativeDateString(new Date(syncTime));
+			} else {
+				msg = "Never synced";
+			}
+		}
+		return msg;
+	}
     
 }
