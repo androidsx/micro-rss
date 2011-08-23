@@ -10,7 +10,7 @@ import com.wimm.framework.view.ScrollView;
  * .
  */
 public class DragAwareScrollView extends ScrollView implements Draggable {
-    private static boolean dragCanExit = false;
+    private static boolean dragCanExit = true;
 
     public DragAwareScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
