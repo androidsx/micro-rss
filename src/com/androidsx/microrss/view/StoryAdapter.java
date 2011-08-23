@@ -1,10 +1,10 @@
 package com.androidsx.microrss.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.TypedValue;
+import android.graphics.Rect;
 import android.view.LayoutInflater;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -12,11 +12,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.androidsx.commons.helper.IntentHelper;
+import com.androidsx.commons.helper.ComponentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
+import com.wimm.framework.widget.Button;
 
 public class StoryAdapter extends BaseAdapter implements Draggable {
     private Activity contextActivity;
@@ -79,6 +81,8 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
             holder.storyHeaderWrapper = (ViewGroup) rowView.findViewById(R.id.header_wrapper);
             holder.storyTitleWrapper = (ViewGroup) rowView.findViewById(R.id.story_title_wrapper);
             rowView.setTag(holder);
+
+            ComponentHelper.increaseTouchArea(rowView.findViewById(R.id.header_wrapper), parent, 30);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
