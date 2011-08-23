@@ -123,8 +123,7 @@ public class CacheImageManager {
             } catch (Exception e) {
                 FileCacheUtil.deleteFileExternalCache(context, getFilenameForUrl(url));
 
-                Log.w(TAG, "Error compressing the image: " + url + ", " + e.getMessage());
-                e.printStackTrace();
+                Log.w(TAG, "Error compressing the image: " + e.getMessage()  + ", " + url);
             }
         }
         return false;
