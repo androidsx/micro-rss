@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
 			android:title="Choose your feeds"
-            android:layout="@layout/custom_preference_category">
+            android:layout="@layout/custom_preference_category_right_arrow">
 	        <Preference
                	android:title="Sample feeds"
                 android:summary=""

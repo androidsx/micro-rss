@@ -4,7 +4,7 @@
 
     <PreferenceCategory
         android:title="Google Reader"
-        android:layout="@layout/custom_preference_category">
+        android:layout="@layout/custom_preference_category_left_arrow">
 
        <!-- If later we want to test with mobile
            <EditTextPreference

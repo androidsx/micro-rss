@@ -1,16 +1,12 @@
 package com.androidsx.microrss.configure;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.jarx.android.reader.GoogleReaderClient;
 import org.jarx.android.reader.ReaderClient;
 import org.jarx.android.reader.ReaderException;
 import org.jarx.android.reader.Subscription;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,11 +24,8 @@ import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.dao.MicroRssDao;
-import com.androidsx.microrss.domain.DefaultFeed;
-import com.androidsx.microrss.domain.Feed;
+import com.androidsx.microrss.view.SwipeAwareListener;
 import com.wimm.framework.app.TextInputDialog;
 
 public class GReaderPreferences extends PreferenceActivity {
@@ -47,8 +40,11 @@ public class GReaderPreferences extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_greader);
-        setContentView(R.layout.wrapper_list_goback);
+        
         dao = new MicroRssDao(getContentResolver());
+        
+        getListView().setOnTouchListener(swipeListener);
+
         ((Preference) findPreference("syncGoogleReaderFeeds"))
                 .setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
@@ -150,6 +146,30 @@ public class GReaderPreferences extends PreferenceActivity {
         Intent intent = IntentHelper.createIntent(GReaderPreferences.this, null, Preferences.class);
         startActivity(intent);
     }
+    
+    private View.OnTouchListener swipeListener = new SwipeAwareListener() {
+
+        @Override
+        public void onTopToBottomSwipe() {
+        }
+
+        @Override
+        public void onRightToLeftSwipe() {
+        }
+
+        @Override
+        public void onLeftToRightSwipe() {
+            Intent intent = IntentHelper.createIntent(GReaderPreferences.this, null,
+                    Preferences.class);
+            startActivity(intent);
+            GReaderPreferences.this.overridePendingTransition(R.anim.slide_in_left,
+                    R.anim.slide_out_right);
+        }
+
+        @Override
+        public void onBottomToTopSwipe() {
+        }
+    };
 
     public class SyncGoogleReaderTask extends AsyncTask<Void, Void, String> {
 

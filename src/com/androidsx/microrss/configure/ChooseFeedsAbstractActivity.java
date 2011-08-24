@@ -14,6 +14,8 @@ import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
+import com.androidsx.microrss.view.FeedActivity;
+import com.androidsx.microrss.view.SwipeAwareListener;
 
 public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     private static final String TAG = "ChooseFeedsAbstractActivity";
@@ -25,7 +27,9 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapper_list_goback);
+        setContentView(R.layout.wrapper_choose_greader);
+        
+        getListView().setOnTouchListener(swipeListener);
         
         dao = new MicroRssDao(getContentResolver());
         feeds = getFeeds();
@@ -71,4 +75,28 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     }
     
     protected abstract List<Feed> getFeeds();
+    
+    private View.OnTouchListener swipeListener = new SwipeAwareListener() {
+
+        @Override
+        public void onTopToBottomSwipe() {
+        }
+
+        @Override
+        public void onRightToLeftSwipe() {
+        }
+
+        @Override
+        public void onLeftToRightSwipe() {
+            Intent intent = IntentHelper.createIntent(ChooseFeedsAbstractActivity.this, null,
+                    Preferences.class);
+            startActivity(intent);
+            ChooseFeedsAbstractActivity.this
+                    .overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+
+        @Override
+        public void onBottomToTopSwipe() {
+        }
+    };
 }

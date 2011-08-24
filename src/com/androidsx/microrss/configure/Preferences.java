@@ -19,6 +19,7 @@ import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.view.AnyRSSHelper;
 import com.androidsx.microrss.view.FeedActivity;
+import com.androidsx.microrss.view.SwipeAwareListener;
 
 public class Preferences extends PreferenceActivity {
     private static final String TAG = "Preferences";
@@ -27,7 +28,9 @@ public class Preferences extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        setContentView(R.layout.wrapper_list_goback);
+        
+        getListView().setOnTouchListener(swipeListener);
+        getListView().setVerticalScrollBarEnabled(false); 
         
         boolean isSyncedWithGoogleReader = PreferenceManager.getDefaultSharedPreferences(
                 this).getBoolean(getResources().getString(R.string.pref_synced_with_google_reader),
@@ -48,6 +51,8 @@ public class Preferences extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, GReaderPreferences.class));
+                Preferences.this
+                .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
         });
@@ -57,6 +62,8 @@ public class Preferences extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, ChooseGoogleReaderFeedsActivity.class));
+                Preferences.this
+                .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             }
         });
@@ -101,6 +108,30 @@ public class Preferences extends PreferenceActivity {
         Intent intent = IntentHelper.createIntent(Preferences.this, null, FeedActivity.class);
         startActivity(intent);
     }
+    
+    private View.OnTouchListener swipeListener = new SwipeAwareListener() {
+
+        @Override
+        public void onTopToBottomSwipe() {
+        }
+
+        @Override
+        public void onRightToLeftSwipe() {
+            Intent intent = IntentHelper.createIntent(Preferences.this, null,
+                    FeedActivity.class);
+            startActivity(intent);
+            Preferences.this
+                    .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+
+        @Override
+        public void onLeftToRightSwipe() {
+        }
+
+        @Override
+        public void onBottomToTopSwipe() {
+        }
+    };
     
 	private String getLastSyncMessage() {
 		String msg = "";
