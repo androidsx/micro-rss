@@ -49,7 +49,7 @@ public class InitActivity extends Activity {
 //            dao.persistFeed(this, "El mundo" + MESSAGE_ES, "http://rss.elmundo.es/rss/descarga.htm?data2=4", false);
 //            dao.persistFeed(this, "El país" + MESSAGE_ES, "http://www.elpais.com/rss/feed.html?feedId=1022", false);
 //            dao.persistFeed(this, "ABC" + MESSAGE_ES, "http://www.abc.es/rss/feeds/abcPortada.xml", false);
-        dao.persistFeed(this, "NYTimes World", "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml", true, false);
+        dao.persistFeed(this, "NYTimes World", "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml", false, false);
         dao.persistFeed(this, "BBC World", "http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", true, false);
         dao.persistFeed(this, "CNN Top Stories", "http://rss.cnn.com/rss/edition.rss", false, false);
         dao.persistFeed(this, "CNN Most recent", "http://rss.cnn.com/rss/cnn_latest.rss", false, false);
