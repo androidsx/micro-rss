@@ -25,6 +25,11 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
     private Item[] stories;
     private Feed feed;
     private int currentPosition = 0;
+
+    private int colorStoryTitleWithBackground;
+    private int colorFeedTitleWithBackground;
+    private int colorStoryTitleWithoutBackground;
+    private int colorFeedTitleWithoutBackground;
     
     static class ViewHolder {
         public ImageView storyImage;
@@ -42,6 +47,15 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
         this.stories = stories;
         this.contextActivity = contextActivity;
         this.feed = feed;
+
+        this.colorStoryTitleWithBackground = contextActivity.getResources().getColor(
+                R.color.story_feed_title_with_background);
+        this.colorFeedTitleWithBackground = contextActivity.getResources().getColor(
+                R.color.story_title_with_background);
+        this.colorStoryTitleWithoutBackground = contextActivity.getResources().getColor(
+                R.color.story_title);
+        this.colorFeedTitleWithoutBackground = contextActivity.getResources().getColor(
+                R.color.story_feed_title);
     }
 
     @Override
@@ -103,6 +117,11 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
         Bitmap favicon = AnyRSSHelper.getBitmapFromCache(contextActivity, story.getThumbnail(), 
                 -1);
         if (favicon != null) {
+            // Transform the view to hold images
+            RelativeLayout.LayoutParams paramsImage = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT); 
+            holder.storyImage.setLayoutParams(paramsImage);
+            
             holder.storyImage.setImageBitmap(favicon);
             holder.storyImage.setVisibility(View.VISIBLE);
             
@@ -111,7 +130,7 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
             holder.storyTitleWrapper.setLayoutParams(paramsStoryTitleWrapper);
             
             // TODO: duplicated code, refactor it in XML
-            holder.feedTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
+            holder.feedTitle.setTextColor(colorFeedTitleWithBackground);
             holder.feedTitle.setBackgroundColor(R.color.story_background_feed_title);
             
             //holder.storyCount.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
@@ -119,12 +138,43 @@ public class StoryAdapter extends BaseAdapter implements Draggable {
             
             holder.storyTitle.setMaxLines(5);
             holder.storyTitle.setPadding(3, 0, 3, 3);
-            holder.storyTitle.setTextColor(contextActivity.getResources().getColor(R.color.story_title_with_background));
+            holder.storyTitle.setTextColor(colorStoryTitleWithBackground);
             holder.storyTitle.setBackgroundColor(R.color.story_background_title); 
             
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.BELOW);
             params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.story_image);
+            
+            holder.storyTitle.setLayoutParams(params);
+        } else {
+            // return to what it was
+            
+            //FIXME: refactor this
+            RelativeLayout.LayoutParams paramsImage = new RelativeLayout.LayoutParams(
+                    0, 0); 
+            holder.storyImage.setLayoutParams(paramsImage);
+            
+            holder.storyImage.setImageBitmap(null);
+            holder.storyImage.setVisibility(View.INVISIBLE);
+            
+            RelativeLayout.LayoutParams paramsStoryTitleWrapper = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT); //FIXME: refactor this
+            holder.storyTitleWrapper.setLayoutParams(paramsStoryTitleWrapper);
+            
+            // TODO: duplicated code, refactor it in XML
+            holder.feedTitle.setTextColor(colorFeedTitleWithoutBackground);
+            holder.feedTitle.setBackgroundColor(-1);
+            
+            //holder.storyCount.setTextColor(contextActivity.getResources().getColor(R.color.story_feed_title_with_background));
+            //holder.storyCount.setBackgroundColor(R.color.story_background_feed_title);
+            
+            holder.storyTitle.setMaxLines(6);
+            holder.storyTitle.setPadding(3, 0, 3, 10);
+            holder.storyTitle.setTextColor(colorStoryTitleWithoutBackground);
+            holder.storyTitle.setBackgroundColor(-1); 
+            
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.BELOW, R.id.feed_title);
             
             holder.storyTitle.setLayoutParams(params);
         }
