@@ -13,6 +13,7 @@ public class SyncIntervalPrefs {
     private static final String SYNC_STATUS = "SYNC_STATUS";
     private static final String LAST_SYNC_ATTEMPT = "LAST_SYNC_ATTEMPT";
     private static final String LAST_SUCCESSFUL_SYNC = "LAST_SUCCESSFUL_SYNC";
+    private static final String FORCE_SYNC = "FORCE_SYNC";
 
     private static final long MIN_SYNC_INTERVAL = UpdateService.DEFAULT_UPDATE_INTERVAL_MILLIS; //60 * 1000; // ms 
 
@@ -44,10 +45,16 @@ public class SyncIntervalPrefs {
 
         long now = System.currentTimeMillis();
         long lastSync = mPrefs.getLong(LAST_SUCCESSFUL_SYNC, 0);
-
+        boolean forceSync = mPrefs.getBoolean(FORCE_SYNC, false);
+        
         // we have never sync'd
         if (lastSync == 0)
             return true;
+        
+        if (forceSync) {
+            // we will update the flag when consumed the sync
+            return true;
+        }
 
         // we are too close to the last sync
         if ((now - lastSync) < MIN_SYNC_INTERVAL)
@@ -63,6 +70,13 @@ public class SyncIntervalPrefs {
         editor.commit();
     }
 
+    // update sync status
+    public void willForceSync(boolean force) {
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(FORCE_SYNC, force);
+        editor.commit();
+    }
+
     // update sync dates
     public void didCompleteSync(boolean success) {
         long now = System.currentTimeMillis();
@@ -72,6 +86,9 @@ public class SyncIntervalPrefs {
         editor.putLong(LAST_SYNC_ATTEMPT, now);
         if (success)
             editor.putLong(LAST_SUCCESSFUL_SYNC, now);
+        
+        // consume the force sync
+        editor.putBoolean(FORCE_SYNC, false);
 
         editor.commit();
     }

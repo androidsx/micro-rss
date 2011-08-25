@@ -90,6 +90,8 @@ public class Preferences extends PreferenceActivity {
                     
                     Toast.makeText(Preferences.this, "Force the sync, it may take a while", Toast.LENGTH_SHORT).show();
                 }
+                
+                syncIntervalPrefs.willForceSync(true);
                 WIMMCompatibleHelper.requestSync(Preferences.this);
                 
                 return true;

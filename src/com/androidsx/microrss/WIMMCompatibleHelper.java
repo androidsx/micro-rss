@@ -21,6 +21,9 @@ public class WIMMCompatibleHelper {
                 context.startService(new Intent(context, UpdateService.class)); // if already started, does nothing
             } 
             else {
+                // if we arrive here from the force sync button, on the incoming
+                // broadcast it will allow the sync even it has not passed more 
+                // than the e.g. 6 hours from the last sync.
                 Log.i(TAG, "Request the network connection to sync the feeds");
                 network.requestNetworkConnection();
             }
