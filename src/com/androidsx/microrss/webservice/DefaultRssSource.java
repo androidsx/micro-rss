@@ -154,8 +154,6 @@ class DefaultRssSource implements RssSource {
             // encoding
             int eventType = xpp.getEventType();
 
-            Log.i(TAG, "RSS: " + new Date(lastFeedUpdate).toString());
-
             while (eventType != XmlPullParser.END_DOCUMENT && items.size() <= maxNumberOfItems) {
                 if (eventType == XmlPullParser.START_TAG) {
                     thisTag = xpp.getName();
@@ -244,8 +242,6 @@ class DefaultRssSource implements RssSource {
                 sFactory = XmlPullParserFactory.newInstance();
             }
             sFactory.setNamespaceAware(true);
-
-            Log.i(TAG, "ATOM: " + new Date(lastFeedUpdate).toString());
 
             XmlPullParser xpp = sFactory.newPullParser();
             boolean insideItem = false;
