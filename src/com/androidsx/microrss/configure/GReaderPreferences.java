@@ -44,6 +44,8 @@ public class GReaderPreferences extends PreferenceActivity {
         dao = new MicroRssDao(getContentResolver());
         
         getListView().setOnTouchListener(swipeListener);
+        
+        enableSyncFeedsWhenCredentialsOK(); 
 
         ((Preference) findPreference("syncGoogleReaderFeeds"))
                 .setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -81,6 +83,7 @@ public class GReaderPreferences extends PreferenceActivity {
                                 } else {
                                     dialogHasBeenCancelled = false;
                                 }
+                                enableSyncFeedsWhenCredentialsOK();
                             }
                         });
                         textInput.setOnCancelListener(new OnCancelListener() {
@@ -119,6 +122,7 @@ public class GReaderPreferences extends PreferenceActivity {
                                 } else {
                                     dialogHasBeenCancelled = false;
                                 }
+                                enableSyncFeedsWhenCredentialsOK();
                             }
                         });
                         textInput.setOnCancelListener(new OnCancelListener() {
@@ -140,6 +144,15 @@ public class GReaderPreferences extends PreferenceActivity {
         // hours
         // to get your 3 minutes! Maybe with WIMM this will radically change
 
+    }
+
+    private void enableSyncFeedsWhenCredentialsOK() {
+        String username = PreferenceManager.getDefaultSharedPreferences(this).getString(
+                getResources().getString(R.string.pref_google_user_name), "");
+        String password = PreferenceManager.getDefaultSharedPreferences(this).getString(
+                getResources().getString(R.string.pref_google_password), "");
+        ((Preference) findPreference("syncGoogleReaderFeeds")).setEnabled(!username.equals("")
+                && !password.equals(""));
     }
 
     public void onGoBackClick(View target) {
