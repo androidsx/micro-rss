@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 
 public abstract class SwipeAwareListener implements View.OnTouchListener {
-    private static final int SWIPE_MIN_DISTANCE = 60; //120;
+    private static final int SWIPE_MIN_DISTANCE = 50; //120;
     private static final int SWIPE_MAX_OFF_PATH = 100; //250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 190;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 180;
     
     private GestureDetector gestureDetector;
     
