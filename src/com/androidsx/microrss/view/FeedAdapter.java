@@ -32,6 +32,7 @@ public class FeedAdapter extends BaseAdapter {
     private String rightDisabledArrow;
     private int arrowsNormalColor;
     private int arrowsSettingsColor;
+    private int errorMessageColor;
 
     private static final class FeedViewHolder {
         public ImageView feedImage;
@@ -55,6 +56,7 @@ public class FeedAdapter extends BaseAdapter {
         
         arrowsNormalColor = contextActivity.getResources().getColor(R.color.white);
         arrowsSettingsColor = contextActivity.getResources().getColor(R.color.almost_white);
+        errorMessageColor = contextActivity.getResources().getColor(R.color.error_message_info);
     }
 
     @Override
@@ -127,11 +129,11 @@ public class FeedAdapter extends BaseAdapter {
                         .findViewById(R.id.error_message_detailed);
     
                 errorMsg.setText(contextActivity.getString(R.string.error_message_feed_no_items));
-                errorMsg.setTextColor(R.color.error_message_info);
+                errorMsg.setTextColor(errorMessageColor);
     
                 errorMsgDetailed.setText(contextActivity
                         .getString(R.string.error_message_feed_no_items_detailed));
-                errorMsgDetailed.setTextColor(R.color.error_message_info);
+                errorMsgDetailed.setTextColor(errorMessageColor);
     
                 holder.storyListWrapper.addView(noItemsfeedRowView);
             } else {

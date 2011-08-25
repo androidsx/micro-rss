@@ -202,13 +202,13 @@ v1.4 (19.01.2010)\n
     <string name="error_message_feed_no_active_detailed">Please select at least one in Settings</string>
     
     <string name="error_message_feed_unexpected_id">Unexpected error</string>
-    <string name="error_message_feed_unexpected_id_detailed">Please press \'Sync Stories\' in Settings</string>
+    <string name="error_message_feed_unexpected_id_detailed">Please press \'Force sync\' in Settings</string>
 
     <string name="error_message_story_no_items">No stories</string>
-    <string name="error_message_story_no_items_detailed">Please wait and come back later, or press \'Sync Stories\' in Settings</string>
+    <string name="error_message_story_no_items_detailed">Please wait and come back later, or force the sync in Settings</string>
 
     <string name="error_message_feed_no_items">No stories</string>
-    <string name="error_message_feed_no_items_detailed">Please wait and come back, or press \'Sync Stories\' in Settings</string>
+    <string name="error_message_feed_no_items_detailed">Please wait and come back later, or force the sync in Settings</string>
     
     <string name="no_feeds_configured">No feeds have been configured yet</string>
     
