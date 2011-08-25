@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.wimm.permission.NETWORK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.wimm.permission.ICON_SERVICE" />
     
     <!-- This is useful to be commented in order to test on the mobile phone
         <uses-library android:name="com.wimm.framework" android:required="true"></uses-library>
