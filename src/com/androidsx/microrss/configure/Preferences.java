@@ -140,14 +140,14 @@ public class Preferences extends PreferenceActivity {
 		SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(
 				Preferences.this);
 		if (syncIntervalPrefs.isSyncing()) {
-			msg = "Syncronizing...";
+			msg = getString(R.string.synchronizing);
 		} else {
 			long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
 			if (syncTime != 0) {
-				msg = "Last sync: "
+				msg = getString(R.string.last_sync) + " "
 						+ AnyRSSHelper.toRelativeDateString(new Date(syncTime));
 			} else {
-				msg = "Never synced";
+				msg = getString(R.string.never_synced);
 			}
 		}
 		return msg;

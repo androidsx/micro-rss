@@ -13,6 +13,9 @@
     <string name="app_descrip"></string>
 
 	<string name="pref_update_interval">updateInterval</string>
+	
+	<!-- Intent filter that indicates to the views that the database content was updated -->
+	<string name="database_changed_intent_filter">database_changed</string>
 
 	<string name="pref_google_user_name">google_user_name</string>
 	<string name="pref_google_password">google_password</string> <!-- FIXME: this is not serious! -->
@@ -219,4 +222,8 @@ v1.4 (19.01.2010)\n
     
     <string name="go_settings_long_message">Configure your feeds manually or import your Google Reader feeds</string>
     <string name="go_settings">Settings</string>
+    
+    <string name="synchronizing">Synchronizing ...</string>
+    <string name="last_sync">Last sync:</string>
+    <string name="never_synced">Never sync\'ed</string>
 </resources>
