@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesHelper {
 
-  private static final String PREFS_NAME = "com.androidsx.microrss.mainconfig";
+  private static final String PREFS_NAME = "com.androidsx.microrss";
   private static final char ARRAY_SEPARATOR = '|';
   private static final String ARRAY_SEPARATOR_REGEX = "\\|";
   
@@ -33,6 +33,17 @@ public class SharedPreferencesHelper {
     return config.getInt(key, 0);
   }
 
+  public static void saveLongValue(Context context, String key, int value) {
+      SharedPreferences.Editor editor =  context.getSharedPreferences(SharedPreferencesHelper.PREFS_NAME, 0).edit();
+      editor.putLong(key, value);
+      editor.commit();
+  }
+  
+  public static long getLongValue(Context context, String key) {
+      SharedPreferences config =  context.getSharedPreferences(SharedPreferencesHelper.PREFS_NAME, 0);
+      return config.getLong(key, 0);
+  }
+  
   /**
    * Adds a string to an array of strings in the shared preferences. A new array
    * will be created if it does not exist already.
