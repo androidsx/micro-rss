@@ -89,16 +89,16 @@ public class FeedActivity extends LauncherActivity {
     private void buildFirstExecView() {
         getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(firstSyncListener);
-        ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_first_update,
+        ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this, R.string.error_message_first_update,
                 R.string.error_message_first_update_detailed,
                 R.drawable.information,
                 R.color.error_message_info);
         customViewTrayAdapter.setAdapter(errorAdapter);
-        
+        customViewTrayAdapter.setIndex(1); // The index 0 is the settings, and 1 is the actual error message
     }
     
     private void buildNoFeedsView() {
-        ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this,
+        ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this,
                 R.string.error_message_feed_no_active,
                 R.string.error_message_feed_no_active_detailed, R.drawable.information,
                 R.color.error_message_info);

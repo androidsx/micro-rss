@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@color/application_background"
+	>
+	
+	<include layout="@layout/feed_header" android:layout_above="@id/error_image"/>
+	
+	<ImageView android:id="@+id/error_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:src="@drawable/information"
+		android:paddingTop="5dip"
+        android:layout_centerHorizontal="true" />
+        
+	<TextView android:id="@+id/error_message"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:gravity="center"
+		android:layout_centerHorizontal="true"
+        android:layout_below="@+id/error_image"
+		android:text="@string/error_message_feed_no_active" 
+		style="@style/error_message" />
+        
+    <TextView android:id="@+id/error_message_detailed"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/error_message"
+        android:text="@string/error_message_feed_no_active_detailed" 
+        style="@style/error_message_detailed" />        
+
+
+</RelativeLayout>

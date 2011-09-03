@@ -25,15 +25,6 @@ public class ErrorMessageAdapter extends BaseAdapter implements Draggable {
     }
 
     public ErrorMessageAdapter(Activity contextActivity, int messageRes, int messageDetailedRes,
-            int imageDrawableRes) {
-        this.contextActivity = contextActivity;
-        this.messageRes = messageRes;
-        this.messageDetailedRes = messageDetailedRes;
-        this.imageDrawableRes = imageDrawableRes;
-        this.textColorRes = -1;
-    }
-    
-    public ErrorMessageAdapter(Activity contextActivity, int messageRes, int messageDetailedRes,
             int imageDrawableRes, int textColorRes) {
         this.contextActivity = contextActivity;
         this.messageRes = messageRes;
