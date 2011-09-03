@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.configure.SharedPreferencesHelper;
 import com.androidsx.microrss.db.dao.MicroRssDao;
@@ -35,10 +36,19 @@ public class FeedActivity extends LauncherActivity {
     private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
             if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC)) {
-                Log.i(TAG, "Update the views after a successful synchronization operation");
-                configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
-                configureAdapter();
-                findViewById(R.id.custom_feed_wrapper).invalidate();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "Update the views after a successful synchronization operation");
+                        configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
+                        buildView();
+                        findViewById(R.id.custom_feed_wrapper).invalidate();
+                        
+                        // We don't have to listen to this event any more
+                        getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+                            .unregisterOnSharedPreferenceChangeListener(firstSyncListener);
+                    }
+                });
             }
         }
     };
@@ -49,56 +59,70 @@ public class FeedActivity extends LauncherActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wimm_wrapper);
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
-        configureAdapter();
-
-        if (SharedPreferencesHelper.getLongValue(this, SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) == 0) {
-            Log.d(TAG, "A successful sync was never performed: we'll now register a listener");
-            getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
-                .registerOnSharedPreferenceChangeListener(firstSyncListener);
-        } else {
-            Log.d(TAG, "At least one successful sync was already done: no need for listening to this event");
-        }
+        buildView();
     }
 
-    private void configureAdapter() {
-        MicroRssDao dao = new MicroRssDao(getContentResolver());
-        List<Feed> feedList = dao.findActiveFeeds();
-        
-        if (feedList.size() > 0) {
-            List<Feed> feedsWithSettings = insertEmptyFeedForSettings(feedList);
-            FeedAdapter feedAdapter = new FeedAdapter(this, feedsWithSettings.toArray(new Feed[0]));
-            int currentFeedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
-            int position = feedAdapter.getItemPosition(currentFeedId, 1); // Default position is 1, due to the settings
-            if (position >= 0) {
-                customViewTrayAdapter.setAdapter(feedAdapter);
-                customViewTrayAdapter.setIndex(position);
-            } else {
-                Log.e(TAG, "Wrong feed id: " + currentFeedId);
-                // FIXME: Why don't we just log it and move to the first position?
-                ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
-                        R.string.error_message_feed_unexpected_id_detailed,
-                        R.drawable.warning, R.color.error_message_warning);
-                customViewTrayAdapter.setAdapter(errorAdapter);
-            }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        buildView();
+    }
+    
+    private void buildView() {
+        if (SharedPreferencesHelper.getLongValue(this, SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) == 0) {
+            Log.d(TAG, "A successful sync was never performed: start the service and wait for it to finish");
+            WIMMCompatibleHelper.requestSync(this);
+            buildFirstExecView();
         } else {
-            Log.e(TAG, "There are no active feeds");
-
-            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this,
-                    R.string.error_message_feed_no_active,
-                    R.string.error_message_feed_no_active_detailed, R.drawable.information,
-                    R.color.error_message_info);
+            MicroRssDao dao = new MicroRssDao(getContentResolver());
+            List<Feed> feedList = dao.findActiveFeeds();
+            if (feedList.size() == 0) {
+                Log.e(TAG, "There are no active feeds");
+                buildNoFeedsView();
+            } else {
+                buildNormalView(feedList);
+            }
+        }
+    }
+    
+    private void buildFirstExecView() {
+        getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+                .registerOnSharedPreferenceChangeListener(firstSyncListener);
+        ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_first_update,
+                R.string.error_message_first_update_detailed,
+                R.drawable.information,
+                R.color.error_message_info);
+        customViewTrayAdapter.setAdapter(errorAdapter);
+        
+    }
+    
+    private void buildNoFeedsView() {
+        ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this,
+                R.string.error_message_feed_no_active,
+                R.string.error_message_feed_no_active_detailed, R.drawable.information,
+                R.color.error_message_info);
+        customViewTrayAdapter.setAdapter(errorAdapter);
+    }
+    
+    private void buildNormalView(List<Feed> feedList) {
+        List<Feed> feedsWithSettings = insertEmptyFeedForSettings(feedList);
+        FeedAdapter feedAdapter = new FeedAdapter(this, feedsWithSettings.toArray(new Feed[0]));
+        int currentFeedId = getIntent().getIntExtra(new FeedNavigationExtras().getCurrentIdKey(), -1);
+        int position = feedAdapter.getItemPosition(currentFeedId, 1); // Default position is 1, due to the settings
+        if (position >= 0) {
+            customViewTrayAdapter.setAdapter(feedAdapter);
+            customViewTrayAdapter.setIndex(position);
+        } else {
+            Log.e(TAG, "Wrong feed id: " + currentFeedId);
+            // FIXME: Why don't we just log it and move to the first position?
+            ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
+                    R.string.error_message_feed_unexpected_id_detailed,
+                    R.drawable.warning, R.color.error_message_warning);
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }
     
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        
-        setIntent(intent);
-        configureAdapter();
-    }
-
     @Override
     public boolean dragCanExit() {
         return customViewTrayAdapter.getActiveView().getScrollY() == 0 ? super.dragCanExit() : false;

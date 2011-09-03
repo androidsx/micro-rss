@@ -107,8 +107,13 @@ public class Preferences extends PreferenceActivity {
         lastSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
                 if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC)) {
-                    ((Preference) findPreference("syncStoriesMessage"))
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((Preference) findPreference("syncStoriesMessage"))
                             .setTitle(getLastSyncMessage());
+                        }
+                    });
                 }
             }
         };
