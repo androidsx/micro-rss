@@ -3,7 +3,10 @@ package com.androidsx.microrss.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,9 +16,11 @@ import android.widget.Toast;
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.configure.Preferences;
+import com.androidsx.microrss.configure.SharedPreferencesHelper;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.Feed;
+import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
@@ -27,6 +32,16 @@ import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 public class FeedActivity extends LauncherActivity {
     private static final String TAG = "FeedActivity";
 
+    private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+            if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC)) {
+                Log.i(TAG, "Update the views after a successful synchronization operation");
+                configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
+                configureAdapter();
+                findViewById(R.id.custom_feed_wrapper).invalidate();
+            }
+        }
+    };
     private CustomAdapterViewTray customViewTrayAdapter;
 
     @Override
@@ -34,8 +49,15 @@ public class FeedActivity extends LauncherActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wimm_wrapper);
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
-
         configureAdapter();
+
+        if (SharedPreferencesHelper.getLongValue(this, SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) == 0) {
+            Log.d(TAG, "A successful sync was never performed: we'll now register a listener");
+            getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+                .registerOnSharedPreferenceChangeListener(firstSyncListener);
+        } else {
+            Log.d(TAG, "At least one successful sync was already done: no need for listening to this event");
+        }
     }
 
     private void configureAdapter() {
