@@ -2,7 +2,9 @@ package com.androidsx.microrss.configure;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -23,6 +25,8 @@ import com.androidsx.microrss.view.SwipeAwareListener;
 
 public class Preferences extends PreferenceActivity {
     private static final String TAG = "Preferences";
+    
+    private SharedPreferences.OnSharedPreferenceChangeListener lastSyncListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +102,26 @@ public class Preferences extends PreferenceActivity {
             }
         });
         
-        ((Preference) findPreference("syncStoriesMessage")).setTitle(getLastSyncMessage());
         
+        ((Preference) findPreference("syncStoriesMessage")).setTitle(getLastSyncMessage());
+        lastSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC)) {
+                            ((Preference) findPreference("syncStoriesMessage"))
+                                    .setTitle(getLastSyncMessage());
+                        }
+                    }
+                });
+            }
+        };
+        getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+                .registerOnSharedPreferenceChangeListener(lastSyncListener);
+
         // FIXME: Missing: when we change the update interval, do some kind of refresh. For instance, 
         // if it is set to 24 hours and you change it down to 3 minutes, you have to wait another 17 hours
         // to get your 3 minutes! Maybe with WIMM this will radically change
-        
     }
     
     public void onGoBackClick(View target) {

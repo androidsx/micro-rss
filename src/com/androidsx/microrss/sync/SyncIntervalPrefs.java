@@ -12,7 +12,7 @@ import com.androidsx.microrss.UpdateService;
 public class SyncIntervalPrefs {
     private static final String SYNC_STATUS = "SYNC_STATUS";
     private static final String LAST_SYNC_ATTEMPT = "LAST_SYNC_ATTEMPT";
-    private static final String LAST_SUCCESSFUL_SYNC = "LAST_SUCCESSFUL_SYNC";
+    public static final String LAST_SUCCESSFUL_SYNC = "LAST_SUCCESSFUL_SYNC";
     private static final String FORCE_SYNC = "FORCE_SYNC";
 
     private static final long MIN_SYNC_INTERVAL = UpdateService.DEFAULT_UPDATE_INTERVAL_MILLIS; //60 * 1000; // ms 
