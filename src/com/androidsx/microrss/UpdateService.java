@@ -170,48 +170,51 @@ public class UpdateService extends Service implements Runnable {
         Log.i(TAG, "Processing thread of the update service started");
         
         boolean success = true;
-        syncPrefs.willBeginSync();
-        
-        requestUpdate(new MicroRssDao(getContentResolver()).findActiveFeedIds());
-
-        boolean areThereHumans = false; // ie, are there feeds that are not zombies?
-        while (hasMoreUpdates()) {
-            int feedId = getNextUpdate();
-
-            areThereHumans = true; // This feed is not a zombie
-
-            Log.i(TAG, "Proceed to update feed [" + feedId + "]");
-
-            // Last update is outside throttle window, so update again
-            try {
-                Log.d(TAG, "Let's ask the WebserviceHelper");
-
-                int maxItemsToStoreInDb = getMaxItemsToStoreInDb(feedId);
-                WebserviceHelper.updateForecastsAndFeeds(
-                        this,
-                        feedId,
-                        Math.max(UpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
-                        maxItemsToStoreInDb);
-                WebserviceHelper.retrieveFaviconFromFeed(this, feedId);
-            } catch (FeedProcessingException e) {
-                Log.e(TAG, "Exception while processing content for the feed " + feedId
-                        + ". We'll end up in the error view.", e);
-                success = false;
-            } catch (Exception e) { // Let's try to avoid an ANR no matter how!
-                Log.e(TAG, "Unknown problem. Feed " + feedId
-                        + ". We'll end up in the error view.", e);
-                //FlurryAgent.onError(FlurryConstants.ERROR_ID_UPDATE_SERVICE,
-                //        "Update service fails unexpectedly", e.getClass().toString());
-                success = false;
+        try {
+            syncPrefs.willBeginSync();
+            
+            requestUpdate(new MicroRssDao(getContentResolver()).findActiveFeedIds());
+    
+            boolean areThereHumans = false; // ie, are there feeds that are not zombies?
+            while (hasMoreUpdates()) {
+                int feedId = getNextUpdate();
+    
+                areThereHumans = true; // This feed is not a zombie
+    
+                Log.i(TAG, "Proceed to update feed [" + feedId + "]");
+    
+                // Last update is outside throttle window, so update again
+                try {
+                    Log.d(TAG, "Let's ask the WebserviceHelper");
+    
+                    int maxItemsToStoreInDb = getMaxItemsToStoreInDb(feedId);
+                    WebserviceHelper.updateForecastsAndFeeds(
+                            this,
+                            feedId,
+                            Math.max(UpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
+                            maxItemsToStoreInDb);
+                    WebserviceHelper.retrieveFaviconFromFeed(this, feedId);
+                } catch (FeedProcessingException e) {
+                    Log.e(TAG, "Exception while processing content for the feed " + feedId
+                            + ". We'll end up in the error view.", e);
+                    success = false;
+                } catch (Exception e) { // Let's try to avoid an ANR no matter how!
+                    Log.e(TAG, "Unknown problem. Feed " + feedId
+                            + ". We'll end up in the error view.", e);
+                    //FlurryAgent.onError(FlurryConstants.ERROR_ID_UPDATE_SERVICE,
+                    //        "Update service fails unexpectedly", e.getClass().toString());
+                    success = false;
+                }
+            } // end of "while there are more updates"
+    
+            // schedule alarm only for non-wimm devices
+            if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == false) {
+                scheduleNextSync(areThereHumans);
             }
-        } // end of "while there are more updates"
-
-        // schedule alarm only for non-wimm devices
-        if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == false) {
-            scheduleNextSync(areThereHumans);
-        }
         
-        syncPrefs.didCompleteSync(success);
+        } finally {
+            syncPrefs.didCompleteSync(success);
+        }
         
         // No updates remaining, so stop service
         Log.i(TAG, "Stop the service, we have finished the sync: " + success);
