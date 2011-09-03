@@ -118,7 +118,7 @@ public class UpdateService extends Service implements Runnable {
     
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate~");
+        Log.d(TAG, "Create the update service");
         super.onCreate();
         
         networkService = new NetworkService(this);
@@ -151,7 +151,7 @@ public class UpdateService extends Service implements Runnable {
     // unregister for network takedown intents
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy~");
+        Log.d(TAG, "Destroy the update service");
         super.onDestroy();
         
         Log.d(TAG, "Unregistering com.wimm.action.NETWORK_TAKEDOWN, we no longer need the connection");

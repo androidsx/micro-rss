@@ -31,7 +31,10 @@ public class InitActivity extends Activity {
             WIMMCompatibleHelper.requestSync(this);
         }
         
-        dispatchToViewActivities();
+        Intent intent = IntentHelper
+                .createIntent(this, getIntent().getExtras(), FeedActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void insertInitialFeeds() {
@@ -128,14 +131,5 @@ public class InitActivity extends Activity {
 //          dao.persistFeed(this, "test 16", "http://www.Motorsport-Total.com/rss_f1.xml", false, false);
 //          dao.persistFeed(this, "test 17", "http://www.gizmodo.net/index.xml", false, false);
 //          dao.persistFeed(this, "test 18", "http://rss.feedsportal.com/c/32314/f/440274/index.rss", false, false);
-    }
-
-    private void dispatchToViewActivities() {
-        Log.i(TAG, "Dispatch to the view activities");
-
-        Intent intent = IntentHelper
-                .createIntent(this, getIntent().getExtras(), FeedActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

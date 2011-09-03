@@ -28,7 +28,7 @@ public class WIMMCompatibleHelper {
                 network.requestNetworkConnection();
             }
         } else {
-            Log.i(TAG, "Start the update service");
+            Log.i(TAG, "Start the update service (unless already started)");
             context.startService(new Intent(context, UpdateService.class)); // if already started, does nothing
         }
     }
