@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.domain.DefaultItem;
 import com.androidsx.microrss.domain.DefaultItemList;
 import com.androidsx.microrss.domain.Item;
@@ -93,9 +94,32 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         }
     }
     
+    /** 
+     * Wrapper class to hold an item id with its thumbnail url, useful to delete.
+     * 
+     * TODO: we need to fix this big mess (and I'm making even deeper)
+     */
+    private class ItemThumbnailWrapper {
+        private int id;
+        private String url;
+        
+        public ItemThumbnailWrapper(int id, String url) {
+            this.id = id;
+            this.url = url;
+        }
+        
+        public int getId() {
+            return id;
+        }
+
+        public String getThumbnail() {
+            return url;
+        }
+    }
+    
     // TODO: this may help: there is a column in BaseColumn named _COUNT :)
     @Override
-    public int deleteOldestItems(ContentResolver resolver, int feedId, int numItemsToDelete) {
+    public int deleteOldestItems(ContentResolver resolver, int feedId, int numItemsToDelete, CacheImageManager cacheImageManager) {
         if (numItemsToDelete == 0) {
             Log.v(TAG, "No items are to be deleted");
             return 0;
@@ -103,10 +127,18 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             Log.d(TAG, "Attempting to delete the " + numItemsToDelete + " oldest items from the DB");
             final Uri feedUri = ContentUris.withAppendedId(
                     MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-            final List<Integer> sortedListOfIds = readSortedItemIdsFromDb(feedUri, resolver);
-            final List<Integer> idsToDelete = sortedListOfIds.subList(
+            final List<ItemThumbnailWrapper> sortedListOfIds = readSortedItemIdsFromDb(feedUri, resolver);
+            final List<ItemThumbnailWrapper> idsToDelete = sortedListOfIds.subList(
                     sortedListOfIds.size() - numItemsToDelete,
                     sortedListOfIds.size());
+            
+            for (ItemThumbnailWrapper itemWrapper : idsToDelete) {
+                if (!itemWrapper.getThumbnail().equals("")) {
+                    cacheImageManager.deleteImage(cacheImageManager.getFilenameForUrl(itemWrapper
+                            .getThumbnail()));
+                }
+            }
+            
             return deleteItemsById(resolver, feedUri, idsToDelete);
         }
     }
@@ -158,8 +190,8 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     }
     
     /** TODO: merge with #readSortedItemsFromDb */
-    private List<Integer> readSortedItemIdsFromDb(Uri feedUri, ContentResolver resolver) {
-        final List<Integer> sortedListOfIds = new LinkedList<Integer>();
+    private List<ItemThumbnailWrapper> readSortedItemIdsFromDb(Uri feedUri, ContentResolver resolver) {
+        final List<ItemThumbnailWrapper> sortedListOfIds = new LinkedList<ItemThumbnailWrapper>();
 
         Cursor cursor = null;
         try {
@@ -167,7 +199,9 @@ public class SqLiteRssItemsDao implements RssItemsDao {
 
             while (cursor != null && cursor.moveToNext()) {
                 int id = cursor.getInt(COL_ID);
-                sortedListOfIds.add(Integer.valueOf(id));
+                String thumb = cursor.getString(COL_ITEM_THUMBNAIL);
+                sortedListOfIds.add(new ItemThumbnailWrapper(Integer.valueOf(id),
+                        thumb));
             }
         } finally {
             if (cursor != null) {
@@ -211,11 +245,11 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         return maxId;
     }
     
-    private int deleteItemsById(ContentResolver resolver, Uri feedUri, List<Integer> listOfIds) {
+    private int deleteItemsById(ContentResolver resolver, Uri feedUri, List<ItemThumbnailWrapper> listOfIds) {
         StringBuilder whereClause = new StringBuilder();
         whereClause.append(BaseColumns._ID + " IN (");
-        for (Integer id : listOfIds) {
-            whereClause.append(id + ", ");
+        for (ItemThumbnailWrapper itemWrapper : listOfIds) {
+            whereClause.append(itemWrapper.getId() + ", ");
         }
         whereClause.replace(whereClause.length() - 2, whereClause.length(), ")");
         Log.v(TAG, "WHERE clase to delete items: " + whereClause);

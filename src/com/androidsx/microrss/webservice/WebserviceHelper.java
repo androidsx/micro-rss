@@ -175,7 +175,7 @@ public class WebserviceHelper {
         
         final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, feedId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
-        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, feedId, itemsToDelete);
+        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, feedId, itemsToDelete, new CacheImageManager(context));
         if (itemsToDelete == deletedItems) {
             // OK
         } else {

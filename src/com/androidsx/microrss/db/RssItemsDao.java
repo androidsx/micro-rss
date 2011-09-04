@@ -2,6 +2,7 @@ package com.androidsx.microrss.db;
 
 import android.content.ContentResolver;
 
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.domain.ItemList;
 
 /**
@@ -41,6 +42,6 @@ public interface RssItemsDao {
      * @return number of items that were actually deleted
      */
     int deleteOldestItems(ContentResolver resolver, int feedId,
-            int numItemsToDelete);
+            int numItemsToDelete, CacheImageManager cacheImageManager);
     
 }
