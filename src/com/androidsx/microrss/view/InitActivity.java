@@ -46,6 +46,7 @@ public class InitActivity extends Activity {
         dao.persistFeed(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch", true, false);    
         dao.persistFeed(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml", false, false);
         dao.persistFeed(this, "and.roid.es", "http://feeds.feedburner.com/AndroidEnEspanol", true, false);
+        dao.persistFeed(this, "港澳台新闻-新浪新闻", "http://rss.sina.com.cn/news/china/hktaiwan15.xml", true, false);
         dao.persistFeed(this, "Geek And Poke", "http://geekandpoke.typepad.com/geekandpoke/rss.xml", false, false);
         
         // news 
