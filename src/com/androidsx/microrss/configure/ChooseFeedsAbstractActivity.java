@@ -3,6 +3,7 @@ package com.androidsx.microrss.configure;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.view.FeedActivity;
@@ -23,6 +25,7 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     private MicroRssDao dao;
     private List<Feed> feeds;
     private ListView listView;
+    private CacheImageManager cacheImageManager;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         
         dao = new MicroRssDao(getContentResolver());
         feeds = getFeeds();
+        cacheImageManager = new CacheImageManager(this);
         
         setListAdapter(new ArrayAdapter<String>(this,
                 R.layout.custom_simple_list_item_multiple_choice, feedToStringArray(feeds)));
@@ -62,7 +66,7 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         boolean newActiveStatus = listView.getCheckedItemPositions().get(position);
         Feed feed = feeds.get(position);
         Log.i(TAG, "Update the feed " + feed.getTitle() + " as active=" + newActiveStatus);
-        dao.updateFeedActive(feed, newActiveStatus);
+        dao.updateFeedActive(feed, newActiveStatus, cacheImageManager);
     }
 
     private static String[] feedToStringArray(List<Feed> list) {

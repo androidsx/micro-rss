@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.db.FeedColumns;
 import com.androidsx.microrss.db.ItemColumns;
 import com.androidsx.microrss.db.MicroRssContentProvider;
@@ -53,11 +54,20 @@ public class MicroRssDao {
         contentResolver.update(aFeedUri, values, null, null);
     }
 
-    public void updateFeedActive(Feed feed, boolean active) {
+    /**
+     * Updates the feed activating or disabling it. 
+     * 
+     * @param active if false it will delete all the item feeds and thumbnails associated
+     */
+    public void updateFeedActive(Feed feed, boolean active, CacheImageManager cacheManager) {
         Feed updatedFeed = new DefaultFeed(feed.getId(), feed.getTitle(), feed.getURL(), active, feed.getLastModificationDate());
         updateFeed(updatedFeed);
+
+        if (active == false) {
+            deleteAllItems(feed, cacheManager);
+        }
     }
-    
+
     public int[] findAllFeedIds() {
         Cursor cursor = null;
         try {
@@ -228,6 +238,25 @@ public class MicroRssDao {
                 cursor.close();
             }
         }
+    }
+    
+    /** 
+     * Delete all the items for the given feed, together with the associated
+     * thumbnails
+     */
+    private void deleteAllItems(Feed feed, CacheImageManager cacheManager) {
+        List<Item> itemsToDelete = findStories(feed.getId());
+        
+        for (Item item : itemsToDelete) {
+            if (!item.getThumbnail().equals("")) {
+                cacheManager.deleteImage(cacheManager.getFilenameForUrl(item.getThumbnail()));
+            }
+        }
+        final Uri feedUri = ContentUris.withAppendedId(
+        MicroRssContentProvider.FEEDS_CONTENT_URI, feed.getId());
+        final Uri allItemsFeedUri = Uri.withAppendedPath(feedUri,
+              MicroRssContentProvider.TABLE_ITEMS);
+        contentResolver.delete(allItemsFeedUri, null, null);
     }
 
     private static Item itemFromCursor(Cursor cursor) {
