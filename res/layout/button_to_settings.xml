@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Screen that just shows a little text and a button that links to the settings view.
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"

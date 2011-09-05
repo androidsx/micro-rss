@@ -3,6 +3,7 @@ package com.androidsx.microrss.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 
 import com.androidsx.commons.helper.IntentHelper;

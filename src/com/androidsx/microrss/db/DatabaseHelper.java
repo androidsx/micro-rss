@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.androidsx.microrss.FlurryConstants;
-import com.flurry.android.FlurryAgent;
-
 /**
  * Helper to manage the database version upgrades. Works closely with the content provider,
  * {@link MicroRssContentProvider}.
@@ -16,7 +13,7 @@ import com.flurry.android.FlurryAgent;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 20;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

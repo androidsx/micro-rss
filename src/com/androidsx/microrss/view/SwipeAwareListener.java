@@ -1,9 +1,9 @@
 package com.androidsx.microrss.view;
 
 import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
 
 public abstract class SwipeAwareListener implements View.OnTouchListener {
     private static final int SWIPE_MIN_DISTANCE = 50; //120;

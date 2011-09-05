@@ -10,7 +10,6 @@
 		android:layout_height="wrap_content" 
 		android:src="@drawable/information"
 		android:paddingTop="5dip"
-		android:layout_below="@+id/go_settings"
         android:layout_centerHorizontal="true" />
         
 	<TextView android:id="@+id/error_message"

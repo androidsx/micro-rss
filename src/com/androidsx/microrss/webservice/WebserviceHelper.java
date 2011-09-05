@@ -28,7 +28,6 @@ import android.net.Uri;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.androidsx.microrss.FlurryConstants;
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.cache.ThumbnailUtil;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
@@ -40,7 +39,6 @@ import com.androidsx.microrss.domain.DefaultItemList;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
 import com.androidsx.microrss.view.AnyRSSHelper;
-import com.flurry.android.FlurryAgent;
 
 /**
  * Helper class to handle querying a webservice for forecast details and parsing

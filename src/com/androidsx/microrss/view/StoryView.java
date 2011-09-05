@@ -3,13 +3,11 @@ package com.androidsx.microrss.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.LinearInterpolator;
 
 import com.androidsx.microrss.R;
-import com.wimm.framework.view.ScrollView;
 
 public class StoryView extends DragAwareScrollView {
     private boolean pendingAnimation = false;

@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,12 +61,9 @@ class DefaultRssSource implements RssSource {
 
   private CacheImageManager cacheImageManager;
   
-  private static final Pattern srcAttributePattern = Pattern.compile("src\\s*=\\s*([\\\"'])?([^ \\\"']*)");
-  
   public DefaultRssSource(CacheImageManager cacheImageManager) {
     this.cacheImageManager = cacheImageManager;
   }
-  
 
   /**
    * We try three times. Ugly as hell.

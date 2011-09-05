@@ -2,23 +2,19 @@ package com.androidsx.microrss.view;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.view.LayoutInflater;
-import android.view.TouchDelegate;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidsx.commons.helper.ComponentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
-import com.wimm.framework.widget.Button;
 
 public class StoryAdapter extends BaseAdapter implements Draggable {
     private Activity contextActivity;

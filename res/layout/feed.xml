@@ -21,16 +21,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
         
-
-        <!-- FIXME: Temporary button, remove before the release-->
-        <Button
-            android:id="@+id/go_settings"
-            android:layout_width="fill_parent"
-            android:text="Go settings"
-            android:layout_height="35dip"
-            android:onClick="onGoSettingsClick"
-            android:visibility="gone" />
-	
         <include layout="@layout/feed_header" />
 
         <LinearLayout

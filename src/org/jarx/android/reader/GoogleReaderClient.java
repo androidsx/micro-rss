@@ -1,30 +1,31 @@
 package org.jarx.android.reader;
 
-import java.io.ByteArrayOutputStream;
+import static org.jarx.android.reader.Utils.asInt;
+import static org.jarx.android.reader.Utils.asLong;
+import static org.jarx.android.reader.Utils.asString;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 import org.apache.http.NameValuePair;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.json.simple.parser.ContentHandler;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
-import static org.jarx.android.reader.Utils.*; 
 
 public class GoogleReaderClient extends ReaderClient {
 

@@ -94,8 +94,6 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
             } else {
                 holder = (ViewHolder) rowView.getTag();
             }
-            ViewGroup settingsRowView = (ViewGroup) inflater.inflate(R.layout.button_to_settings, null, true);
-            holder.storyListWrapper.addView(settingsRowView);
             holder.feedImage.setImageBitmap(null);
             
             holder.leftArrow.setText(leftDisabledArrow);

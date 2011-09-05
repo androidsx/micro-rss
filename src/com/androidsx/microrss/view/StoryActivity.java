@@ -17,7 +17,6 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.wimm.framework.view.MotionInterpreter;
-import com.wimm.framework.view.ScrollView;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 public class StoryActivity extends ScrollAwareLauncherActivity {
@@ -155,29 +154,5 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
 
     public void onClickNavigationDown(View target) {
         // Can't go further down from here
-    }
-
-    @Deprecated
-    private void switchToImageLayout(Bitmap bitmap) {
-        ImageView imageView = (ImageView) findViewById(R.id.story_image);
-        imageView.setImageBitmap(bitmap);
-
-        TextView feed = ((TextView) findViewById(R.id.feed_title));
-        feed.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
-        feed.setBackgroundColor(R.color.story_background_feed_title);
-
-        TextView storyCount = ((TextView) findViewById(R.id.story_count));
-        storyCount.setTextColor(getResources().getColor(R.color.story_feed_title_with_background));
-        storyCount.setBackgroundColor(R.color.story_background_feed_title);
-
-        TextView title = ((TextView) findViewById(R.id.story_title));
-        title.setMaxLines(5);
-        title.setPadding(3, 0, 3, 3);
-        title.setTextColor(getResources().getColor(R.color.story_title_with_background));
-        title.setBackgroundColor(R.color.story_background_title);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.BELOW);
     }
 }

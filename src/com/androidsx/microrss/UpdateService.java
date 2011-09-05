@@ -16,14 +16,12 @@ import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
-import com.flurry.android.FlurryAgent;
 import com.wimm.framework.service.NetworkService;
 
 /**

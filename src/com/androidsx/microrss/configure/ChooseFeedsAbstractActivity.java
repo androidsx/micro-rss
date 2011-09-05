@@ -16,7 +16,6 @@ import com.androidsx.microrss.R;
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
-import com.androidsx.microrss.view.FeedActivity;
 import com.androidsx.microrss.view.SwipeAwareListener;
 
 public abstract class ChooseFeedsAbstractActivity extends ListActivity {
