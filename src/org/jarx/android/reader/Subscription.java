@@ -3,19 +3,19 @@ package org.jarx.android.reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
-import static org.jarx.android.reader.Utils.*; 
 
 public class Subscription implements Serializable, BaseColumns, Parcelable {
 

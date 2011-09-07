@@ -1,7 +1,5 @@
 package org.jarx.android.reader;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
 
 public class ReaderException extends Exception {
 
