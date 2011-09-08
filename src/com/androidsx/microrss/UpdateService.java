@@ -17,7 +17,6 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.androidsx.microrss.configure.DefaultMaxNumItemsSaved;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.webservice.FeedProcessingException;
@@ -33,12 +32,17 @@ public class UpdateService extends Service implements Runnable {
     protected static final String TAG = "UpdateService";
 
     /**
-     * Number of items that we read from the RSS source for every update request.
-     * <p>
-     * FIXME (WIMM): See {@link DefaultMaxNumItemsSaved}, where a constant and 2 strings also define
-     * the maximum...
+     * Maxium of the number of stories that we read from the RSS source for a feed for every update
+     * request. Note that, after several sync operations, we may have more (or less) stories for a
+     * given feed stored in the database.
      */
-    public static final int MAX_ITEMS_PER_FEED = 5;
+    private static final int MAX_STORIES_PER_REQUEST = 15;
+
+    /**
+     * Maximum of the number of stories that we keep in the database for a feed. It must be higher
+     * than {@lik #STORIES_PER_REQUEST}.
+     */
+    private static final int MAX_STORIES_IN_DATABASE = 50;
 
     /**
      * Default update interval, in milliseconds. Every update period, the update service wakes up,
@@ -185,12 +189,11 @@ public class UpdateService extends Service implements Runnable {
                 try {
                     Log.d(TAG, "Let's ask the WebserviceHelper");
     
-                    int maxItemsToStoreInDb = getMaxItemsToStoreInDb(feedId);
-                    WebserviceHelper.updateForecastsAndFeeds(
+                    WebserviceHelper.updateStoriesForFeed(
                             this,
                             feedId,
-                            Math.max(UpdateService.MAX_ITEMS_PER_FEED, maxItemsToStoreInDb),
-                            maxItemsToStoreInDb);
+                            MAX_STORIES_PER_REQUEST,
+                            MAX_STORIES_IN_DATABASE);
                     WebserviceHelper.retrieveFaviconFromFeed(this, feedId);
                 } catch (FeedProcessingException e) {
                     Log.e(TAG, "Exception while processing content for the feed " + feedId
@@ -290,13 +293,6 @@ public class UpdateService extends Service implements Runnable {
         return builder.toString();
     }
 
-    /** Gets the number of items that should be stored in the phone memory. */
-    private int getMaxItemsToStoreInDb(int feedId) {
-        return new DefaultMaxNumItemsSaved(R.string.conf_default_num_items_saved,
-                R.string.max_num_items_saved_prefs_name).getMaxNumItemsSaved(this, feedId);
-
-    }
-    
     private BroadcastReceiver networkTakedownReceiver = new BroadcastReceiver() {
 
         private static final String TAG = "NetworkTakedownReceiver";

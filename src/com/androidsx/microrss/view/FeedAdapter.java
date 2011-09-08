@@ -168,11 +168,6 @@ public class FeedAdapter extends BaseAdapter {
         return rowView;
     }
 
-    private View createSettingsView() {
-        View view = inflater.inflate(R.layout.settings, null, true);
-        return view;
-    }
-
     /**
      * Get the row position associated with the specified row id in the list.
      * 

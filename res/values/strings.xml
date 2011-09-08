@@ -37,10 +37,6 @@
     <string name="conf_update_time_units">hours:</string>
     <string name="conf_default_update_time">2</string>
     
-    <string name="conf_num_items_saved">Number of items to store in the memory:</string>
-    <string name="conf_default_num_items_saved">15</string>
-    <string name="max_num_items_saved_prefs_name">MaxNumItemsSaved-%d</string>
-    
         <string name="list_mode_options_title">Options</string>
     <string name="list_mode_options_open_item_mode">Open item</string>
 
@@ -217,8 +213,6 @@ v1.4 (19.01.2010)\n
 
     <string name="error_message_feed_no_items">No stories for this feed</string>
     <string name="error_message_feed_no_items_detailed">Please wait for the next synchronization, or force the sync from the Settings screen</string>
-    
-    <string name="no_feeds_configured">No feeds have been configured yet. Go to the settings screen</string>
     
     <string name="left_arrow_enabled">&lt;</string>
     <string name="left_arrow_disabled">&lt;</string>

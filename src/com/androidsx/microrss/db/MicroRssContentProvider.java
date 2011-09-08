@@ -82,7 +82,7 @@ public class MicroRssContentProvider extends ContentProvider {
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 selection = (selection == null ? "" : "(" + selection + ") AND ") + ItemColumns.FEED_ID + "=" + feedId;
-                Log.d(TAG, "Delete the items " + arrayToString(selectionArgs) + " for the feed " + feedId);
+                Log.d(TAG, "Delete " + selectionArgs.length + " items for the feed " + feedId);
                 count += db.delete(TABLE_ITEMS, selection, selectionArgs);
                 break;
             }

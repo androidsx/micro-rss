@@ -142,17 +142,17 @@ public class WebserviceHelper {
     /**
      * Perform a webservice query to retrieve the items for this feed from the
      * corresponding webserver, and store a selection of them in the database.
-     * This call blocks until the request is finished and the feeds have been
+     * This call blocks until the request is finished and the feed has been
      * updated.
      * <p>
      * TODO: Move to a non-static method
      *
-     * @param context the activity context. TODO: This violates Demeter's law
+     * @param context the activity context
      * @param feedId the feed ID
      * @param maxItemsToRetrieve number of items to retrieve from the feed
      * @param maxItemsToStore number of items to store in the DB
      */
-    public static void updateForecastsAndFeeds(Context context,
+    public static void updateStoriesForFeed(Context context,
                     int feedId,
                     int maxItemsToRetrieve,
                     int maxItemsToStore)
