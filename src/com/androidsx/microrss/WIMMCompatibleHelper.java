@@ -32,4 +32,21 @@ public class WIMMCompatibleHelper {
             context.startService(new Intent(context, UpdateService.class)); // if already started, does nothing
         }
     }
+
+    public static void requestSyncGoogleReader(Context context) {
+        if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == true) {
+            NetworkService network = new NetworkService(context);
+            if ( network.isNetworkAvailable() ) {
+                Log.i(TAG, "Network is available, start the Google Reader service");
+                context.startService(new Intent(context, GoogleReaderSyncService.class)); // if already started, does nothing
+            } 
+            else {
+                Log.i(TAG, "Request the network connection to sync google reader feeds");
+                network.requestNetworkConnection();
+            }
+        } else {
+            Log.i(TAG, "Start the update service (unless already started)");
+            context.startService(new Intent(context, GoogleReaderSyncService.class)); // if already started, does nothing
+        }
+    }
 }

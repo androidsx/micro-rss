@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.androidsx.microrss.GoogleReaderSyncService;
 import com.androidsx.microrss.UpdateService;
 import com.wimm.framework.service.NetworkService;
 
@@ -18,7 +19,7 @@ public class NetworkAvailableReceiver extends BroadcastReceiver {
 
         // We have received notification that the network is available.
         if (NetworkService.ACTION_NETWORK_AVAILABLE.equals(action)) {
-            Log.i(TAG, "Received com.wimm.action.NETWORK_AVAILABLE broadcast");
+            Log.d(TAG, "Received com.wimm.action.NETWORK_AVAILABLE broadcast");
 
             // If we need to update our data, start our sync service.
             SyncIntervalPrefs prefs = new SyncIntervalPrefs(context);
@@ -27,6 +28,11 @@ public class NetworkAvailableReceiver extends BroadcastReceiver {
                 context.startService(new Intent(context, UpdateService.class));
             } else {
                 Log.i(TAG, "We should not sync now, maybe later");
+            }
+            
+            if (prefs.shouldSyncGoogleReader()) {
+                Log.i(TAG, "We should sync the google reader account, start the Google Reader service");
+                context.startService(new Intent(context, GoogleReaderSyncService.class));
             }
         }
     }

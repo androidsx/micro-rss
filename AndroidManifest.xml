@@ -22,6 +22,9 @@
         <!-- Service for the periodic synchronization of the data with the internet sources -->
         <service android:name="com.androidsx.microrss.UpdateService" />
 
+        <!-- Service for the google reader syncronization -->
+        <service android:name="com.androidsx.microrss.GoogleReaderSyncService" />
+
         <!-- Activity that sets up the application and dispatches to the view activities -->
         <activity android:name=".view.InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:noHistory="true"> 
             <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />

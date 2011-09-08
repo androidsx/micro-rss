@@ -1,6 +1,7 @@
 package com.androidsx.microrss.configure;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.jarx.android.reader.GoogleReaderClient;
 import org.jarx.android.reader.ReaderClient;
@@ -10,6 +11,7 @@ import org.jarx.android.reader.Subscription;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -18,13 +20,17 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
+import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.db.dao.MicroRssDao;
+import com.androidsx.microrss.sync.SyncIntervalPrefs;
+import com.androidsx.microrss.view.AnyRSSHelper;
 import com.androidsx.microrss.view.SwipeAwareListener;
 import com.wimm.framework.app.TextInputDialog;
 
@@ -34,14 +40,12 @@ public class GReaderPreferences extends PreferenceActivity {
     /** FIXME: workaround: it will be true if the TextDialog has been cancelled */
     private boolean dialogHasBeenCancelled = false;
 
-    private MicroRssDao dao;
+    private SharedPreferences.OnSharedPreferenceChangeListener lastSyncListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_greader);
-        
-        dao = new MicroRssDao(getContentResolver());
         
         getListView().setOnTouchListener(swipeListener);
         
@@ -51,7 +55,40 @@ public class GReaderPreferences extends PreferenceActivity {
                 .setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        new SyncGoogleReaderTask().execute((Void) null);
+                        SharedPreferences sharedPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(GReaderPreferences.this);
+                        String user = sharedPrefs.getString(getResources().getString(
+                                R.string.pref_google_user_name), "");
+                        String password = sharedPrefs.getString(getResources().getString(
+                                R.string.pref_google_password), "");
+        
+                        if (user.equals("") || password.equals("")) {
+                            Toast.makeText(GReaderPreferences.this, "Input your credentials", Toast.LENGTH_SHORT);
+                        } else {
+                            Toast.makeText(GReaderPreferences.this, "Input your credentials", Toast.LENGTH_SHORT);
+                        
+                            Log.i(TAG, "Request to sync Google Reader");
+                            
+                            SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(GReaderPreferences.this);
+                            if ( syncIntervalPrefs.isSyncingGoogleReader() ) {
+                                Log.i(TAG, "We are already syncing google reader");
+                                Toast.makeText(GReaderPreferences.this, "We are already syncing", Toast.LENGTH_SHORT).show();
+                            } else {
+                                long syncTime = syncIntervalPrefs.getLastSuccessfulSyncGoogleReader();
+                                if ( syncTime != 0 ) {
+                                    Time t = new Time();
+                                    t.set(syncTime);
+                                    Log.i(TAG, "Last google reader sync success: " + t.format("%H:%M:%S") + " " +  t.format("%m/%d/%Y"));
+                                } else {
+                                    Log.i(TAG, "We have never succeed to sync google reader");
+                                }
+                                
+                                Toast.makeText(GReaderPreferences.this, "Synchronizing, it may take a while", Toast.LENGTH_SHORT).show();
+                            }
+                            
+                            syncIntervalPrefs.willForceSyncGoogleReader(true);
+                            WIMMCompatibleHelper.requestSyncGoogleReader(GReaderPreferences.this);
+                        }
 
                         return true;
                     }
@@ -138,11 +175,24 @@ public class GReaderPreferences extends PreferenceActivity {
                         return true;
                     }
                 });
-        // FIXME: Missing: when we change the update interval, do some kind of refresh. For
-        // instance,
-        // if it is set to 24 hours and you change it down to 3 minutes, you have to wait another 17
-        // hours
-        // to get your 3 minutes! Maybe with WIMM this will radically change
+
+        ((Preference) findPreference("syncGoogleReaderMessage")).setTitle(getLastSyncMessage());
+        lastSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+                if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC_GREADER)
+                        || key.equals(SyncIntervalPrefs.SYNC_STATUS_GREADER)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((Preference) findPreference("syncGoogleReaderMessage"))
+                            .setTitle(getLastSyncMessage());
+                        }
+                    });
+                }
+            }
+        };
+        getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+                .registerOnSharedPreferenceChangeListener(lastSyncListener);
 
     }
 
@@ -183,72 +233,27 @@ public class GReaderPreferences extends PreferenceActivity {
         public void onBottomToTopSwipe() {
         }
     };
-
-    public class SyncGoogleReaderTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            Toast.makeText(GReaderPreferences.this, "Starting syncronization", Toast.LENGTH_SHORT)
-                    .show();
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String result = "";
-            try {
-                GoogleReaderClient gReader = new GoogleReaderClient(getApplicationContext());
-
-                SharedPreferences sharedPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(GReaderPreferences.this);
-                String user = sharedPrefs.getString(getResources().getString(
-                        R.string.pref_google_user_name), "");
-                String password = sharedPrefs.getString(getResources().getString(
-                        R.string.pref_google_password), "");
-
-                if (user.equals("") || password.equals("")) {
-                    return "Input your credentials";
+    
+    private String getLastSyncMessage() {
+        String msg = "";
+        SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(
+                GReaderPreferences.this);
+        if (syncIntervalPrefs.isSyncingGoogleReader()) {
+            msg = getString(R.string.synchronizing);
+        } else {
+            String errorMessage = syncIntervalPrefs.getErrorMessageGoogleReader();
+            if (!errorMessage.equals("")) {
+                msg = errorMessage;                
+            } else {
+                long syncTime = syncIntervalPrefs.getLastSuccessfulSyncGoogleReader();
+                if (syncTime != 0) {
+                    msg = getString(R.string.last_sync) + " "
+                            + AnyRSSHelper.toRelativeDateString(new Date(syncTime));
+                } else {
+                    msg = getString(R.string.never_synced);
                 }
-
-                gReader.login(user, password);
-
-                gReader.handleSubList(new ReaderClient.SubListHandler() {
-                    @Override
-                    public boolean subscription(Subscription sub) {
-                        if (sub.getUid().startsWith("feed/")) {
-                            String url = sub.getUid().replaceFirst("feed/", "");
-                            String title = sub.getTitle();
-                            dao.persistFeed(GReaderPreferences.this, title, url, false, true);
-                        }
-                        return true;
-                    }
-                }, System.currentTimeMillis());
-
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean(
-                        getResources().getString(R.string.pref_synced_with_google_reader), true);
-                editor.commit();
-            } catch (IOException e) {
-                Log.e(TAG, "IOException: " + e);
-                result = "Can't connect: login error";
-            } catch (ReaderException e) {
-                /*
-                 * // TODO: This gets us a very nasty inflater exception. A bug in wimm? Dialog
-                 * dialog = new Dialog(Preferences.this);
-                 * dialog.setTitle("Can't connect: log-in error"); dialog.show();
-                 */
-                Log.e(TAG, "ReaderException: " + e);
-                result = "Can't connect: login error";
             }
-            return result;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result.equals("")) {
-                result = "Completed feed syncronization";
-            }
-            Toast.makeText(GReaderPreferences.this, result, Toast.LENGTH_SHORT).show();
-        }
+        return msg;
     }
-
 }

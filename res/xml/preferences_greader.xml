@@ -33,6 +33,12 @@
             android:summary=""
             android:key="syncGoogleReaderFeeds"
             android:layout="@layout/custom_preferences_row" />
+        <Preference
+            android:title=""
+            android:summary=""
+            android:key="syncGoogleReaderMessage"
+            android:enabled="false"
+            android:layout="@layout/custom_preferences_row_thin" />                     
     </PreferenceCategory>
 </PreferenceScreen>
     
