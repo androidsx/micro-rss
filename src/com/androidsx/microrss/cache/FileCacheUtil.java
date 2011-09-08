@@ -13,8 +13,7 @@ package com.androidsx.microrss.cache;
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Harry Tormey <harry@catch.com>
- * Modified by Omar Pera <omar@androidsx.com>
+ * Harry Tormey <harry@catch.com> Modified by Omar Pera <omar@androidsx.com>
  */
 
 import java.io.File;
@@ -30,6 +29,7 @@ public class FileCacheUtil {
     private static final long CACHE_FILE_EXPIRATION = DateUtils.DAY_IN_MILLIS * 7;
     private static final String TAG = "FileCacheUtil";
 
+    /** We are supposed to check before this method if the sdcard is available */
     private static File getExternalStorageDir(Context context, String dir) {
         if (dir != null) {
             File extMediaDir = new File(Environment.getExternalStorageDirectory()
@@ -40,29 +40,23 @@ public class FileCacheUtil {
                 return extMediaDir;
             }
 
-            if (isSdCardAvailable()) {
-                File sdcard = Environment.getExternalStorageDirectory();
-
-                if (sdcard.canWrite()) {
-                    extMediaDir.mkdirs();
-                    createNomediaDotFile(context, extMediaDir);
-                    return extMediaDir;
-                } else {
-                    Log.e(TAG, "SD card not writeable, unable to create directory: "
-                            + extMediaDir.getPath());
-                }
-            } else {
+            if (isSdCardWritable()) {
+                extMediaDir.mkdirs();
+                createNomediaDotFile(context, extMediaDir);
                 return extMediaDir;
+            } else {
+                Log.e(TAG, "SD card not writeable, unable to create directory: "
+                        + extMediaDir.getPath());
             }
         }
         return null;
     }
 
     private static void createNomediaDotFile(Context context, File directory) {
-        if (directory != null) {
+        if (directory != null && isSdCardWritable()) {
             File nomedia = new File(directory, NOMEDIA_FILENAME);
 
-            if (!nomedia.exists()) {
+            if (nomedia != null && !nomedia.exists()) {
                 try {
                     nomedia.mkdirs();
                     nomedia.createNewFile();
@@ -75,10 +69,22 @@ public class FileCacheUtil {
     }
 
     /**
-     * Returns whether the SD card is available.
+     * Returns whether the SD card is available and writable
+     */
+    public static boolean isSdCardWritable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    /**
+     * Returns whether the SD card is available
      */
     public static boolean isSdCardAvailable() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+        String externalStorage = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(externalStorage) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(externalStorage)) {
+            return true;
+        }
+        return false;
     }
 
     public static File getExternalCacheDir(Context context) {
@@ -86,25 +92,28 @@ public class FileCacheUtil {
     }
 
     public static File addFileToExternalCache(Context context, String fileName) {
-        File extCacheDir = getExternalCacheDir(context);
-        return addFileToCache(context, fileName, extCacheDir);
+        if (isSdCardWritable()) {
+            File extCacheDir = getExternalCacheDir(context);
+            return addFileToCache(context, fileName, extCacheDir);
+        } else {
+            Log.w(TAG, "Sdcard not available while creating new file " + fileName);
+            return null;
+        }
     }
 
-    public static File addFileToCache(Context context, String fileName, File cacheDir) {
+    private static File addFileToCache(Context context, String fileName, File cacheDir) {
         if (cacheDir != null) {
-
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
 
             File cachedFile = new File(cacheDir, fileName);
-
-            if (!cachedFile.exists()) {
+            if (cachedFile != null && !cachedFile.exists()) {
                 try {
                     cachedFile.createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "Unable to create file in " + cachedFile.getPath(), e);
+                    Log.w(TAG, "Unable to create file in " + cachedFile.getPath(), e);
                 }
             }
             return cachedFile;
@@ -113,14 +122,19 @@ public class FileCacheUtil {
     }
 
     public static File getFileFromExternalCache(Context context, String fileName) {
-        File extCacheDir = getExternalCacheDir(context);
-        return getFileFromCache(context, fileName, extCacheDir);
+        if (isSdCardAvailable()) {
+            File extCacheDir = getExternalCacheDir(context);
+            return getFileFromCache(context, fileName, extCacheDir);
+        } else {
+            Log.w(TAG, "Sdcard not available while retrieving " + fileName);
+            return null;
+        }
     }
 
-    public static File getFileFromCache(Context context, String fileName, File cacheDir) {
+    private static File getFileFromCache(Context context, String fileName, File cacheDir) {
         if (cacheDir != null) {
             File cachedFile = new File(cacheDir, fileName);
-            if (cachedFile.exists()) {
+            if (cachedFile != null && cachedFile.exists()) {
                 return cachedFile;
             }
         }
@@ -128,8 +142,8 @@ public class FileCacheUtil {
     }
 
     public static void cleanExternalCache(Context context) {
-        Log.i(TAG, "Cleaning up cache from external storage");
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        if (isSdCardWritable()) {
+            Log.i(TAG, "Cleaning up cache from external storage");
             File externalDir = getExternalCacheDir(context);
 
             if (externalDir != null) {
@@ -145,11 +159,13 @@ public class FileCacheUtil {
                     }
                 }
             }
+        } else {
+            Log.w(TAG, "Sdcard not writable while cleaning cache ");
         }
     }
 
     public static void deleteFileExternalCache(Context context, String fileName) {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        if (isSdCardWritable()) {
             File externalDir = getExternalCacheDir(context);
 
             if (externalDir != null) {
@@ -159,6 +175,8 @@ public class FileCacheUtil {
                     Log.d(TAG, "Deleting " + toBeDeletedFile.getPath());
                 }
             }
+        } else {
+            Log.w(TAG, "Sdcard not writable while deleting " + fileName);
         }
     }
 }

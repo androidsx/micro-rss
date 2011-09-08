@@ -76,11 +76,7 @@ class DefaultRssSource implements RssSource {
             try {
                 return getRssItemsInternal(rssUrl, maxNumberOfItems, lastFeedUpdate);
             } catch (FeedProcessingException e1) {
-                try {
-                    return getRssItemsInternal(rssUrl, maxNumberOfItems, lastFeedUpdate);
-                } catch (FeedProcessingException e2) {
-                    throw e2;
-                }
+                throw e1;
             }
         }
     }

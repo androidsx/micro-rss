@@ -194,11 +194,11 @@ public class UpdateService extends Service implements Runnable {
                     WebserviceHelper.retrieveFaviconFromFeed(this, feedId);
                 } catch (FeedProcessingException e) {
                     Log.e(TAG, "Exception while processing content for the feed " + feedId
-                            + ". We'll end up in the error view.", e);
+                            + ".", e);
                     success = false;
                 } catch (Exception e) { // Let's try to avoid an ANR no matter how!
                     Log.e(TAG, "Unknown problem. Feed " + feedId
-                            + ". We'll end up in the error view.", e);
+                            + ".", e);
                     //FlurryAgent.onError(FlurryConstants.ERROR_ID_UPDATE_SERVICE,
                     //        "Update service fails unexpectedly", e.getClass().toString());
                     success = false;

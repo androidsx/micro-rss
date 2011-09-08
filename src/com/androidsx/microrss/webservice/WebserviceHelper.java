@@ -205,24 +205,28 @@ public class WebserviceHelper {
      *
      * @param context the activity context. TODO: This violates Demeter's law
      * @param feedId the feed ID
-     * @throws FeedProcessingException 
      */
-    public static void retrieveFaviconFromFeed(Context context, int feedId) throws FeedProcessingException {
+    public static void retrieveFaviconFromFeed(Context context, int feedId) {
         Log.d(TAG, "Start to retrieve the favicon for [" + feedId + "]");
-        final ContentResolver resolver = context.getContentResolver();
-        final Cursor feedCursor = extractFeedInfo(feedId, resolver);
-        final String rssUrl = feedCursor.getString(COL_RSS_URL);
-        feedCursor.close();
-
-        prepareUserAgent(context);
-        
-        CacheImageManager.Options options = new CacheImageManager.Options();
-        options.targetSize = ThumbnailUtil.TARGET_SIZE_FAVICON_THUMBNAIL;
-        options.compressFormat = CacheImageManager.CompressFormatImage.PNG;
-
-        CacheImageManager cacheManager = new CacheImageManager(context);
-        boolean result = cacheManager.downloadAndSaveInCache(AnyRSSHelper.retrieveFaviconUrl(rssUrl), options);
-        Log.d(TAG, "Result of retrieval of favicon for feed [" + feedId + "]: " + result);
+        try {
+            final ContentResolver resolver = context.getContentResolver();
+            final Cursor feedCursor = extractFeedInfo(feedId, resolver);
+            final String rssUrl = feedCursor.getString(COL_RSS_URL);
+            feedCursor.close();
+    
+            prepareUserAgent(context);
+            
+            CacheImageManager.Options options = new CacheImageManager.Options();
+            options.targetSize = ThumbnailUtil.TARGET_SIZE_FAVICON_THUMBNAIL;
+            options.compressFormat = CacheImageManager.CompressFormatImage.PNG;
+    
+            CacheImageManager cacheManager = new CacheImageManager(context);
+            boolean result = cacheManager.downloadAndSaveInCache(AnyRSSHelper.retrieveFaviconUrl(rssUrl), options);
+            Log.d(TAG, "Result of retrieval of favicon for feed [" + feedId + "]: " + result);
+        } catch (Exception e) {
+            // do not go up in the stack, this is not a killing error
+            Log.w(TAG, "Error while retrieving favicon for feed [" + feedId + "]: " + e.getMessage());
+        }
     }
     
     /**
