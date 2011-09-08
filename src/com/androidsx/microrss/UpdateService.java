@@ -303,11 +303,11 @@ public class UpdateService extends Service implements Runnable {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Received com.wimm.action.NETWORK_TAKEDOWN broadcast");
+            Log.d(TAG, "Received com.wimm.action.NETWORK_TAKEDOWN broadcast");
 
             if (threadIsRunning) {
                 networkService.postponeNetworkTakedown();
-                Log.i(TAG, "Postpone network takedown, we are still doing network operations");
+                Log.i(TAG, "Postpone network takedown, we are still doing network operations syncing the stories");
             }
         }
     };
