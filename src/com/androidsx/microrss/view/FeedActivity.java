@@ -70,7 +70,6 @@ public class FeedActivity extends LauncherActivity {
     private void buildView() {
         if (SharedPreferencesHelper.getLongValue(this, SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) == 0) {
             Log.d(TAG, "A successful sync was never performed: start the service and wait for it to finish");
-            WIMMCompatibleHelper.requestSync(this);
             buildFirstExecView();
         } else {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
