@@ -107,14 +107,9 @@ public class MicroRssContentProvider extends ContentProvider {
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
                 Log.d(TAG, "Insert a new feed");
-                try {
-                    long feedId = db.insert(TABLE_FEEDS, null, values);
-                    if (feedId != -1) {
-                        resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-                    }
-                } catch (SQLiteConstraintException e) {
-                    // FIXME: Soon...
-                    Log.e("WIMM", "This feed already exists. This is expected, until we fix it in a cleaner way, since we use a constant number. This catch can NOT stay");
+                long feedId = db.insert(TABLE_FEEDS, null, values);
+                if (feedId != -1) {
+                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
                 }
                 break;
             }

@@ -9,8 +9,10 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.db.FeedColumns;
@@ -30,13 +32,26 @@ public class MicroRssDao {
 
     public void persistFeed(Context context, String title, String feedUrl, boolean active,
             boolean gReader) {
+        persistFeedInternal(context, title, feedUrl, active, gReader);
+    }
+    public void persistFeedCheckingUniqueKey(Context context, String title, String feedUrl, boolean active,
+            boolean gReader) {
+        if (findFeedsByUrl(feedUrl).size() == 0) {
+            persistFeedInternal(context, title, feedUrl, active, gReader);
+        } else {
+            Log.w("MicroRssDao", "This feed: " + title + " already exists in the database. We skip it.");
+        }
+    }
+
+    private void persistFeedInternal(Context context, String title, String feedUrl, boolean active,
+            boolean gReader) {
         ContentValues values = new ContentValues();
         values.put(FeedColumns.LAST_UPDATE, -1);
         values.put(FeedColumns.TITLE, title);
         values.put(FeedColumns.FEED_URL, feedUrl);
         values.put(FeedColumns.ACTIVE, active);
         values.put(FeedColumns.G_READER, gReader);
-
+        
         ContentResolver resolver = context.getContentResolver();
         resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
     }
@@ -126,6 +141,10 @@ public class MicroRssDao {
     
     public List<Feed> findSampleFeeds() {
         return findFeeds(FeedColumns.G_READER + " <> 1");
+    }
+
+    public List<Feed> findFeedsByUrl(String url) {
+        return findFeeds(FeedColumns.FEED_URL + " = " + DatabaseUtils.sqlEscapeString(url));
     }
     
     

@@ -48,9 +48,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ItemColumns.ITEM_URL + " TEXT,"
                 + ItemColumns.THUMBNAIL_URL + " TEXT,"
                 + ItemColumns.DATE + " INTEGER);");
-        
-        db.execSQL("CREATE UNIQUE INDEX " + "INDEX_URL" + " ON " + MicroRssContentProvider.TABLE_FEEDS + " (" + FeedColumns.FEED_URL + ");");
-        
     }
 
     /**

@@ -121,7 +121,7 @@ public class GoogleReaderSyncService extends Service {
                             String url = sub.getUid().replaceFirst("feed/", "");
                             String title = sub.getTitle();
                             MicroRssDao dao = new MicroRssDao(getContentResolver());
-                            dao.persistFeed(GoogleReaderSyncService.this, title, url, false, true);
+                            dao.persistFeedCheckingUniqueKey(GoogleReaderSyncService.this, title, url, false, true);
                         }
                         return true;
                     }
@@ -142,6 +142,14 @@ public class GoogleReaderSyncService extends Service {
                  */
                 Log.e(TAG, "ReaderException: " + e);
                 result = "Can't connect: login error";
+            } catch (Exception e) {
+                /*
+                 * // TODO: This gets us a very nasty inflater exception. A bug in wimm? Dialog
+                 * dialog = new Dialog(Preferences.this);
+                 * dialog.setTitle("Can't connect: log-in error"); dialog.show();
+                 */
+                Log.e(TAG, "Exception: " + e);
+                result = "Can't connect: unexpected error";
             }
             return result;
         }
