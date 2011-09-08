@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,7 +23,6 @@ import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
-import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
 /**
  * List of feeds: left-right to change feeds. Scroll up-down to see the titles of the stories of the
@@ -134,7 +132,6 @@ public class FeedActivity extends LauncherActivity {
         customViewTrayAdapter.setMotionAxis(scrollAxis);
         customViewTrayAdapter.setCanScrollInternalView(true);
         customViewTrayAdapter.setCanLoop(false);
-        customViewTrayAdapter.setOnDragEndListener(dragEndListener);
     }
 
     @Deprecated
@@ -157,27 +154,6 @@ public class FeedActivity extends LauncherActivity {
         after.addAll(before);
         return after;
     }
-
-    /** 
-     * Controls the swipe down to go to Story View, and the swipe left on the first feed to go to Settings.
-     */
-    private CustomAdapterViewTray.OnDragEndListener dragEndListener = new CustomAdapterViewTray.OnDragEndListener() {
-
-        @Override
-        public void onDragEnd(MotionEvent arg0, ScrollAxis arg1, float arg3) {
-            Log.v(TAG, "Detected movement " + arg1.toString() + ": index " + customViewTrayAdapter.getIndex());
-//            if (arg1 == ScrollAxis.LeftRight && arg2 == Direction.Left
-//                    && customViewTrayAdapter.getIndex() == 0) {
-//                startActivity(new Intent(FeedActivity.this, Preferences.class));
-//                Log.d(TAG, "Can't go left anymore. Go to Settings");
-//            } else if (arg1 == ScrollAxis.UpDown && arg2 == Direction.Down
-//                    && customViewTrayAdapter.getAdapter() != null
-//                    && customViewTrayAdapter.getAdapter().getCount() > 0
-//                    && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
-//                onFeedClick(null);
-//            }
-        }
-    };
 
     public void onClickNavigationUp(View target) {
         Toast.makeText(this, "Terminate application!", Toast.LENGTH_LONG).show();
