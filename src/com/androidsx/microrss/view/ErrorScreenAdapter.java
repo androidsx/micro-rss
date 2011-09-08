@@ -45,6 +45,7 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
         public TextView feedTitle;
         public TextView leftArrow;
         public TextView rightArrow;
+        public View loadingIndicator;
     }
 
     public ErrorScreenAdapter(Activity contextActivity, int messageRes, int messageDetailedRes,
@@ -103,7 +104,7 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
             holder.rightArrow.setText(rightEnabledArrow);
             holder.rightArrow.setVisibility(View.VISIBLE);
             
-        } else {
+        } else { // position == POSITION_ERROR_MESSAGE
             if (rowView == null) {
                 LayoutInflater inflater = contextActivity.getLayoutInflater();
                 rowView = inflater.inflate(R.layout.error_screen, null, true);
@@ -116,6 +117,7 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
                 holder.errorMessageDetailed = (TextView) rowView
                         .findViewById(R.id.error_message_detailed);
                 holder.errorImage = (ImageView) rowView.findViewById(R.id.error_image);
+                holder.loadingIndicator = rowView.findViewById(R.id.loading);
                 rowView.setTag(holder);
             } else {
                 holder = (ViewHolder) rowView.getTag();
@@ -136,6 +138,10 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
             holder.leftArrow.setVisibility(View.VISIBLE);
             holder.rightArrow.setText(rightDisabledArrow);
             holder.rightArrow.setVisibility(View.INVISIBLE);
+            
+            holder.feedTitle.setText(R.string.loading);
+            holder.loadingIndicator.setVisibility(View.VISIBLE);
+            holder.feedImage.setVisibility(View.GONE);
         }
 
         return rowView;
