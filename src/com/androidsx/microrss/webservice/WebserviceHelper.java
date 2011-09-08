@@ -169,11 +169,12 @@ public class WebserviceHelper {
 
         final ContentValues values = new ContentValues();
             
-        insertNewItemsIntoDb(context, resolver, feedId, rssUrl, maxItemsToStore, lastFeedUpdate, new SqLiteRssItemsDao());
+        SqLiteRssItemsDao deprecatedDao = new SqLiteRssItemsDao();
+        insertNewItemsIntoDb(context, resolver, feedId, rssUrl, maxItemsToRetrieve, lastFeedUpdate, deprecatedDao);
         
-        final int numberOfItemsInTheDB = new SqLiteRssItemsDao().getItemList(resolver, feedId).getNumberOfItems();
+        final int numberOfItemsInTheDB = deprecatedDao.getItemList(resolver, feedId).getNumberOfItems();
         final int itemsToDelete = Math.max(0, numberOfItemsInTheDB - maxItemsToStore);
-        int deletedItems = new SqLiteRssItemsDao().deleteOldestItems(resolver, feedId, itemsToDelete, new CacheImageManager(context));
+        int deletedItems = deprecatedDao.deleteOldestItems(resolver, feedId, itemsToDelete, new CacheImageManager(context));
         if (itemsToDelete == deletedItems) {
             // OK
         } else {

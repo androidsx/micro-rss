@@ -40,9 +40,9 @@ public class UpdateService extends Service implements Runnable {
 
     /**
      * Maximum of the number of stories that we keep in the database for a feed. It must be higher
-     * than {@lik #STORIES_PER_REQUEST}.
+     * than {@link #STORIES_PER_REQUEST}.
      */
-    private static final int MAX_STORIES_IN_DATABASE = 50;
+    private static final int MAX_STORIES_IN_DATABASE = 20;
 
     /**
      * Default update interval, in milliseconds. Every update period, the update service wakes up,
