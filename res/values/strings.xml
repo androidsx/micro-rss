@@ -208,7 +208,7 @@ v1.4 (19.01.2010)\n
     <string name="error_message_feed_unexpected_id_detailed">Please press \'Force sync\' in Settings</string>
 
     <string name="error_message_first_update">Not synchronized yet</string>
-    <string name="error_message_first_update_detailed">The initial sync is in progress, please wait for several seconds</string>
+    <string name="error_message_first_update_detailed">The initial sync is in progress... please wait</string>
 
 	<!-- @Deprecated -->
     <string name="error_message_story_no_items">No stories</string>

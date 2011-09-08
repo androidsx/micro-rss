@@ -5,14 +5,15 @@
 	android:background="@color/application_background"
 	>
 	
-	<include layout="@layout/feed_header" android:layout_above="@id/error_image"/>
+	<include android:id="@+id/header" layout="@layout/feed_header" />
 	
 	<ImageView android:id="@+id/error_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
 		android:src="@drawable/information"
 		android:paddingTop="5dip"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/header" />
         
 	<TextView android:id="@+id/error_message"
 		android:layout_width="fill_parent"
@@ -30,7 +31,6 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/error_message"
         android:text="@string/error_message_feed_no_active_detailed" 
-        style="@style/error_message_detailed" />        
-
+        style="@style/error_message_detailed" />
 
 </RelativeLayout>

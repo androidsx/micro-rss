@@ -13,7 +13,7 @@
         android:layout_height="wrap_content" 
         android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:text="@string/go_settings_long_message" 
+        android:text="@string/go_settings_long_message"
         style="@style/error_message_detailed" />        
 
     <com.wimm.framework.widget.Button
