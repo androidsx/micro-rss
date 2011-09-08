@@ -3,7 +3,6 @@ package com.androidsx.microrss.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 
 import com.androidsx.commons.helper.IntentHelper;
@@ -11,8 +10,8 @@ import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 
 /**
- * Main activity: starts the service, waits for the configuration thread to do the first update, and
- * then gets the items from the DB, and passes them to the view activity.
+ * Init activity: if the DB is empty, it populates it with the initial list of feeds. It then
+ * requests a synchronization of the data, and starts the feed view activity.
  */
 public class InitActivity extends Activity {
     public static final String TAG = "InitActivity";
@@ -21,14 +20,10 @@ public class InitActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // FIXME: don't make an extra call to the DB, with a shared preference is enough
         MicroRssDao dao = new MicroRssDao(getContentResolver());
-        int[] currentIds = dao.findAllFeedIds();
-        if (currentIds.length == 0) {
-            // FIXME (WIMM): do in an a-sync task? or is this really necessary to build the first view when there are no items?
-            Log.i(TAG, "This is temporary: put some feeds into the DB");
-            insertInitialFeeds();
-            
+        if (dao.findAllFeedIds().length == 0) {
+            Log.i(TAG, "Insert the initial set of feeds into the DB");
+            insertInitialFeeds(dao);
             WIMMCompatibleHelper.requestSync(this);
         }
         
@@ -38,11 +33,10 @@ public class InitActivity extends Activity {
         finish();
     }
 
-    private void insertInitialFeeds() {
+    private void insertInitialFeeds(MicroRssDao dao) {
         final String MESSAGE_ES = " (ES)";
         
-        MicroRssDao dao = new MicroRssDao(getContentResolver());
-        
+        // TODO: use a persistFeeds that takes them all in one chunk
         // wimm tests
         dao.persistFeed(this, "Tech Crunch", "http://feeds.feedburner.com/Techcrunch", true, false);    
         dao.persistFeed(this, "BBC Top Stories", "http://feeds.bbci.co.uk/news/rss.xml", false, false);
