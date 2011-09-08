@@ -30,6 +30,7 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
     private String leftDisabledArrow;
     private String rightEnabledArrow;
     private String rightDisabledArrow;
+    private final boolean showLoading;
     
     static class ViewHolder {
         // For the settings
@@ -49,12 +50,13 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
     }
 
     public ErrorScreenAdapter(Activity contextActivity, int messageRes, int messageDetailedRes,
-            int imageDrawableRes, int textColorRes) {
+            int imageDrawableRes, int textColorRes, boolean showLoading) {
         this.contextActivity = contextActivity;
         this.messageRes = messageRes;
         this.messageDetailedRes = messageDetailedRes;
         this.imageDrawableRes = imageDrawableRes;
         this.textColorRes = textColorRes;
+        this.showLoading = showLoading;
         inflater = contextActivity.getLayoutInflater();
         
         leftEnabledArrow = contextActivity.getString(R.string.left_arrow_enabled);
@@ -139,9 +141,15 @@ public class ErrorScreenAdapter extends BaseAdapter implements Draggable {
             holder.rightArrow.setText(rightDisabledArrow);
             holder.rightArrow.setVisibility(View.INVISIBLE);
             
-            holder.feedTitle.setText(R.string.loading);
-            holder.loadingIndicator.setVisibility(View.VISIBLE);
-            holder.feedImage.setVisibility(View.GONE);
+            if (showLoading) {
+                holder.loadingIndicator.setVisibility(View.VISIBLE);
+                holder.feedImage.setVisibility(View.GONE);
+                holder.feedTitle.setText(R.string.loading);
+            } else {
+                holder.loadingIndicator.setVisibility(View.GONE);
+                holder.feedImage.setVisibility(View.VISIBLE);
+                holder.feedTitle.setText(R.string.app_name);
+            }
         }
 
         return rowView;
