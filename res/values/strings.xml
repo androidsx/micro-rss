@@ -212,7 +212,7 @@ v1.4 (19.01.2010)\n
     <string name="error_message_story_no_items_detailed">There are no stories for this feed. We\'ll soon attempt to synchronize it. You can force the sync in the Settings</string>
 
     <string name="error_message_feed_no_items">No stories for this feed</string>
-    <string name="error_message_feed_no_items_detailed">Please wait for the next synchronization, or force the sync from the Settings screen</string>
+    <string name="error_message_feed_no_items_detailed">Please wait for the next sync, or force it from Settings</string>
     
     <string name="left_arrow_enabled">&lt;</string>
     <string name="left_arrow_disabled">&lt;</string>
