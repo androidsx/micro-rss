@@ -61,7 +61,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
                 ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_story_no_items,
                         R.string.error_message_story_no_items_detailed,
                         R.drawable.information,
-                        R.color.error_message_info);
+                        getResources().getColor(R.color.error_message_info));
                 customViewTrayAdapter.setAdapter(errorAdapter);
                 setDragable(errorAdapter);
             }
@@ -73,7 +73,7 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
             ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
                     R.string.error_message_feed_unexpected_id_detailed,
                     R.drawable.warning,
-                    R.color.error_message_warning);
+                    getResources().getColor(R.color.error_message_warning));
             customViewTrayAdapter.setAdapter(errorAdapter);
             setDragable(errorAdapter);
         }

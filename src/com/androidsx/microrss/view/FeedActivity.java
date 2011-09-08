@@ -90,7 +90,7 @@ public class FeedActivity extends LauncherActivity {
         ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this, R.string.error_message_first_update,
                 R.string.error_message_first_update_detailed,
                 R.drawable.information,
-                R.color.error_message_info,
+                getResources().getColor(R.color.error_message_info),
                 true);
         customViewTrayAdapter.setAdapter(errorAdapter);
         customViewTrayAdapter.setIndex(1); // The index 0 is the settings, and 1 is the actual error message
@@ -100,9 +100,10 @@ public class FeedActivity extends LauncherActivity {
         ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this,
                 R.string.error_message_feed_no_active,
                 R.string.error_message_feed_no_active_detailed, R.drawable.information,
-                R.color.error_message_info,
+                getResources().getColor(R.color.error_message_info),
                 false);
         customViewTrayAdapter.setAdapter(errorAdapter);
+        customViewTrayAdapter.setIndex(1); // The index 0 is the settings, and 1 is the actual error message
     }
     
     private void buildNormalView(List<Feed> feedList) {
@@ -118,7 +119,7 @@ public class FeedActivity extends LauncherActivity {
             // FIXME: Why don't we just log it and move to the first position?
             ErrorMessageAdapter errorAdapter = new ErrorMessageAdapter(this, R.string.error_message_feed_unexpected_id,
                     R.string.error_message_feed_unexpected_id_detailed,
-                    R.drawable.warning, R.color.error_message_warning);
+                    R.drawable.warning, getResources().getColor(R.color.error_message_warning));
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
     }
