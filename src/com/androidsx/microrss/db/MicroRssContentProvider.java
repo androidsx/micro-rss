@@ -7,11 +7,9 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
@@ -75,7 +73,7 @@ public class MicroRssContentProvider extends ContentProvider {
             case A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 Log.d(TAG, "Delete the feed " + feedId + " and all its items");
-                count += db.delete(TABLE_FEEDS, BaseColumns._ID + "=" + feedId, null);
+                count += db.delete(TABLE_FEEDS, FeedColumns._ID + "=" + feedId, null);
                 count += db.delete(TABLE_ITEMS, ItemColumns.FEED_ID + "=" + feedId, null);
                 break;
             }
@@ -156,7 +154,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 String feedId = uri.getPathSegments().get(1);
                 Log.d(TAG, "Fetch the feed with id " + feedId);
                 qb.setTables(TABLE_FEEDS);
-                qb.appendWhere(BaseColumns._ID + "=" + feedId);
+                qb.appendWhere(FeedColumns._ID + "=" + feedId);
                 break;
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
@@ -164,7 +162,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 Log.d(TAG, "Fetch all items for the feed " + feedId);
                 qb.setTables(TABLE_ITEMS);
                 qb.appendWhere(ItemColumns.FEED_ID + "=" + feedId);
-                sortOrder = (sortOrder == null) ? BaseColumns._ID + " ASC" : sortOrder;
+                sortOrder = (sortOrder == null) ? ItemColumns._ID + " ASC" : sortOrder;
                 break;
             }
             case ALL_ITEMS: {
@@ -176,7 +174,7 @@ public class MicroRssContentProvider extends ContentProvider {
                 String itemId = uri.getPathSegments().get(1);
                 Log.d(TAG, "Fetch the item with id " + itemId);
                 qb.setTables(TABLE_ITEMS);
-                qb.appendWhere(BaseColumns._ID + "=" + itemId);
+                qb.appendWhere(ItemColumns._ID + "=" + itemId);
                 break;
             }
         }
@@ -199,7 +197,7 @@ public class MicroRssContentProvider extends ContentProvider {
             }
             case A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
-                count = db.update(TABLE_FEEDS, values, BaseColumns._ID + "=" + feedId,
+                count = db.update(TABLE_FEEDS, values, FeedColumns._ID + "=" + feedId,
                         null);
                 break;
             }

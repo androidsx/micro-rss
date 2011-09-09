@@ -9,7 +9,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
@@ -35,7 +34,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             ItemColumns.POSITION,
             ItemColumns.TITLE,
             ItemColumns.THUMBNAIL_URL,
-            BaseColumns._ID};
+            ItemColumns._ID};
     private static final int COL_CONTENT = 0;
     private static final int COL_ITEM_URL = 1;
     private static final int COL_DATE = 2;
@@ -220,7 +219,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
                 null,
                 ItemColumns.POSITION + " DESC," // See #insertItems to understand why
                 + ItemColumns.DATE + " DESC,"
-                + BaseColumns._ID + " DESC");
+                + ItemColumns._ID + " DESC");
     }
     
     private int getMaxIndex(Uri feedUri, ContentResolver resolver) {
@@ -247,7 +246,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     
     private int deleteItemsById(ContentResolver resolver, Uri feedUri, List<ItemThumbnailWrapper> listOfIds) {
         StringBuilder whereClause = new StringBuilder();
-        whereClause.append(BaseColumns._ID + " IN (");
+        whereClause.append(ItemColumns._ID + " IN (");
         for (ItemThumbnailWrapper itemWrapper : listOfIds) {
             whereClause.append(itemWrapper.getId() + ", ");
         }

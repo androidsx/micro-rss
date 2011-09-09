@@ -3,7 +3,6 @@ package com.androidsx.microrss.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
@@ -31,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + FeedColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + FeedColumns.FEED_URL + " TEXT,"
                 + FeedColumns.TITLE + " TEXT,"
                 + FeedColumns.ACTIVE + " BOOLEAN,"
@@ -40,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ");");
 
         db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_ITEMS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ItemColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ItemColumns.FEED_ID + " INTEGER,"
                 + ItemColumns.POSITION + " INTEGER,"
                 + ItemColumns.TITLE + " TEXT, "

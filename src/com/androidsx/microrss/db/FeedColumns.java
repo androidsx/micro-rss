@@ -1,9 +1,11 @@
 package com.androidsx.microrss.db;
 
+import android.provider.BaseColumns;
+
 /**
  * Columns for the DB table that contains the feeds.
  */
-public class FeedColumns {
+public class FeedColumns implements BaseColumns {
 
     /**
      * URL of the feed.

@@ -1,9 +1,11 @@
 package com.androidsx.microrss.db;
 
+import android.provider.BaseColumns;
+
 /**
  * Columns for the DB table that contains the stories.
  */
-public class ItemColumns {
+public class ItemColumns implements BaseColumns {
 
     /**
      * Foreign key to the feed that this story belongs to.
