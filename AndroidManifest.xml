@@ -17,12 +17,12 @@
     <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:description="@string/app_descrip" android:debuggable="true">
 
         <!-- Content provider for the data in the DB -->
-        <provider android:name="com.androidsx.microrss.db.MicroRssContentProvider" android:authorities="com.androidsx.microrss" />
+        <provider android:name=".provider.NewsProvider" android:authorities="com.androidsx.microrss.provider.NewsProvider" />
         
         <!-- Service for the periodic synchronization of the data with the internet sources -->
         <service android:name="com.androidsx.microrss.UpdateService" />
 
-        <!-- Service for the google reader syncronization -->
+        <!-- Service for the google reader synchronization -->
         <service android:name="com.androidsx.microrss.GoogleReaderSyncService" />
 
         <!-- Activity that sets up the application and dispatches to the view activities -->

@@ -1,18 +1,21 @@
-package com.androidsx.microrss.db;
+package com.androidsx.microrss.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidsx.microrss.provider.News.Feeds;
+import com.androidsx.microrss.provider.News.Items;
+
 /**
  * Helper to manage the database version upgrades. Works closely with the content provider,
- * {@link MicroRssContentProvider}.
+ * {@link NewsProvider}.
  */
-public class DatabaseHelper extends SQLiteOpenHelper {
+class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 1;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,24 +32,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
-        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_FEEDS + " ("
-                + FeedColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + FeedColumns.FEED_URL + " TEXT,"
-                + FeedColumns.TITLE + " TEXT,"
-                + FeedColumns.ACTIVE + " BOOLEAN,"
-                + FeedColumns.LAST_UPDATE + " BIGINT, "
-                + FeedColumns.G_READER + " BOOLEAN"
+        db.execSQL("CREATE TABLE " + News.TABLE_FEEDS + " ("
+                + Feeds._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Feeds.FEED_URL + " TEXT,"
+                + Feeds.TITLE + " TEXT,"
+                + Feeds.ACTIVE + " BOOLEAN,"
+                + Feeds.LAST_UPDATE + " BIGINT, "
+                + Feeds.G_READER + " BOOLEAN"
                 + ");");
 
-        db.execSQL("CREATE TABLE " + MicroRssContentProvider.TABLE_ITEMS + " ("
-                + ItemColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + ItemColumns.FEED_ID + " INTEGER,"
-                + ItemColumns.POSITION + " INTEGER,"
-                + ItemColumns.TITLE + " TEXT, "
-                + ItemColumns.CONTENT + " TEXT,"
-                + ItemColumns.ITEM_URL + " TEXT,"
-                + ItemColumns.THUMBNAIL_URL + " TEXT,"
-                + ItemColumns.DATE + " INTEGER);");
+        db.execSQL("CREATE TABLE " + News.TABLE_ITEMS + " ("
+                + Items._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Items.FEED_ID + " INTEGER,"
+                + Items.POSITION + " INTEGER,"
+                + Items.TITLE + " TEXT, "
+                + Items.CONTENT + " TEXT,"
+                + Items.ITEM_URL + " TEXT,"
+                + Items.THUMBNAIL_URL + " TEXT,"
+                + Items.DATE + " INTEGER);");
     }
 
     /**
@@ -68,8 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (version != DATABASE_VERSION) {
             Log.w(TAG, "The database version has changed from " + oldVersion + " to " + newVersion
                     + ". We will now destroy all existing tables and recreate them");
-            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_FEEDS);
-            db.execSQL("DROP TABLE IF EXISTS " + MicroRssContentProvider.TABLE_ITEMS);
+            db.execSQL("DROP TABLE IF EXISTS " + News.TABLE_FEEDS);
+            db.execSQL("DROP TABLE IF EXISTS " + News.TABLE_ITEMS);
             onCreate(db);
         }
     }

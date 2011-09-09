@@ -16,6 +16,9 @@ import com.androidsx.microrss.domain.DefaultItem;
 import com.androidsx.microrss.domain.DefaultItemList;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
+import com.androidsx.microrss.provider.News;
+import com.androidsx.microrss.provider.News.Feeds;
+import com.androidsx.microrss.provider.News.Items;
 
 /**
  * DAO implementation based on SQLite database engine.
@@ -28,13 +31,13 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     private static final String TAG = SqLiteRssItemsDao.class.getSimpleName();
 
     private static final String[] PROJECTION_FEEDS = new String[] {
-            ItemColumns.CONTENT,
-            ItemColumns.ITEM_URL,
-            ItemColumns.DATE,
-            ItemColumns.POSITION,
-            ItemColumns.TITLE,
-            ItemColumns.THUMBNAIL_URL,
-            ItemColumns._ID};
+            Items.CONTENT,
+            Items.ITEM_URL,
+            Items.DATE,
+            Items.POSITION,
+            Items.TITLE,
+            Items.THUMBNAIL_URL,
+            Items._ID};
     private static final int COL_CONTENT = 0;
     private static final int COL_ITEM_URL = 1;
     private static final int COL_DATE = 2;
@@ -46,7 +49,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     @Override
     public ItemList getItemList(ContentResolver resolver, int feedId) {
         Uri feedWithIdUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+                News.Feeds.CONTENT_URI, feedId);
         // FIXME: there is an extra DB call here, to the feeds table. ItemList shouldn't be aware of the feed
         final String feedTitle = extractFeedTitle(resolver, feedWithIdUri);
         final ItemList itemList = readSortedItemsFromDb(feedWithIdUri, resolver, feedTitle);
@@ -71,9 +74,9 @@ public class SqLiteRssItemsDao implements RssItemsDao {
             ItemList itemsToInsert) {
         Log.d(TAG, "Insert " + itemsToInsert.getNumberOfItems() + " elements into the DB");
         final Uri feedUri = ContentUris.withAppendedId(
-                MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+                News.Feeds.CONTENT_URI, feedId);
         final Uri feedForecasts = Uri.withAppendedPath(feedUri,
-                MicroRssContentProvider.TABLE_ITEMS);
+                News.TABLE_ITEMS);
         
         final int maxIndex = getMaxIndex(feedUri, resolver);
         
@@ -81,13 +84,13 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         for (int i = 0; i < itemsToInsert.getNumberOfItems(); i++) {
             final int index = maxIndex + itemsToInsert.getNumberOfItems() - i;
             Item feedItem = itemsToInsert.getItemAt(i);
-            values.put(ItemColumns.CONTENT, feedItem.getContent());
-            values.put(ItemColumns.ITEM_URL, feedItem.getURL());
-            values.put(ItemColumns.TITLE, feedItem.getTitle());
-            values.put(ItemColumns.THUMBNAIL_URL, feedItem.getThumbnail());
-            values.put(ItemColumns.DATE, feedItem.getPubDate()
+            values.put(Items.CONTENT, feedItem.getContent());
+            values.put(Items.ITEM_URL, feedItem.getURL());
+            values.put(Items.TITLE, feedItem.getTitle());
+            values.put(Items.THUMBNAIL_URL, feedItem.getThumbnail());
+            values.put(Items.DATE, feedItem.getPubDate()
                     .getTime());
-            values.put(ItemColumns.POSITION, index);
+            values.put(Items.POSITION, index);
             Log.v(TAG, "Insert item #" + index + ": " + feedItem);
             resolver.insert(feedForecasts, values);
         }
@@ -125,7 +128,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         } else {
             Log.d(TAG, "Attempting to delete the " + numItemsToDelete + " oldest items from the DB");
             final Uri feedUri = ContentUris.withAppendedId(
-                    MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+                    News.Feeds.CONTENT_URI, feedId);
             final List<ItemThumbnailWrapper> sortedListOfIds = readSortedItemIdsFromDb(feedUri, resolver);
             final List<ItemThumbnailWrapper> idsToDelete = sortedListOfIds.subList(
                     sortedListOfIds.size() - numItemsToDelete,
@@ -145,9 +148,9 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     private String extractFeedTitle(ContentResolver resolver, Uri feedWithIdUri) {
         Cursor cursor = null;
         try {
-            cursor = resolver.query(feedWithIdUri, new String[] { FeedColumns.TITLE }, null, null, null);
+            cursor = resolver.query(feedWithIdUri, new String[] { Feeds.TITLE }, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
-                int titleColumn = cursor.getColumnIndex(FeedColumns.TITLE);
+                int titleColumn = cursor.getColumnIndex(Feeds.TITLE);
                 return cursor.getString(titleColumn);
             } else {
                 return "";
@@ -212,14 +215,14 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     
     private Cursor queryForSortedItems(ContentResolver resolver, Uri feedUri) {
         Uri allForecastsUri = Uri.withAppendedPath(feedUri,
-                MicroRssContentProvider.TABLE_ITEMS);
+                News.TABLE_ITEMS);
 
         return resolver.query(allForecastsUri, PROJECTION_FEEDS,
                 null,
                 null,
-                ItemColumns.POSITION + " DESC," // See #insertItems to understand why
-                + ItemColumns.DATE + " DESC,"
-                + ItemColumns._ID + " DESC");
+                Items.POSITION + " DESC," // See #insertItems to understand why
+                + Items.DATE + " DESC,"
+                + Items._ID + " DESC");
     }
     
     private int getMaxIndex(Uri feedUri, ContentResolver resolver) {
@@ -227,7 +230,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         int maxId;
         try {
             Uri allForecastsUri = Uri.withAppendedPath(feedUri,
-                    MicroRssContentProvider.TABLE_ITEMS);
+                    News.TABLE_ITEMS);
             cursor = resolver.query(allForecastsUri, PROJECTION_FEEDS, null,
                     null, null);
             maxId = 0;
@@ -246,7 +249,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
     
     private int deleteItemsById(ContentResolver resolver, Uri feedUri, List<ItemThumbnailWrapper> listOfIds) {
         StringBuilder whereClause = new StringBuilder();
-        whereClause.append(ItemColumns._ID + " IN (");
+        whereClause.append(Items._ID + " IN (");
         for (ItemThumbnailWrapper itemWrapper : listOfIds) {
             whereClause.append(itemWrapper.getId() + ", ");
         }
@@ -254,7 +257,7 @@ public class SqLiteRssItemsDao implements RssItemsDao {
         Log.v(TAG, "WHERE clase to delete items: " + whereClause);
         
         final Uri allForecastsUri = Uri.withAppendedPath(feedUri,
-                MicroRssContentProvider.TABLE_ITEMS);
+                News.TABLE_ITEMS);
         return resolver.delete(allForecastsUri, whereClause.toString(), null);
     }
 

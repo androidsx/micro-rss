@@ -31,13 +31,13 @@ import android.util.Log;
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.cache.ThumbnailUtil;
 import com.androidsx.microrss.configure.UpdateTaskStatus;
-import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.DefaultItemList;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
+import com.androidsx.microrss.provider.News;
+import com.androidsx.microrss.provider.News.Feeds;
 import com.androidsx.microrss.view.AnyRSSHelper;
 
 /**
@@ -50,8 +50,8 @@ public class WebserviceHelper {
     private static final String USER_AGENT_TEMPLATE = "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.1.8) Gecko/20100202 Firefox/3.5.8";
     
     private static final String[] PROJECTION_APPFEED = {
-        FeedColumns.FEED_URL, 
-        FeedColumns.LAST_UPDATE
+        Feeds.FEED_URL, 
+        Feeds.LAST_UPDATE
     };
 
     private static final int COL_RSS_URL = 0;
@@ -188,9 +188,9 @@ public class WebserviceHelper {
         ContentValues values2 = new ContentValues();
         long lastUpdate = System.currentTimeMillis();
         // This Uri has the FEED_ID, so we only update ONE feed
-        Uri feedUriWithId = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI,
+        Uri feedUriWithId = ContentUris.withAppendedId(News.Feeds.CONTENT_URI,
                         feedId);
-        values2.put(FeedColumns.LAST_UPDATE, lastUpdate);
+        values2.put(Feeds.LAST_UPDATE, lastUpdate);
         int updateRows = resolver.update(feedUriWithId, values2, null, null);
         if (updateRows != 1) {
             Log.w(TAG, "Updated [" + updateRows + " != " + "1] rows for LAST_UPDATED and CURRENT_ITEM_POSITION");
@@ -286,7 +286,7 @@ public class WebserviceHelper {
     private static Cursor extractFeedInfo(int feedId,
             ContentResolver resolver) throws FeedProcessingException {
         Cursor cursor = null;
-        Uri uri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId); 
+        Uri uri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, feedId); 
         
         cursor = resolver.query(uri, PROJECTION_APPFEED, null,
                 null, null);

@@ -1,4 +1,4 @@
-package com.androidsx.microrss.db;
+package com.androidsx.microrss.provider;
 
 import java.util.Arrays;
 
@@ -12,37 +12,22 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
+import com.androidsx.microrss.provider.News.Feeds;
+import com.androidsx.microrss.provider.News.Items;
+
 /**
  * Content provider for information about feeds and their items. It is strongly recommended to
  * perform the DB access operations in a separate thread.
  * <p>
  * TODO (WIMM): consider using http://developer.android.com/reference/android/content/ContentResolver.html#notifyChange(android.net.Uri, android.database.ContentObserver) to notify and get notified of data changes
  */
-public class MicroRssContentProvider extends ContentProvider {
-    public static final String TAG = MicroRssContentProvider.class.getSimpleName();
+public class NewsProvider extends ContentProvider {
+    public static final String TAG = NewsProvider.class.getSimpleName();
 
-    /** Content provider authority for this application. Defined in the manifest file too. */
-    private static final String AUTHORITY = "com.androidsx.microrss";
-    
-    /** Name of the feed table, whose columns are {@link FeedColumns}. */
-    public static final String TABLE_FEEDS = "feeds";
     private static final String SINGLE_FEED = "feed";
-    
-    /** Name of the item table, whose columns are {@link ItemColumns}. */
-    public static final String TABLE_ITEMS = "items";
     private static final String SINGLE_ITEM = "item";
 
-    /**
-     * Content provider for the feeds table.
-     * <p>
-     * Use {@code ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId)} in
-     * order to access a single feed.
-     */
-    public static final Uri FEEDS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
-    
-    /** Content provider for the items table. */
-    public static final Uri ITEMS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_ITEMS);
-    
+    // Codes for the different URIs. See the #getUriMatcher method.
     private static final int ALL_FEEDS = 101;
     private static final int A_FEED_BY_ID = 102;
     private static final int ALL_ITEMS_FOR_A_FEED_BY_ID = 103;
@@ -67,26 +52,26 @@ public class MicroRssContentProvider extends ContentProvider {
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
                 Log.d(TAG, "Delete all the feeds that match " + selection + " with " +  arrayToString(selectionArgs));
-                count += db.delete(TABLE_FEEDS, selection, selectionArgs);
+                count += db.delete(News.TABLE_FEEDS, selection, selectionArgs);
                 break;
             }
             case A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 Log.d(TAG, "Delete the feed " + feedId + " and all its items");
-                count += db.delete(TABLE_FEEDS, FeedColumns._ID + "=" + feedId, null);
-                count += db.delete(TABLE_ITEMS, ItemColumns.FEED_ID + "=" + feedId, null);
+                count += db.delete(News.TABLE_FEEDS, Feeds._ID + "=" + feedId, null);
+                count += db.delete(News.TABLE_ITEMS, Items.FEED_ID + "=" + feedId, null);
                 break;
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
-                selection = (selection == null ? "" : "(" + selection + ") AND ") + ItemColumns.FEED_ID + "=" + feedId;
+                selection = (selection == null ? "" : "(" + selection + ") AND ") + Items.FEED_ID + "=" + feedId;
                 Log.d(TAG, "Delete " + selectionArgs.length + " items for the feed " + feedId);
-                count += db.delete(TABLE_ITEMS, selection, selectionArgs);
+                count += db.delete(News.TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
             case ALL_ITEMS: {
                 Log.d(TAG, "Delete all items for all feeds that match " + selection + " with " +  arrayToString(selectionArgs));
-                count += db.delete(TABLE_ITEMS, selection, selectionArgs);
+                count += db.delete(News.TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
             default:
@@ -105,27 +90,27 @@ public class MicroRssContentProvider extends ContentProvider {
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
                 Log.d(TAG, "Insert a new feed");
-                long feedId = db.insert(TABLE_FEEDS, null, values);
+                long feedId = db.insert(News.TABLE_FEEDS, null, values);
                 if (feedId != -1) {
-                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
+                    resultUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, feedId);
                 }
                 break;
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 Log.d(TAG, "Insert a new item for the feed " + feedId);
-                values.put(ItemColumns.FEED_ID, feedId);
-                long rowId = db.insert(TABLE_ITEMS, null, values);
+                values.put(Items.FEED_ID, feedId);
+                long rowId = db.insert(News.TABLE_ITEMS, null, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(MicroRssContentProvider.ITEMS_CONTENT_URI, rowId);
+                    resultUri = ContentUris.withAppendedId(News.Items.CONTENT_URI, rowId);
                 }
                 break;
             }
             case ALL_ITEMS: {
                 Log.d(TAG, "Insert items, just like that. Not attached to a feed?");
-                long rowId = db.insert(TABLE_ITEMS, null, values);
+                long rowId = db.insert(News.TABLE_ITEMS, null, values);
                 if (rowId != -1) {
-                    resultUri = ContentUris.withAppendedId(ITEMS_CONTENT_URI, rowId);
+                    resultUri = ContentUris.withAppendedId(News.Items.CONTENT_URI, rowId);
                 }
                 break;
             }
@@ -147,34 +132,34 @@ public class MicroRssContentProvider extends ContentProvider {
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
                 Log.d(TAG, "Fetch all feeds");
-                qb.setTables(TABLE_FEEDS);
+                qb.setTables(News.TABLE_FEEDS);
                 break;
             }
             case A_FEED_BY_ID: {
                 String feedId = uri.getPathSegments().get(1);
                 Log.d(TAG, "Fetch the feed with id " + feedId);
-                qb.setTables(TABLE_FEEDS);
-                qb.appendWhere(FeedColumns._ID + "=" + feedId);
+                qb.setTables(News.TABLE_FEEDS);
+                qb.appendWhere(Feeds._ID + "=" + feedId);
                 break;
             }
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 String feedId = uri.getPathSegments().get(1);
                 Log.d(TAG, "Fetch all items for the feed " + feedId);
-                qb.setTables(TABLE_ITEMS);
-                qb.appendWhere(ItemColumns.FEED_ID + "=" + feedId);
-                sortOrder = (sortOrder == null) ? ItemColumns._ID + " ASC" : sortOrder;
+                qb.setTables(News.TABLE_ITEMS);
+                qb.appendWhere(Items.FEED_ID + "=" + feedId);
+                sortOrder = (sortOrder == null) ? Items._ID + " ASC" : sortOrder;
                 break;
             }
             case ALL_ITEMS: {
                 Log.d(TAG, "Fetch all items for all feeds");
-                qb.setTables(TABLE_ITEMS);
+                qb.setTables(News.TABLE_ITEMS);
                 break;
             }
             case A_ITEMS_BY_ID: {
                 String itemId = uri.getPathSegments().get(1);
                 Log.d(TAG, "Fetch the item with id " + itemId);
-                qb.setTables(TABLE_ITEMS);
-                qb.appendWhere(ItemColumns._ID + "=" + itemId);
+                qb.setTables(News.TABLE_ITEMS);
+                qb.appendWhere(Items._ID + "=" + itemId);
                 break;
             }
         }
@@ -192,17 +177,17 @@ public class MicroRssContentProvider extends ContentProvider {
         int count = 0;
         switch (getUriMatcher().match(uri)) {
             case ALL_FEEDS: {
-                count = db.update(TABLE_FEEDS, values, selection, selectionArgs);
+                count = db.update(News.TABLE_FEEDS, values, selection, selectionArgs);
                 break;
             }
             case A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
-                count = db.update(TABLE_FEEDS, values, FeedColumns._ID + "=" + feedId,
+                count = db.update(News.TABLE_FEEDS, values, Feeds._ID + "=" + feedId,
                         null);
                 break;
             }
             case ALL_ITEMS: {
-                count = db.update(TABLE_ITEMS, values, selection, selectionArgs);
+                count = db.update(News.TABLE_ITEMS, values, selection, selectionArgs);
                 break;
             }
             default:
@@ -235,16 +220,25 @@ public class MicroRssContentProvider extends ContentProvider {
         throw new IllegalStateException();
     }
 
+    /**
+     * Returns the matcher of URIs to their corresponding codes. It is a simple mapping of DB URIs,
+     * such as <i>feeds/#</i>, to integer identifiers, such as <i>102</i>. This mapping is used by
+     * the main methods in the content provider in order to understand what operation to perform:
+     * <i>delete one story for a given feed, or all stories for it?</i>.
+     * 
+     * @return URI matcher for this content provider
+     * @see UriMatcher
+     */
     private UriMatcher getUriMatcher() {
         if (uriMatcher == null) {
             uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
             
-            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS,                       ALL_FEEDS);
-            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#",                A_FEED_BY_ID);
-            uriMatcher.addURI(AUTHORITY, TABLE_FEEDS + "/#/" + TABLE_ITEMS, ALL_ITEMS_FOR_A_FEED_BY_ID);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS,                       ALL_FEEDS);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS + "/#",                A_FEED_BY_ID);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS + "/#/" + News.TABLE_ITEMS, ALL_ITEMS_FOR_A_FEED_BY_ID);
             
-            uriMatcher.addURI(AUTHORITY, TABLE_ITEMS,                       ALL_ITEMS);
-            uriMatcher.addURI(AUTHORITY, TABLE_ITEMS + "/#",                A_ITEMS_BY_ID);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS,                       ALL_ITEMS);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS + "/#",                A_ITEMS_BY_ID);
         }
         return uriMatcher;
     }

@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.androidsx.microrss.db.ItemColumns;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
+import com.androidsx.microrss.provider.News.Items;
 
 public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
 
@@ -56,7 +56,7 @@ public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
         Cursor cursor = null;
         try {
             cursor = resolver.query(feedForecasts, null, 
-                    ItemColumns.ITEM_URL + " = \"" + url + "\"", null, null);
+                    Items.ITEM_URL + " = \"" + url + "\"", null, null);
             if (cursor == null || cursor.moveToFirst() == false) {
                 thereAreItemsWithThisUrl = Duplicated.FALSE;
             } else {

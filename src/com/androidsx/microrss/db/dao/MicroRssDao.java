@@ -14,13 +14,13 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
-import com.androidsx.microrss.db.FeedColumns;
-import com.androidsx.microrss.db.ItemColumns;
-import com.androidsx.microrss.db.MicroRssContentProvider;
 import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.DefaultItem;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
+import com.androidsx.microrss.provider.News;
+import com.androidsx.microrss.provider.News.Feeds;
+import com.androidsx.microrss.provider.News.Items;
 
 public class MicroRssDao {
     private final ContentResolver contentResolver;
@@ -45,25 +45,25 @@ public class MicroRssDao {
     private void persistFeedInternal(Context context, String title, String feedUrl, boolean active,
             boolean gReader) {
         ContentValues values = new ContentValues();
-        values.put(FeedColumns.LAST_UPDATE, -1);
-        values.put(FeedColumns.TITLE, title);
-        values.put(FeedColumns.FEED_URL, feedUrl);
-        values.put(FeedColumns.ACTIVE, active);
-        values.put(FeedColumns.G_READER, gReader);
+        values.put(Feeds.LAST_UPDATE, -1);
+        values.put(Feeds.TITLE, title);
+        values.put(Feeds.FEED_URL, feedUrl);
+        values.put(Feeds.ACTIVE, active);
+        values.put(Feeds.G_READER, gReader);
         
         ContentResolver resolver = context.getContentResolver();
-        resolver.insert(MicroRssContentProvider.FEEDS_CONTENT_URI, values);
+        resolver.insert(News.Feeds.CONTENT_URI, values);
     }
     
     public void updateFeed(Feed feed) {
         ContentValues values = new ContentValues();
-        values.put(FeedColumns._ID, feed.getId());
-        values.put(FeedColumns.LAST_UPDATE, feed.getLastModificationDate().getTime()); // FIXME: sure?
-        values.put(FeedColumns.TITLE, feed.getTitle());
-        values.put(FeedColumns.FEED_URL, feed.getURL());
-        values.put(FeedColumns.ACTIVE, feed.isActive());
+        values.put(Feeds._ID, feed.getId());
+        values.put(Feeds.LAST_UPDATE, feed.getLastModificationDate().getTime()); // FIXME: sure?
+        values.put(Feeds.TITLE, feed.getTitle());
+        values.put(Feeds.FEED_URL, feed.getURL());
+        values.put(Feeds.ACTIVE, feed.isActive());
 
-        final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feed.getId());
+        final Uri aFeedUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, feed.getId());
         
         contentResolver.update(aFeedUri, values, null, null);
     }
@@ -85,15 +85,15 @@ public class MicroRssDao {
     public int[] findAllFeedIds() {
         Cursor cursor = null;
         try {
-            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
-            final String[] projection = new String[] { FeedColumns._ID };
+            final Uri allFeedsUri = News.Feeds.CONTENT_URI;
+            final String[] projection = new String[] { Feeds._ID };
             cursor = contentResolver.query(allFeedsUri, projection, null, null,
-                    FeedColumns._ID + " ASC"); // FIXME: sort by feed position instead
+                    Feeds._ID + " ASC"); // FIXME: sort by feed position instead
     
             List<Integer> ids = new LinkedList<Integer>();
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ids.add(cursor.getInt(cursor.getColumnIndex(FeedColumns._ID)));
+                    ids.add(cursor.getInt(cursor.getColumnIndex(Feeds._ID)));
                 } while (cursor.moveToNext());
             }
             return toIntArray(ids);
@@ -107,15 +107,15 @@ public class MicroRssDao {
     public int[] findActiveFeedIds() {
         Cursor cursor = null;
         try {
-            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
-            final String[] projection = new String[] { FeedColumns._ID };
-            cursor = contentResolver.query(allFeedsUri, projection, FeedColumns.ACTIVE + " = 1", null,
-                    FeedColumns._ID + " ASC"); // FIXME: sort by feed position instead
+            final Uri allFeedsUri = News.Feeds.CONTENT_URI;
+            final String[] projection = new String[] { Feeds._ID };
+            cursor = contentResolver.query(allFeedsUri, projection, Feeds.ACTIVE + " = 1", null,
+                    Feeds._ID + " ASC"); // FIXME: sort by feed position instead
     
             List<Integer> ids = new LinkedList<Integer>();
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ids.add(cursor.getInt(cursor.getColumnIndex(FeedColumns._ID)));
+                    ids.add(cursor.getInt(cursor.getColumnIndex(Feeds._ID)));
                 } while (cursor.moveToNext());
             }
             return toIntArray(ids);
@@ -131,30 +131,30 @@ public class MicroRssDao {
     }
     
     public List<Feed> findActiveFeeds() {
-        return findFeeds(FeedColumns.ACTIVE + " = 1");
+        return findFeeds(Feeds.ACTIVE + " = 1");
     }
     
     public List<Feed> findGoogleReaderFeeds() {
-        return findFeeds(FeedColumns.G_READER + " = 1");
+        return findFeeds(Feeds.G_READER + " = 1");
     }
     
     public List<Feed> findSampleFeeds() {
-        return findFeeds(FeedColumns.G_READER + " <> 1");
+        return findFeeds(Feeds.G_READER + " <> 1");
     }
 
     public List<Feed> findFeedsByUrl(String url) {
-        return findFeeds(FeedColumns.FEED_URL + " = " + DatabaseUtils.sqlEscapeString(url));
+        return findFeeds(Feeds.FEED_URL + " = " + DatabaseUtils.sqlEscapeString(url));
     }
     
     
     private List<Feed> findFeeds(String selection) {
         Cursor cursor = null;
         try {
-            final Uri allFeedsUri = MicroRssContentProvider.FEEDS_CONTENT_URI;
-            final String[] projection = new String[] { FeedColumns._ID, FeedColumns.TITLE,
-                    FeedColumns.FEED_URL, FeedColumns.ACTIVE, FeedColumns.LAST_UPDATE };
+            final Uri allFeedsUri = News.Feeds.CONTENT_URI;
+            final String[] projection = new String[] { Feeds._ID, Feeds.TITLE,
+                    Feeds.FEED_URL, Feeds.ACTIVE, Feeds.LAST_UPDATE };
             cursor = contentResolver.query(allFeedsUri, projection, selection, null,
-                    FeedColumns._ID + " ASC"); // FIXME: sort by feed position instead
+                    Feeds._ID + " ASC"); // FIXME: sort by feed position instead
             
             List<Feed> feeds = new LinkedList<Feed>();
             if (cursor != null && cursor.moveToFirst()) {
@@ -173,9 +173,9 @@ public class MicroRssDao {
     public Feed findFeed(int id) {
         Cursor cursor = null;
         try {
-            final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, id);
-            final String[] projection = new String[] { FeedColumns._ID, FeedColumns.FEED_URL, FeedColumns.TITLE,
-                    FeedColumns.LAST_UPDATE, FeedColumns.ACTIVE };
+            final Uri aFeedUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, id);
+            final String[] projection = new String[] { Feeds._ID, Feeds.FEED_URL, Feeds.TITLE,
+                    Feeds.LAST_UPDATE, Feeds.ACTIVE };
             cursor = contentResolver.query(aFeedUri, projection, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return feedFromCursor(cursor);
@@ -192,12 +192,12 @@ public class MicroRssDao {
     public List<Item> findStories(int feedId) {
         Cursor cursor = null;
         try {
-            final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-            final Uri allStoriesUriInFeedUri = Uri.withAppendedPath(aFeedUri, MicroRssContentProvider.TABLE_ITEMS);
-            final String[] projection = new String[] { ItemColumns._ID, ItemColumns.TITLE, ItemColumns.CONTENT,
-                    ItemColumns.ITEM_URL, ItemColumns.THUMBNAIL_URL, ItemColumns.DATE };
+            final Uri aFeedUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, feedId);
+            final Uri allStoriesUriInFeedUri = Uri.withAppendedPath(aFeedUri, News.TABLE_ITEMS);
+            final String[] projection = new String[] { Items._ID, Items.TITLE, Items.CONTENT,
+                    Items.ITEM_URL, Items.THUMBNAIL_URL, Items.DATE };
             cursor = contentResolver.query(allStoriesUriInFeedUri, projection, null, null,
-                    ItemColumns.POSITION + " DESC");
+                    Items.POSITION + " DESC");
     
             List<Item> items = new LinkedList<Item>();
             if (cursor != null && cursor.moveToFirst()) {
@@ -217,16 +217,16 @@ public class MicroRssDao {
     public int[] findStoryIds(int feedId) {
         Cursor cursor = null;
         try {
-            final Uri aFeedUri = ContentUris.withAppendedId(MicroRssContentProvider.FEEDS_CONTENT_URI, feedId);
-            final Uri allStoriesUriInFeedUri = Uri.withAppendedPath(aFeedUri, MicroRssContentProvider.TABLE_ITEMS);
-            final String[] projection = new String[] { ItemColumns._ID };
+            final Uri aFeedUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, feedId);
+            final Uri allStoriesUriInFeedUri = Uri.withAppendedPath(aFeedUri, News.TABLE_ITEMS);
+            final String[] projection = new String[] { Items._ID };
             cursor = contentResolver.query(allStoriesUriInFeedUri, projection, null, null,
-                    ItemColumns.POSITION + " DESC");
+                    Items.POSITION + " DESC");
     
             List<Integer> ids = new LinkedList<Integer>();
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ids.add(cursor.getInt(cursor.getColumnIndex(ItemColumns._ID)));
+                    ids.add(cursor.getInt(cursor.getColumnIndex(Items._ID)));
                 } while (cursor.moveToNext());
             }
             return toIntArray(ids);
@@ -242,9 +242,9 @@ public class MicroRssDao {
     public Item findStory(int id) {
         Cursor cursor = null;
         try {
-            final Uri anItemUri = ContentUris.withAppendedId(MicroRssContentProvider.ITEMS_CONTENT_URI, id);
-            final String[] projection = new String[] { ItemColumns.TITLE, ItemColumns.CONTENT,
-                    ItemColumns.ITEM_URL, ItemColumns.THUMBNAIL_URL, ItemColumns.DATE };
+            final Uri anItemUri = ContentUris.withAppendedId(News.Items.CONTENT_URI, id);
+            final String[] projection = new String[] { Items.TITLE, Items.CONTENT,
+                    Items.ITEM_URL, Items.THUMBNAIL_URL, Items.DATE };
             cursor = contentResolver.query(anItemUri, projection, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return itemFromCursor(cursor);
@@ -271,29 +271,29 @@ public class MicroRssDao {
             }
         }
         final Uri feedUri = ContentUris.withAppendedId(
-        MicroRssContentProvider.FEEDS_CONTENT_URI, feed.getId());
+        News.Feeds.CONTENT_URI, feed.getId());
         final Uri allItemsFeedUri = Uri.withAppendedPath(feedUri,
-              MicroRssContentProvider.TABLE_ITEMS);
+              News.TABLE_ITEMS);
         contentResolver.delete(allItemsFeedUri, null, null);
     }
 
     private static Item itemFromCursor(Cursor cursor) {
         return new DefaultItem(
-                cursor.getInt(cursor.getColumnIndex(ItemColumns._ID)),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.TITLE)),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.CONTENT)),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.ITEM_URL)),
-                new Date(cursor.getLong(cursor.getColumnIndex(ItemColumns.DATE))),
-                cursor.getString(cursor.getColumnIndex(ItemColumns.THUMBNAIL_URL)));
+                cursor.getInt(cursor.getColumnIndex(Items._ID)),
+                cursor.getString(cursor.getColumnIndex(Items.TITLE)),
+                cursor.getString(cursor.getColumnIndex(Items.CONTENT)),
+                cursor.getString(cursor.getColumnIndex(Items.ITEM_URL)),
+                new Date(cursor.getLong(cursor.getColumnIndex(Items.DATE))),
+                cursor.getString(cursor.getColumnIndex(Items.THUMBNAIL_URL)));
     }
     
     private static Feed feedFromCursor(Cursor cursor) {
         return new DefaultFeed(
-                cursor.getInt(cursor.getColumnIndex(FeedColumns._ID)),
-                cursor.getString(cursor.getColumnIndex(FeedColumns.TITLE)),
-                cursor.getString(cursor.getColumnIndex(FeedColumns.FEED_URL)),
-                cursor.getInt(cursor.getColumnIndex(FeedColumns.ACTIVE)) == 1,
-                new Date(cursor.getLong(cursor.getColumnIndex(FeedColumns.LAST_UPDATE))));
+                cursor.getInt(cursor.getColumnIndex(Feeds._ID)),
+                cursor.getString(cursor.getColumnIndex(Feeds.TITLE)),
+                cursor.getString(cursor.getColumnIndex(Feeds.FEED_URL)),
+                cursor.getInt(cursor.getColumnIndex(Feeds.ACTIVE)) == 1,
+                new Date(cursor.getLong(cursor.getColumnIndex(Feeds.LAST_UPDATE))));
     }
 
     private static int[] toIntArray(List<Integer> list) {
