@@ -206,6 +206,9 @@ v1.4 (19.01.2010)\n
     <string name="error_message_first_update">Not synchronized yet</string>
     <string name="error_message_first_update_detailed">The initial sync is in progress... please wait</string>
 
+    <string name="error_message_first_update_no_sync">Not synchronized yet</string>
+    <string name="error_message_first_update_no_sync_detailed">Please wait for the first sync, it will start soon</string>
+
 	<!-- @Deprecated -->
     <string name="error_message_story_no_items">No stories</string>
 	<!-- @Deprecated -->

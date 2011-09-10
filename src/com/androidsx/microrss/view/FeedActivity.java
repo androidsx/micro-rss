@@ -33,7 +33,12 @@ public class FeedActivity extends LauncherActivity {
 
     private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
-            if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC)) {
+        	// update only when there has been a succesful sync OR
+        	// the sync has started/finished ONLY on the initial sync, to not
+        	// update while you are looking feeds.
+            if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) ||
+            		(key.equals(SyncIntervalPrefs.SYNC_STATUS) &&
+            				prefs.getLong(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC, 0) == 0)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -68,9 +73,15 @@ public class FeedActivity extends LauncherActivity {
     }
     
     private void buildView() {
-        if (SharedPreferencesHelper.getLongValue(this, SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) == 0) {
-            Log.d(TAG, "A successful sync was never performed: start the service and wait for it to finish");
-            buildFirstExecView();
+    	SyncIntervalPrefs syncPrefs = new SyncIntervalPrefs(this);
+        if (syncPrefs.getLastSuccessfulSync() == 0) {
+            if (syncPrefs.isSyncing()) {
+            	Log.d(TAG, "A successful sync was never performed and we are syncing in the background");
+            	buildFirstExecIsSyncingView();
+            } else {
+            	Log.d(TAG, "A successful sync was never performed and we are not syncing (yet) in the background");
+            	buildFirstExecNoSyncView();
+            }
         } else {
             MicroRssDao dao = new MicroRssDao(getContentResolver());
             List<Feed> feedList = dao.findActiveFeeds();
@@ -83,7 +94,7 @@ public class FeedActivity extends LauncherActivity {
         }
     }
     
-    private void buildFirstExecView() {
+    private void buildFirstExecIsSyncingView() {
         getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(firstSyncListener);
         ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this, R.string.error_message_first_update,
@@ -93,6 +104,18 @@ public class FeedActivity extends LauncherActivity {
                 true);
         customViewTrayAdapter.setAdapter(errorAdapter);
         customViewTrayAdapter.setIndex(1); // The index 0 is the settings, and 1 is the actual error message
+    }
+
+    private void buildFirstExecNoSyncView() {
+    	getSharedPreferences(getPackageName(), Context.MODE_PRIVATE)
+    	.registerOnSharedPreferenceChangeListener(firstSyncListener);
+    	ErrorScreenAdapter errorAdapter = new ErrorScreenAdapter(this, R.string.error_message_first_update_no_sync,
+    			R.string.error_message_first_update_no_sync_detailed,
+    			R.drawable.information,
+    			getResources().getColor(R.color.error_message_info),
+    			false);
+    	customViewTrayAdapter.setAdapter(errorAdapter);
+    	customViewTrayAdapter.setIndex(1); // The index 0 is the settings, and 1 is the actual error message
     }
     
     private void buildNoFeedsView() {
