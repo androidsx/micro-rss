@@ -23,17 +23,17 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="Choose your feeds" />
-    
-        <TextView
-            android:id="@+id/arrow_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:maxLines="1"
-            android:textColor="@color/almost_white"
-            android:text="@string/left_arrow_disabled"
-            android:layout_alignParentLeft="true"
-            style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />
+        
+    <TextView
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:textColor="@color/almost_white"
+        android:text="@string/right_arrow_disabled"
+        android:layout_alignParentRight="true"
+        style="@style/Text.Feed.UpperBar.Highlighted.Arrows" />        
     
     </RelativeLayout>
 

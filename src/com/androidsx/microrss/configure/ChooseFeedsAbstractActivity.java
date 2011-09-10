@@ -87,15 +87,15 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
 
         @Override
         public void onRightToLeftSwipe() {
-        }
-
-        @Override
-        public void onLeftToRightSwipe() {
             Intent intent = IntentHelper.createIntent(ChooseFeedsAbstractActivity.this, null,
                     Preferences.class);
             startActivity(intent);
             ChooseFeedsAbstractActivity.this
-                    .overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+
+        @Override
+        public void onLeftToRightSwipe() {
         }
 
         @Override

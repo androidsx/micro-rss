@@ -46,6 +46,8 @@ public class Preferences extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, ChooseSampleFeedsActivity.class));
+                Preferences.this
+                .overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             }
         });
@@ -56,7 +58,7 @@ public class Preferences extends PreferenceActivity {
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, GReaderPreferences.class));
                 Preferences.this
-                .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                .overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             }
         });
@@ -67,7 +69,7 @@ public class Preferences extends PreferenceActivity {
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(Preferences.this, ChooseGoogleReaderFeedsActivity.class));
                 Preferences.this
-                .overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                .overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             }
         });

@@ -48,6 +48,7 @@ public class GReaderPreferences extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences_greader);
         
         getListView().setOnTouchListener(swipeListener);
+        getListView().setVerticalScrollBarEnabled(false); 
         
         enableSyncFeedsWhenCredentialsOK(); 
 
@@ -218,15 +219,15 @@ public class GReaderPreferences extends PreferenceActivity {
 
         @Override
         public void onRightToLeftSwipe() {
+            Intent intent = IntentHelper.createIntent(GReaderPreferences.this, null,
+                    Preferences.class);
+            startActivity(intent);
+            GReaderPreferences.this.overridePendingTransition(R.anim.slide_in_right,
+                    R.anim.slide_out_left);
         }
 
         @Override
         public void onLeftToRightSwipe() {
-            Intent intent = IntentHelper.createIntent(GReaderPreferences.this, null,
-                    Preferences.class);
-            startActivity(intent);
-            GReaderPreferences.this.overridePendingTransition(R.anim.slide_in_left,
-                    R.anim.slide_out_right);
         }
 
         @Override
