@@ -65,7 +65,7 @@ public class NewsProvider extends ContentProvider {
             case ALL_ITEMS_FOR_A_FEED_BY_ID: {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 selection = (selection == null ? "" : "(" + selection + ") AND ") + Items.FEED_ID + "=" + feedId;
-                Log.d(TAG, "Delete " + selectionArgs.length + " items for the feed " + feedId);
+                Log.d(TAG, "Delete items for the feed " + feedId);
                 count += db.delete(News.TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
