@@ -29,7 +29,7 @@ import com.wimm.framework.view.MotionInterpreter;
  * current feed. 
  */
 public class FeedActivity extends LauncherActivity {
-    private static final String TAG = "FeedActivity";
+	private static final String TAG = "FeedActivity";
 
     private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
@@ -55,12 +55,22 @@ public class FeedActivity extends LauncherActivity {
             }
         }
     };
+
     private CustomAdapterViewTray customViewTrayAdapter;
+    private static final String FIRST_TIME_APP_OPENED_PREFS = "FIRST_TIME_APP_OPENED";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_wimm_wrapper);
+        
+        // check first execution, to ask WIMM syncronization
+        int isFirstTimeUserOpenApp = SharedPreferencesHelper.getIntValue(this, FIRST_TIME_APP_OPENED_PREFS);
+        if (isFirstTimeUserOpenApp == 0) {
+        	WIMMCompatibleHelper.requestSync(this);
+        	SharedPreferencesHelper.saveIntValue(this, FIRST_TIME_APP_OPENED_PREFS, 1);
+        }
+        
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
         buildView();
     }

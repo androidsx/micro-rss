@@ -25,19 +25,14 @@
         <!-- Service for the google reader synchronization -->
         <service android:name="com.androidsx.microrss.GoogleReaderSyncService" />
 
-        <!-- Activity that sets up the application and dispatches to the view activities -->
-        <activity android:name=".view.InitActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:noHistory="true"> 
+        <!-- Activity that shows the basic information of a feed -->
+	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"
+         android:launchMode="singleTask" >
             <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
-        <!-- Activity that shows the basic information of a feed -->
-	    <activity android:name=".view.FeedActivity" android:theme="@style/Theme.MicroRss" android:noHistory="false"
-         android:launchMode="singleTask" >
-            <meta-data android:name="com.wimm.app.peekview" android:resource="@layout/peekview" />
         </activity>
 	    
 	    <!-- Activity that shows the basic information of a story -->
