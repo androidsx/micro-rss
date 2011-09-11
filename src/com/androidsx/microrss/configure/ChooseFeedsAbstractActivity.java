@@ -3,15 +3,17 @@ package com.androidsx.microrss.configure;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
@@ -24,7 +26,6 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     private static final String TAG = "ChooseFeedsAbstractActivity";
     
     private MicroRssDao dao;
-    private List<Feed> feeds;
     private ListView listView;
     private CacheImageManager cacheImageManager;
     
@@ -35,18 +36,20 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         
         getListView().setOnTouchListener(swipeListener);
         
-        dao = new MicroRssDao(getContentResolver());
-        feeds = getFeeds();
         cacheImageManager = new CacheImageManager(this);
+        dao = new MicroRssDao(getContentResolver());
         
-        setListAdapter(configureAdapter());
+        List<Feed> feeds = getFeeds();
+        setListAdapter(configureAdapter(feeds));
 
         listView = getListView();
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         
         for (int i = 0; i < feeds.size(); i++) {
-            listView.setItemChecked(getAdapterPosByItemPos(i), feeds.get(i).isActive());
+        	if (feeds.get(i).isActive()) {
+        		listView.setItemChecked(getAdapterPos(feeds.get(i)), true);
+        	}
         }
     }
 
@@ -66,9 +69,8 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         int adapterPosition = position;
         if (!isHeader(adapterPosition)) {
 	        boolean newActiveStatus = listView.getCheckedItemPositions().get(adapterPosition);
-	        int itemPosition = getItemPosByAdapterPos(position);
-	        Feed feed = feeds.get(itemPosition);
-	        Log.i(TAG, "Update the feed " + feed.getTitle() + " as active=" + newActiveStatus + ", itemPosition= " + itemPosition + ", adapterPosition=" + adapterPosition);
+	        Feed feed = getFeed(adapterPosition);
+	        Log.i(TAG, "Update the feed " + feed.getTitle() + " as active=" + newActiveStatus);
 	        dao.updateFeedActive(feed, newActiveStatus, cacheImageManager);
         }
     }
@@ -83,12 +85,12 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
     }
     
     protected abstract List<Feed> getFeeds();
-    protected abstract ListAdapter configureAdapter();
+    protected abstract ListAdapter configureAdapter(List<Feed> feeds);
     protected abstract boolean isHeader(int position);
     
     /** It might have headers, having different position from the Items you pass to the adapters */
-    protected abstract int getAdapterPosByItemPos(int position);
-    protected abstract int getItemPosByAdapterPos(int position);
+    protected abstract int getAdapterPos(Feed feed);
+    protected abstract Feed getFeed(int adapterPposition);
     
     private View.OnTouchListener swipeListener = new SwipeAwareListener() {
 
@@ -113,4 +115,28 @@ public abstract class ChooseFeedsAbstractActivity extends ListActivity {
         public void onBottomToTopSwipe() {
         }
     };
+    
+	class FeedAdapter extends ArrayAdapter<Feed> {
+
+        private List<Feed> items;
+
+        public FeedAdapter(Context context, List<Feed> items) {
+                super(context, 1, items);
+                this.items = items;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+                View v = convertView;
+                if (v == null) {
+                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    v = vi.inflate(R.layout.custom_simple_list_item_multiple_choice, null);
+                }
+                Feed feed = items.get(position);
+                if (feed != null) {
+                        ((TextView) v.findViewById(android.R.id.text1)).setText(feed.getTitle());
+                }
+                return v;
+        }
+}
 }

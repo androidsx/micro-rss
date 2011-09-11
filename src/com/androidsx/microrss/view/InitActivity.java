@@ -34,11 +34,6 @@ public class InitActivity extends Activity {
     }
 
     /** 
-     * FIXME: hack to put headers for eash set of feeds, every time you add/remove new feeds update
-     *      the ChooseSampleFeedsActivity indexes for the category.
-     *  
-     *      We cannot get rid of the DB order dependency until we don't put the categories in DB.
-     * 
      * TODO: use a persistFeeds that takes them all in one chunk
      */
     private void insertInitialFeeds(MicroRssDao dao) {

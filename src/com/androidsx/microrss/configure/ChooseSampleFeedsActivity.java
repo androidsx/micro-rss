@@ -1,49 +1,45 @@
 package com.androidsx.microrss.configure;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
-import com.androidsx.microrss.R;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 
 public class ChooseSampleFeedsActivity extends ChooseFeedsAbstractActivity {
 	private SeparatedChooseFeedsAdapter adapter;
+	
+	private Map<String, List<Feed>> mapCategoriesWithFeeds = new LinkedHashMap<String, List<Feed>>();
 
 	@Override
 	protected List<Feed> getFeeds() {
 		return new MicroRssDao(getContentResolver()).findSampleFeeds();
 	}
 
-    /** FIXME: hack to put headers for eash set of feeds, every time you add/remove new feeds update
-     * the ChooseSampleFeedsActivity indexes for the category!
-     */
 	@Override
-	protected ListAdapter configureAdapter() {
+	protected ListAdapter configureAdapter(List<Feed> feeds) {
 		adapter = new SeparatedChooseFeedsAdapter(
 				this);
 
-		List<Feed> feeds = getFeeds();
-		adapter.addSection("Tech", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(0, 9))));
-		adapter.addSection("News", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(9, 18))));
-		adapter.addSection("Sports", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(18, 23))));
-		adapter.addSection("Finance", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(23, 27))));
-		adapter.addSection("Entertainment", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(27, 30))));
-		adapter.addSection("Other", new ArrayAdapter<String>(this,
-				R.layout.custom_simple_list_item_multiple_choice,
-				feedToStringArray(feeds.subList(30, feeds.size()))));
+		for (Feed feed : feeds) {
+			List<Feed> categoryFeeds = mapCategoriesWithFeeds.get(feed.getCategory());
+			if (categoryFeeds == null) {
+				categoryFeeds = new ArrayList<Feed>();
+				categoryFeeds.add(feed);
+				mapCategoriesWithFeeds.put(feed.getCategory(), categoryFeeds);
+			} else {
+				categoryFeeds.add(feed);
+			}
+		}
+		
+		for (String category : mapCategoriesWithFeeds.keySet()) {
+			adapter.addSection(category, new FeedAdapter(this, mapCategoriesWithFeeds.get(category)));
+		}
+
 		return adapter;
 	}
 
@@ -53,12 +49,19 @@ public class ChooseSampleFeedsActivity extends ChooseFeedsAbstractActivity {
 	}
 
 	@Override
-	protected int getAdapterPosByItemPos(int position) {
-		return adapter.getAdapterPosByItemPos(position);
+	protected int getAdapterPos(Feed feed) {
+		int numItems = adapter.getCount();
+		for (int i = 0; i < numItems; i++) {
+			Object item = adapter.getItem(i);
+			if (item != null && item instanceof Feed && ((Feed) item).getId() == feed.getId()) {
+				return i;
+			}
+		}
+		return 0;
 	}
 
 	@Override
-	protected int getItemPosByAdapterPos(int position) {
-		return adapter.getItemPosByAdapterPos(position);
+	protected Feed getFeed(int adapterPposition) {
+		return (Feed) ((!isHeader(adapterPposition)) ? adapter.getItem(adapterPposition) : null);
 	}
 }

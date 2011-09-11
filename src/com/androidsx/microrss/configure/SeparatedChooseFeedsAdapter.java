@@ -44,49 +44,6 @@ public class SeparatedChooseFeedsAdapter extends BaseAdapter {
 		return null;
 	}
 
-	/**
-	 * Gets the position within the adapter counting only the real items and headers
-	 * 
-	 * @param itemPosition the position of the real items, not headers
-	 * @return adapter position, counting sections and items
-	 */
-	public int getAdapterPosByItemPos(int itemPosition) {
-		int countItems = 0;
-		int numAdapterItems = getCount();
-		int adapterPosition = 0;
-		for (int adapterItems = 0; adapterItems < numAdapterItems; adapterItems++) {
-			if (!isHeader(adapterItems)) {
-				countItems++;
-			}
-			if (countItems - 1 == itemPosition) {
-				adapterPosition = adapterItems;
-				break;
-			}
-		}
-		return adapterPosition;
-	}
-
-	/**
-	 * Gets the position counting only the real items, not the headers
-	 * 
-	 * @param adapterPosition the position within the adapter
-	 * @return -1 if it is a header, or item position within all the header adapters
-	 */
-	public int getItemPosByAdapterPos(int adapterPosition) {
-		if (isHeader(adapterPosition)) {
-			return -1;
-		}
-		
-		int itemPosition = 0;
-		for (int adapterItems = 0; adapterItems < adapterPosition; adapterItems++) {
-			if (!isHeader(adapterItems)) {
-				itemPosition++;
-			}
-		}
-		
-		return itemPosition;
-	}
-
 	public int getCount() {
 		// total together all sections, plus one for each section header
 		int total = 0;
