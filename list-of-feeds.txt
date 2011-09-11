@@ -1,0 +1,212 @@
+----- News
+
+Google News 
+http://news.google.com/news?ned=us&topic=h&output=rss
+
+BBC Top Stories
+http://feeds.bbci.co.uk/news/rss.xml
+
+NYTimes World
+http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml
+
+BBC World
+http://news.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+
+CNN Top Stories
+http://rss.cnn.com/rss/edition.rss
+
+Wired top stories
+http://www.wired.com/news_drop/netcenter/netcenter.rdf
+
+Fox News
+http://www.foxnews.com/xmlfeed/rss/0,4313,0,00.rss
+
+Yahoo News
+http://rss.news.yahoo.com/rss/topstories
+
+----- Business
+
+NYTimes Business
+http://feeds.nytimes.com/nyt/rss/Business
+
+Reuters
+http://feeds.reuters.com/reuters/topNews
+
+Wall Street Journal
+http://feeds2.feedburner.com/wsj/xml/rss/3_7481.xml
+
+The Economist
+http://www.economist.com/rss/daily_news_and_views_rss.xml
+
+Mashable!
+http://feeds.mashable.com/mashable
+	
+ZeroHedge
+http://feeds.feedburner.com/zerohedge/feed 
+	
+Naked Capitalism
+http://www.nakedcapitalism.com/feed
+	
+Business Insider
+http://feeds2.feedburner.com/businessinsider
+	
+Calculated Risk
+http://feeds.feedburner.com/CalculatedRisk
+
+----- Sports
+
+ESPN Top
+http://sports.espn.go.com/espn/rss/news
+
+Yahoo Sports 
+http://sports.yahoo.com/top/rss.xml
+
+Bleacher Report
+http://bleacherreport.com/articles/feed
+	
+Dr. Saturday - NCAAF
+http://rivals.yahoo.com/ncaa/football/blog/dr_saturday/rss.xml
+	
+LA Times Sports Blog
+http://feeds.latimes.com/LAT_Sports_Blog
+	
+SportsGrid
+http://www.sportsgrid.com/feed/
+
+ESPN NBA
+http://sports.espn.go.com/espn/rss/nba/news
+
+ESPN - NFL
+http://sports.espn.go.com/espn/rss/nfl/news 
+	
+ESPN - NFL
+http://sports.espn.go.com/espn/rss/nhl/news
+
+ESPN Soccer
+http://soccernet.espn.go.com/rss/news
+
+NYTimes Sports 
+http://www.nytimes.com/services/xml/rss/nyt/Sports.xml
+
+----- Politics
+
+The Huffington Post
+http://feeds.huffingtonpost.com/huffingtonpost/raw_feed
+	
+Think Progress
+http://thinkprogress.org/feed/
+	
+CNN Political Ticker
+http://politicalticker.blogs.cnn.com/feed/
+	
+Mediaite
+http://www.mediaite.com/feed/
+	
+Daily Kos
+http://feeds.dailykos.com/dailykos/index.xml
+	
+The Note
+http://abcnews.go.com/blogs/politics/the-note/feed/
+	
+RedState
+http://www.redstate.com/feed/rss/
+
+----- Autos
+
+Autoblog
+http://feeds.autoblog.com/weblogsinc/autoblog
+	
+Top Speed
+http://www.topspeed.com/rss.xml
+
+----- Technology
+
+TechCrunch
+http://feeds.feedburner.com/Techcrunch
+
+Engadget
+http://www.engadget.com/rss.xml
+	
+The Official Google Blog
+http://googleblog.blogspot.com/feeds/posts/default?alt=rss
+	
+Mashable!
+http://feeds.mashable.com/mashable
+	
+BGR
+http://www.bgr.com/feed/
+	
+The Next Web
+http://feeds2.feedburner.com/thenextweb
+	
+SlashGear
+http://feeds.slashgear.com/slashgear
+	
+GigaOM
+http://feeds.feedburner.com/ommalik
+
+Slashdot
+http://rss.slashdot.org/slashdot/eqWf
+
+LifeHacker
+http://lifehacker.com/index.xml
+
+ReadWriteWeb
+http://www.readwriteweb.com/rss.xml
+
+Gizmodo
+http://www.gizmodo.net/index.xml
+
+----- Science
+
+Wired Science
+http://www.wired.com/wiredscience/feed/
+	
+Discover Magazine
+http://feeds.feedburner.com/DiscoverTopStories 
+	
+Universe Today
+http://www.universetoday.com/feed/
+	
+Geekosystem
+http://www.geekosystem.com/feed/ 
+
+----- Living
+
+The Cut
+http://feedproxy.google.com/nymag/fashion
+	
+Fashionista
+http://feeds.feedburner.com/fashionistacom
+
+Think Progress
+http://thinkprogress.org/feed/
+
+----- Entertainment
+
+CNN Entertainment 
+http://rss.cnn.com/rss/edition_entertainment.rss
+
+TMZ.com
+http://www.tmz.com/rss.xml
+	
+Deadline
+http://www.deadline.com/feed/
+	
+Vulture
+http://feeds.feedburner.com/nymag/vulture
+	
+Joystiq
+http://www.joystiq.com/rss.xml
+	
+Just Jared
+http://feeds2.feedburner.com/justjared/TOvO
+
+Eurogamer
+http://www.eurogamer.net/rss/eurogamer_frontpage_feed.rss 
+
+Brain Teasers
+http://feeds.braingle.com/braingle/all
+
+Random Jokes
+http://jokes4all.net/rss/040000111/jokes.xml
