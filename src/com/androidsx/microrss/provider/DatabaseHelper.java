@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.androidsx.microrss.provider.News.Categories;
 import com.androidsx.microrss.provider.News.Feeds;
 import com.androidsx.microrss.provider.News.Items;
 
@@ -15,7 +16,7 @@ import com.androidsx.microrss.provider.News.Items;
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "microrss.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 15;
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,8 +33,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
         //FlurryAgent.onEvent(FlurryConstants.EVENT_NEW_INSTALL);
         Log.i(TAG, "Create a new database " + DATABASE_NAME
                         + ", version " + DATABASE_VERSION);
+        
+        db.execSQL("CREATE TABLE " + News.TABLE_CATEGORIES + " ("
+                + Categories._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Categories.NAME + " TEXT UNIQUE"
+                + ");");
+        
         db.execSQL("CREATE TABLE " + News.TABLE_FEEDS + " ("
                 + Feeds._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Feeds.CATEGORY_ID + " INTEGER,"
                 + Feeds.FEED_URL + " TEXT,"
                 + Feeds.TITLE + " TEXT,"
                 + Feeds.ACTIVE + " BOOLEAN,"
@@ -71,6 +79,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if (version != DATABASE_VERSION) {
             Log.w(TAG, "The database version has changed from " + oldVersion + " to " + newVersion
                     + ". We will now destroy all existing tables and recreate them");
+            db.execSQL("DROP TABLE IF EXISTS " + News.TABLE_CATEGORIES);
             db.execSQL("DROP TABLE IF EXISTS " + News.TABLE_FEEDS);
             db.execSQL("DROP TABLE IF EXISTS " + News.TABLE_ITEMS);
             onCreate(db);

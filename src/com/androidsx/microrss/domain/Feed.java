@@ -55,5 +55,12 @@ public interface Feed extends Serializable {
    * @return pubDate last updated of this feed
    */
   Date getLastModificationDate();
+  
+  /**
+   * Category of this feed, that allows to split feeds by topics.
+   * 
+   * @return category of this feed
+   */
+  String getCategory();
 
 }

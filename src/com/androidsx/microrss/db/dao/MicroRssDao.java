@@ -19,6 +19,7 @@ import com.androidsx.microrss.domain.DefaultItem;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.provider.News;
+import com.androidsx.microrss.provider.News.Categories;
 import com.androidsx.microrss.provider.News.Feeds;
 import com.androidsx.microrss.provider.News.Items;
 
@@ -29,22 +30,77 @@ public class MicroRssDao {
         this.contentResolver = contentResolver;
     }
 
-    public void persistFeed(Context context, String title, String feedUrl, boolean active,
-            boolean gReader) {
-        persistFeedInternal(context, title, feedUrl, active, gReader);
+    String findCategoryById(int id) {
+        Cursor cursor = null;
+        try {
+            final Uri aCategoryUri = ContentUris.withAppendedId(News.Categories.CONTENT_URI, id);
+            final String[] projection = new String[] { Categories._ID, Categories.NAME };
+            cursor = contentResolver.query(aCategoryUri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndex(Categories.NAME));
+            } else {
+                throw new IllegalArgumentException("No category was found for the id " + id);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
-    public void persistFeedCheckingUniqueKey(Context context, String title, String feedUrl, boolean active,
+    
+    Integer findCategoryByName(String categoryName) {
+        Cursor cursor = null;
+        try {
+            final String[] projection = new String[] { Categories._ID, Categories.NAME };
+            cursor = contentResolver.query(News.Categories.CONTENT_URI, projection, Categories.NAME
+                    + " = ?", new String[] { categoryName }, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndex(Categories._ID));
+            } else {
+                return null;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    
+    int persistCategory(String categoryName) {
+        ContentValues values = new ContentValues();
+        values.put(Categories.NAME, categoryName);
+        
+        Uri uri = contentResolver.insert(News.Categories.CONTENT_URI, values);
+        return Integer.valueOf(uri.getPathSegments().get(1));
+    }
+    
+    public void persistFeed(Context context, String category, String title, String feedUrl,
+            boolean active, boolean gReader) {
+        persistFeedInternal(context, category, title, feedUrl, active, gReader);
+    }
+    
+    /**
+     * @deprecated Do this logic in the caller
+     */
+    @Deprecated
+    public void persistFeedCheckingUniqueKey(Context context, String category, String title, String feedUrl, boolean active,
             boolean gReader) {
         if (findFeedsByUrl(feedUrl).size() == 0) {
-            persistFeedInternal(context, title, feedUrl, active, gReader);
+            persistFeedInternal(context, category, title, feedUrl, active, gReader);
         } else {
             Log.w("MicroRssDao", "This feed: " + title + " already exists in the database. We skip it.");
         }
     }
 
-    private void persistFeedInternal(Context context, String title, String feedUrl, boolean active,
+    private void persistFeedInternal(Context context, String category, String title, String feedUrl, boolean active,
             boolean gReader) {
+        Integer categoryId = findCategoryByName(category);
+        if (categoryId == null) {
+            categoryId = persistCategory(category);
+        }
+        
         ContentValues values = new ContentValues();
+        values.put(Feeds.CATEGORY_ID, categoryId);
         values.put(Feeds.LAST_UPDATE, -1);
         values.put(Feeds.TITLE, title);
         values.put(Feeds.FEED_URL, feedUrl);
@@ -74,7 +130,7 @@ public class MicroRssDao {
      * @param active if false it will delete all the item feeds and thumbnails associated
      */
     public void updateFeedActive(Feed feed, boolean active, CacheImageManager cacheManager) {
-        Feed updatedFeed = new DefaultFeed(feed.getId(), feed.getTitle(), feed.getURL(), active, feed.getLastModificationDate());
+        Feed updatedFeed = new DefaultFeed(feed.getId(), feed.getTitle(), feed.getURL(), active, feed.getLastModificationDate(), feed.getCategory());
         updateFeed(updatedFeed);
 
         if (active == false) {
@@ -151,7 +207,7 @@ public class MicroRssDao {
         Cursor cursor = null;
         try {
             final Uri allFeedsUri = News.Feeds.CONTENT_URI;
-            final String[] projection = new String[] { Feeds._ID, Feeds.TITLE,
+            final String[] projection = new String[] { Feeds._ID, Feeds.CATEGORY_ID, Feeds.TITLE,
                     Feeds.FEED_URL, Feeds.ACTIVE, Feeds.LAST_UPDATE };
             cursor = contentResolver.query(allFeedsUri, projection, selection, null,
                     Feeds._ID + " ASC"); // FIXME: sort by feed position instead
@@ -174,7 +230,7 @@ public class MicroRssDao {
         Cursor cursor = null;
         try {
             final Uri aFeedUri = ContentUris.withAppendedId(News.Feeds.CONTENT_URI, id);
-            final String[] projection = new String[] { Feeds._ID, Feeds.FEED_URL, Feeds.TITLE,
+            final String[] projection = new String[] { Feeds._ID, Feeds.CATEGORY_ID, Feeds.FEED_URL, Feeds.TITLE,
                     Feeds.LAST_UPDATE, Feeds.ACTIVE };
             cursor = contentResolver.query(aFeedUri, projection, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
@@ -287,13 +343,15 @@ public class MicroRssDao {
                 cursor.getString(cursor.getColumnIndex(Items.THUMBNAIL_URL)));
     }
     
-    private static Feed feedFromCursor(Cursor cursor) {
+    private Feed feedFromCursor(Cursor cursor) {
+        String categoryName = findCategoryById(cursor.getInt(cursor.getColumnIndex(Feeds.CATEGORY_ID)));
         return new DefaultFeed(
                 cursor.getInt(cursor.getColumnIndex(Feeds._ID)),
                 cursor.getString(cursor.getColumnIndex(Feeds.TITLE)),
                 cursor.getString(cursor.getColumnIndex(Feeds.FEED_URL)),
                 cursor.getInt(cursor.getColumnIndex(Feeds.ACTIVE)) == 1,
-                new Date(cursor.getLong(cursor.getColumnIndex(Feeds.LAST_UPDATE))));
+                new Date(cursor.getLong(cursor.getColumnIndex(Feeds.LAST_UPDATE))),
+                categoryName);
     }
 
     private static int[] toIntArray(List<Integer> list) {

@@ -17,13 +17,15 @@ public class DefaultFeed implements Feed {
     private final String title;
     private final String url;
     private final boolean active;
+    private final String category;
 
-    public DefaultFeed(int id, String title, String url, boolean active, Date lastModificationDate) {
+    public DefaultFeed(int id, String title, String url, boolean active, Date lastModificationDate, String category) {
         this.id = id;
         this.title = title;
         this.url = url;
         this.active = active;
         this.lastModificationDate = lastModificationDate;
+        this.category = category;
     }
 
     @Override
@@ -49,6 +51,11 @@ public class DefaultFeed implements Feed {
     @Override
     public boolean isActive() {
         return active;
+    }
+    
+    @Override
+    public String getCategory() {
+        return category;
     }
 
     @Override

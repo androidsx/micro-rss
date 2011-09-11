@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
+import com.androidsx.microrss.provider.News.Categories;
 import com.androidsx.microrss.provider.News.Feeds;
 import com.androidsx.microrss.provider.News.Items;
 
@@ -24,10 +25,13 @@ import com.androidsx.microrss.provider.News.Items;
 public class NewsProvider extends ContentProvider {
     public static final String TAG = NewsProvider.class.getSimpleName();
 
+    private static final String SINGLE_CATEGORY = "category";
     private static final String SINGLE_FEED = "feed";
     private static final String SINGLE_ITEM = "item";
 
     // Codes for the different URIs. See the #getUriMatcher method.
+    private static final int ALL_CATEGORIES = 301;
+    private static final int A_CATEGORY_BY_ID = 302;
     private static final int ALL_FEEDS = 101;
     private static final int A_FEED_BY_ID = 102;
     private static final int ALL_ITEMS_FOR_A_FEED_BY_ID = 103;
@@ -74,8 +78,9 @@ public class NewsProvider extends ContentProvider {
                 count += db.delete(News.TABLE_ITEMS, selection, selectionArgs);
                 break;
             }
-            default:
-                throw new UnsupportedOperationException();
+            default: {
+                throw new UnsupportedOperationException("The URI " + uri + " is not valid.");
+            }
         }
         Log.v(TAG, "delete() is done. " + count + " elements were deleted");
         return count;
@@ -88,6 +93,14 @@ public class NewsProvider extends ContentProvider {
 
         Uri resultUri = null;
         switch (getUriMatcher().match(uri)) {
+            case ALL_CATEGORIES: {
+                Log.d(TAG, "Insert a new category");
+                long categoryId = db.insert(News.TABLE_CATEGORIES, null, values);
+                if (categoryId != -1) {
+                    resultUri = ContentUris.withAppendedId(News.Categories.CONTENT_URI, categoryId);
+                }
+                break;
+            }
             case ALL_FEEDS: {
                 Log.d(TAG, "Insert a new feed");
                 long feedId = db.insert(News.TABLE_FEEDS, null, values);
@@ -114,8 +127,9 @@ public class NewsProvider extends ContentProvider {
                 }
                 break;
             }
-            default:
-                throw new UnsupportedOperationException();
+            default: {
+                throw new UnsupportedOperationException("The URI " + uri + " is not valid.");
+            }
         }
 
         Log.v(TAG, "insert() is done. Results are in uri " + resultUri);
@@ -130,6 +144,18 @@ public class NewsProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         switch (getUriMatcher().match(uri)) {
+            case ALL_CATEGORIES: {
+                Log.d(TAG, "Fetch all categories");
+                qb.setTables(News.TABLE_CATEGORIES);
+                break;
+            }
+            case A_CATEGORY_BY_ID: {
+                String categoryId = uri.getPathSegments().get(1);
+                Log.d(TAG, "Fetch the category with id " + categoryId);
+                qb.setTables(News.TABLE_CATEGORIES);
+                qb.appendWhere(Categories._ID + "=" + categoryId);
+                break;
+            }
             case ALL_FEEDS: {
                 Log.d(TAG, "Fetch all feeds");
                 qb.setTables(News.TABLE_FEEDS);
@@ -162,6 +188,9 @@ public class NewsProvider extends ContentProvider {
                 qb.appendWhere(Items._ID + "=" + itemId);
                 break;
             }
+            default: {
+                throw new UnsupportedOperationException("The URI " + uri + " is not valid.");
+            }
         }
 
         return qb.query(databaseHelper.getReadableDatabase(), projection, selection, selectionArgs,
@@ -190,8 +219,10 @@ public class NewsProvider extends ContentProvider {
                 count = db.update(News.TABLE_ITEMS, values, selection, selectionArgs);
                 break;
             }
-            default:
-                throw new UnsupportedOperationException();
+            default: {
+                throw new UnsupportedOperationException("The URI " + uri + " is not valid.");
+            }
+
         }
         Log.v(TAG, "update() is done. " + count + " elements were updated");
         return count;
@@ -199,6 +230,9 @@ public class NewsProvider extends ContentProvider {
     
     @Override
     public String getType(Uri uri) {
+        final String CATEGORY_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_CATEGORY;
+        final String CATEGORY_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_CATEGORY;
+        
         final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/" + SINGLE_FEED;
         final String FEED_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_FEED;
         
@@ -206,6 +240,10 @@ public class NewsProvider extends ContentProvider {
         final String ITEM_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + SINGLE_ITEM;
         
         switch (getUriMatcher().match(uri)) {
+            case ALL_CATEGORIES:
+                return CATEGORY_CONTENT_TYPE;
+            case A_CATEGORY_BY_ID:
+                return CATEGORY_CONTENT_ITEM_TYPE;
             case ALL_FEEDS:
                 return FEED_CONTENT_TYPE;
             case A_FEED_BY_ID:
@@ -216,8 +254,9 @@ public class NewsProvider extends ContentProvider {
                 return ITEM_CONTENT_TYPE;
             case A_ITEMS_BY_ID:
                 return ITEM_CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("The URI " + uri + " is not valid.");
         }
-        throw new IllegalStateException();
     }
 
     /**
@@ -233,12 +272,15 @@ public class NewsProvider extends ContentProvider {
         if (uriMatcher == null) {
             uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
             
-            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS,                       ALL_FEEDS);
-            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS + "/#",                A_FEED_BY_ID);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_CATEGORIES, ALL_CATEGORIES);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_CATEGORIES + "/#", A_CATEGORY_BY_ID);
+            
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS, ALL_FEEDS);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS + "/#", A_FEED_BY_ID);
             uriMatcher.addURI(News.AUTHORITY, News.TABLE_FEEDS + "/#/" + News.TABLE_ITEMS, ALL_ITEMS_FOR_A_FEED_BY_ID);
             
-            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS,                       ALL_ITEMS);
-            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS + "/#",                A_ITEMS_BY_ID);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS, ALL_ITEMS);
+            uriMatcher.addURI(News.AUTHORITY, News.TABLE_ITEMS + "/#", A_ITEMS_BY_ID);
         }
         return uriMatcher;
     }

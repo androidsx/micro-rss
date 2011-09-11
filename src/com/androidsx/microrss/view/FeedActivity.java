@@ -175,7 +175,7 @@ public class FeedActivity extends LauncherActivity {
     
     private List<Feed> insertEmptyFeedForSettings(List<Feed> before) {
         List<Feed> after = new ArrayList<Feed>();
-        after.add(new DefaultFeed(Feed.SETTINGS_ID, "", "", true, new java.util.Date()));
+        after.add(new DefaultFeed(Feed.SETTINGS_ID, "", "", true, new java.util.Date(), ""));
         after.addAll(before);
         return after;
     }

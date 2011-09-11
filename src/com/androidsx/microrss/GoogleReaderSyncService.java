@@ -121,7 +121,8 @@ public class GoogleReaderSyncService extends Service {
                             String url = sub.getUid().replaceFirst("feed/", "");
                             String title = sub.getTitle();
                             MicroRssDao dao = new MicroRssDao(getContentResolver());
-                            dao.persistFeedCheckingUniqueKey(GoogleReaderSyncService.this, title, url, false, true);
+                            dao.persistFeedCheckingUniqueKey(GoogleReaderSyncService.this,
+                                    "Google Reader", title, url, false, true);
                         }
                         return true;
                     }

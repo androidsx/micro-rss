@@ -8,12 +8,28 @@ public final class News {
     /** Content provider authority for this application. Defined in the manifest file too. */
     public static final String AUTHORITY = "com.androidsx.microrss.provider.NewsProvider";
     
-    /** Name of the feed table, whose columns are {@link Feeds}. */
+    /** Name of the category table.. */
+    public static final String TABLE_CATEGORIES = "categories";
+    
+    /** Name of the feed table, whose columns represent {@link Feeds}. */
     public static final String TABLE_FEEDS = "feeds";
     
-    /** Name of the item table, whose columns are {@link Items}. */
+    /** Name of the item table, whose columns represent {@link Items}. */
     public static final String TABLE_ITEMS = "items";
 
+    public static final class Categories implements BaseColumns {
+        
+        /**
+         * Content provider for the categories table.
+         */
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_CATEGORIES);
+        
+        /**
+         * Name of this category, in English.
+         */
+        public static final String NAME = "name";
+    }
+    
     /**
      * Columns for the DB table that contains the feeds.
      */
@@ -22,10 +38,15 @@ public final class News {
         /**
          * Content provider for the feeds table.
          * <p>
-         * Use {@code ContentUris.withAppendedId(MicroRssContentProvider.Feeds.FEEDS_CONTENT_URI, feedId)} in
+         * Use {@code ContentUris.withAppendedId(News.Feeds.FEEDS_CONTENT_URI, feedId)} in
          * order to access a single feed.
          */
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_FEEDS);
+        
+        /**
+         * Foreign key to the category that this feed belongs to.
+         */
+        public static final String CATEGORY_ID = "category_id";
 
         /**
          * URL of the feed.
