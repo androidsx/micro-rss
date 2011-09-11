@@ -11,7 +11,7 @@ import com.androidsx.microrss.UpdateService;
 
 public class SyncIntervalPrefs {
     public static final String SYNC_STATUS = "SYNC_STATUS";
-    private static final String LAST_SYNC_ATTEMPT = "LAST_SYNC_ATTEMPT";
+    public static final String LAST_SYNC_ATTEMPT = "LAST_SYNC_ATTEMPT";
     public static final String LAST_SUCCESSFUL_SYNC = "LAST_SUCCESSFUL_SYNC";
     private static final String FORCE_SYNC = "FORCE_SYNC";
 
@@ -44,6 +44,10 @@ public class SyncIntervalPrefs {
 
     public long getLastSyncAttempt() {
         return mPrefs.getLong(LAST_SYNC_ATTEMPT, 0);
+    }
+
+    public long getLastSyncAttemptGoogleReader() {
+    	return mPrefs.getLong(LAST_SYNC_ATTEMPT_GREADER, 0);
     }
 
     public long getLastSuccessfulSync() {

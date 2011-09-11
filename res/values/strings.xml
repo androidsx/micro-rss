@@ -226,7 +226,7 @@ v1.4 (19.01.2010)\n
     <string name="go_settings">Settings</string>
     
     <string name="synchronizing">Synchronizing ...</string>
-    <string name="last_sync">Last sync:</string>
+    <string name="last_sync">Last sync attempt:</string>
     <string name="never_synced">Never sync\'ed</string>
     
     <string name="loading">Loading ...</string>

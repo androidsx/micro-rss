@@ -164,7 +164,7 @@ public class Preferences extends PreferenceActivity {
 		if (syncIntervalPrefs.isSyncing()) {
 			msg = getString(R.string.synchronizing);
 		} else {
-			long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
+			long syncTime = syncIntervalPrefs.getLastSyncAttempt();
 			if (syncTime != 0) {
 				msg = getString(R.string.last_sync) + " "
 						+ AnyRSSHelper.toRelativeDateString(new Date(syncTime));

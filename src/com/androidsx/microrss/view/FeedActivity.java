@@ -33,10 +33,11 @@ public class FeedActivity extends LauncherActivity {
 
     private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
-        	// update only when there has been a succesful sync OR
+        	// update only when there has been a sync OR
         	// the sync has started/finished ONLY on the initial sync, to not
         	// update while you are looking feeds.
             if (key.equals(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC) ||
+            		key.equals(SyncIntervalPrefs.LAST_SYNC_ATTEMPT) ||
             		(key.equals(SyncIntervalPrefs.SYNC_STATUS) &&
             				prefs.getLong(SyncIntervalPrefs.LAST_SUCCESSFUL_SYNC, 0) == 0)) {
                 runOnUiThread(new Runnable() {
@@ -84,7 +85,7 @@ public class FeedActivity extends LauncherActivity {
     
     private void buildView() {
     	SyncIntervalPrefs syncPrefs = new SyncIntervalPrefs(this);
-        if (syncPrefs.getLastSuccessfulSync() == 0) {
+        if (syncPrefs.getLastSyncAttempt() == 0) {
             if (syncPrefs.isSyncing()) {
             	Log.d(TAG, "A successful sync was never performed and we are syncing in the background");
             	buildFirstExecIsSyncingView();
