@@ -61,7 +61,7 @@ public class SyncIntervalPrefs {
     // checks if our data need to be refreshed
     public boolean shouldSync() {
 
-        long now = System.currentTimeMillis();
+        //long now = System.currentTimeMillis();
         long lastSync = mPrefs.getLong(LAST_SUCCESSFUL_SYNC, 0);
         boolean forceSync = mPrefs.getBoolean(FORCE_SYNC, false);
         
@@ -75,8 +75,8 @@ public class SyncIntervalPrefs {
         }
 
         // we are too close to the last sync
-        if ((now - lastSync) < MIN_SYNC_INTERVAL)
-            return false;
+        //if ((now - lastSync) < MIN_SYNC_INTERVAL)
+        //    return false;
 
         return true;
     }
