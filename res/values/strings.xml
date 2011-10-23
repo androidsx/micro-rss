@@ -201,21 +201,21 @@ v1.4 (19.01.2010)\n
     <string name="error_message_feed_no_active_detailed">Please select at least one in Settings</string>
     
     <string name="error_message_feed_unexpected_id">Unexpected error</string>
-    <string name="error_message_feed_unexpected_id_detailed">Please wait for next sync, it will start soon</string>
+    <string name="error_message_feed_unexpected_id_detailed">Please wait for next sync</string>
 
     <string name="error_message_first_update">Not synchronized yet</string>
     <string name="error_message_first_update_detailed">The initial sync is in progress... please wait</string>
 
     <string name="error_message_first_update_no_sync">Not synchronized yet</string>
-    <string name="error_message_first_update_no_sync_detailed">Please wait for the first sync, it will start soon</string>
+    <string name="error_message_first_update_no_sync_detailed">Please wait for the first sync</string>
 
 	<!-- @Deprecated -->
     <string name="error_message_story_no_items">No stories</string>
 	<!-- @Deprecated -->
-    <string name="error_message_story_no_items_detailed">There are no stories for this feed. We\'ll soon attempt to synchronize it.</string>
+    <string name="error_message_story_no_items_detailed">There are no stories for this feed. Wait for the next sync.</string>
 
     <string name="error_message_feed_no_items">No stories for this feed</string>
-    <string name="error_message_feed_no_items_detailed">Please wait for the next sync, it will start soon</string>
+    <string name="error_message_feed_no_items_detailed">Please wait for the next sync</string>
     
     <string name="left_arrow_enabled">&lt;</string>
     <string name="left_arrow_disabled">&lt;</string>
