@@ -74,35 +74,35 @@ public class Preferences extends PreferenceActivity {
             }
         });
         
-        ((Preference) findPreference("syncStories")).setOnPreferenceClickListener(
-                new OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Log.i(TAG, "Force the syncronization");
-                
-                SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(Preferences.this);
-                if ( syncIntervalPrefs.isSyncing() ) {
-                    Log.i(TAG, "We are already syncing");
-                    Toast.makeText(Preferences.this, "We are already syncing", Toast.LENGTH_SHORT).show();
-                } else {
-                    long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
-                    if ( syncTime != 0 ) {
-                        Time t = new Time();
-                        t.set(syncTime);
-                        Log.i(TAG, "Last sync success: " + t.format("%H:%M:%S") + " " +  t.format("%m/%d/%Y"));
-                    } else {
-                        Log.i(TAG, "We have never succeed to sync");
-                    }
-                    
-                    Toast.makeText(Preferences.this, "Force the sync, it may take a while", Toast.LENGTH_SHORT).show();
-                }
-                
-                syncIntervalPrefs.willForceSync(true);
-                WIMMCompatibleHelper.requestSync(Preferences.this);
-                
-                return true;
-            }
-        });
+//        ((Preference) findPreference("syncStories")).setOnPreferenceClickListener(
+//                new OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                Log.i(TAG, "Force the syncronization");
+//                
+//                SyncIntervalPrefs syncIntervalPrefs = new SyncIntervalPrefs(Preferences.this);
+//                if ( syncIntervalPrefs.isSyncing() ) {
+//                    Log.i(TAG, "We are already syncing");
+//                    Toast.makeText(Preferences.this, "We are already syncing", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    long syncTime = syncIntervalPrefs.getLastSuccessfulSync();
+//                    if ( syncTime != 0 ) {
+//                        Time t = new Time();
+//                        t.set(syncTime);
+//                        Log.i(TAG, "Last sync success: " + t.format("%H:%M:%S") + " " +  t.format("%m/%d/%Y"));
+//                    } else {
+//                        Log.i(TAG, "We have never succeed to sync");
+//                    }
+//                    
+//                    Toast.makeText(Preferences.this, "Force the sync, it may take a while", Toast.LENGTH_SHORT).show();
+//                }
+//                
+//                syncIntervalPrefs.willForceSync(true);
+//                WIMMCompatibleHelper.requestSync(Preferences.this);
+//                
+//                return true;
+//            }
+//        });
         
         
         ((Preference) findPreference("syncStoriesMessage")).setTitle(getLastSyncMessage());

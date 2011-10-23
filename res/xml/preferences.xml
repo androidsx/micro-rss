@@ -37,13 +37,13 @@
                     android:dialogTitle="Update the stories every"
                     android:layout="@layout/custom_preferences_row"
                     android:enabled="false" />
-				-->   
+				   
                 <Preference
                         android:title="Force sync"
                         android:summary=""
                         android:key="syncStories"
                         android:layout="@layout/custom_preferences_row" />
-                        
+                 -->       
                 <Preference
                         android:title=""
                         android:summary=""
