@@ -16,7 +16,6 @@ import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.configure.Preferences;
-import com.androidsx.microrss.configure.SharedPreferencesHelper;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.Feed;
@@ -30,7 +29,8 @@ import com.wimm.framework.view.MotionInterpreter;
  */
 public class FeedActivity extends LauncherActivity {
 	private static final String TAG = "FeedActivity";
-
+	private static final String PREFS_NAME = "com.androidsx.microrss";
+	
     private final OnSharedPreferenceChangeListener firstSyncListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
         	// update only when there has been a sync OR
@@ -66,10 +66,10 @@ public class FeedActivity extends LauncherActivity {
         setContentView(R.layout.feed_wimm_wrapper);
         
         // check first execution, to ask WIMM syncronization
-        int isFirstTimeUserOpenApp = SharedPreferencesHelper.getIntValue(this, FIRST_TIME_APP_OPENED_PREFS);
+        int isFirstTimeUserOpenApp = getIntValue(this, FIRST_TIME_APP_OPENED_PREFS);
         if (isFirstTimeUserOpenApp == 0) {
         	WIMMCompatibleHelper.requestSync(this);
-        	SharedPreferencesHelper.saveIntValue(this, FIRST_TIME_APP_OPENED_PREFS, 1);
+        	saveIntValue(this, FIRST_TIME_APP_OPENED_PREFS, 1);
         }
         
         configureViewTray((CustomAdapterViewTray) findViewById(R.id.custom_feed_wrapper));
@@ -220,5 +220,16 @@ public class FeedActivity extends LauncherActivity {
             && !(customViewTrayAdapter.getAdapter() instanceof ErrorMessageAdapter)) {
             onFeedClick(null);
         }
+    }
+    
+    private void saveIntValue(Context context, String key, int value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    private static int getIntValue(Context context, String key) {
+        SharedPreferences config = context.getSharedPreferences(PREFS_NAME, 0);
+        return config.getInt(key, 0);
     }
 }
