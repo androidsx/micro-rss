@@ -229,37 +229,6 @@ public class WebserviceHelper {
         }
     }
     
-    /**
-     * Perform a webservice query to retrieve the items for this feed from the
-     * corresponding webserver.
-     * <p>
-     * This call blocks until the request is finished
-     * <p>
-     * TODO: Move to a non-static method
-     *
-     * @param context the activity context. TODO: This violates Demeter's law
-     * @param rssUrl Url to retrieve the list of items
-     * @param maxNumberOfItems number of items to retrieve from the feed
-     * 
-     * @return the list of items as a {@link ItemList}
-     */
-    public static ItemList getRssItems(Context context, String rssUrl, String rssName, int maxNumberOfItems)
-            throws FeedProcessingException {
-        Log.d(TAG, "Ask the RSS source to retrieve the items from " + rssUrl);
-   
-        prepareUserAgent(context);
-        
-        List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems, -1);
-        DefaultItemList itemList = new DefaultItemList();
-        itemList.setTitle(rssName);
-        for (int i = 0; i < newRssItems.size(); i++) {
-          itemList.addItem(newRssItems.get(i));
-        }
-        
-        Log.d(TAG, "Retrieved " + newRssItems.size() + " items from " + rssUrl);
-        return itemList;
-    }
-    
     private static void insertNewItemsIntoDb(Context context, ContentResolver resolver, int feedId, String rssUrl, int maxNumberOfItems, long lastFeedUpdate, RssItemsDao dao) throws FeedProcessingException {
         final List<Item> newRssItems = new DefaultRssSource(new CacheImageManager(context)).getRssItems(rssUrl, maxNumberOfItems, lastFeedUpdate);
         final ItemList oldRssItemsList = dao.getItemList(resolver, feedId);
