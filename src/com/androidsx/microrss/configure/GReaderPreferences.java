@@ -1,20 +1,13 @@
 package com.androidsx.microrss.configure;
 
-import java.io.IOException;
 import java.util.Date;
 
-import org.jarx.android.reader.GoogleReaderClient;
-import org.jarx.android.reader.ReaderClient;
-import org.jarx.android.reader.ReaderException;
-import org.jarx.android.reader.Subscription;
-
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -28,7 +21,6 @@ import android.widget.Toast;
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.WIMMCompatibleHelper;
-import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.view.AnyRSSHelper;
 import com.androidsx.microrss.view.SwipeAwareListener;

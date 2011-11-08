@@ -18,6 +18,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.androidsx.microrss.cache.CacheImageManager.CompressFormatImage;
+
 /**
  * Manages a cache for images downloaded from the network.
  */

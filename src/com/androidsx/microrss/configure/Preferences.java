@@ -10,14 +10,10 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
 import com.androidsx.microrss.R;
-import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.view.AnyRSSHelper;
 import com.androidsx.microrss.view.FeedActivity;
