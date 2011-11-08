@@ -18,7 +18,6 @@ import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.cache.ThumbnailUtil;
-import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.MutableItem;
 

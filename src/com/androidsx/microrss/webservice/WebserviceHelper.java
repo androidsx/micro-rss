@@ -30,7 +30,6 @@ import android.util.Log;
 
 import com.androidsx.microrss.cache.CacheImageManager;
 import com.androidsx.microrss.cache.ThumbnailUtil;
-import com.androidsx.microrss.configure.UpdateTaskStatus;
 import com.androidsx.microrss.db.RssItemsDao;
 import com.androidsx.microrss.db.SqLiteRssItemsDao;
 import com.androidsx.microrss.domain.DefaultItemList;

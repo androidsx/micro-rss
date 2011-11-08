@@ -1,6 +1,5 @@
 package com.androidsx.microrss.webservice;
 
-import com.androidsx.microrss.configure.UpdateTaskStatus;
 
 /**
  * Exception to inform callers that a feed could not be properly loaded. Note

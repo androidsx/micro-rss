@@ -1,9 +1,8 @@
-package com.androidsx.microrss.configure;
+package com.androidsx.microrss.webservice;
 
-import com.androidsx.microrss.webservice.FeedProcessingException;
 
 /** The types of status results for the update task */
-public enum UpdateTaskStatus {
+enum UpdateTaskStatus {
     
     /**
      * Wimm: In the new model, the update service is totally decoupled from the activity execution.
