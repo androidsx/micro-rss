@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androidsx.commons.helper.IntentHelper;
+import com.androidsx.microrss.GoogleReaderSyncService;
 import com.androidsx.microrss.R;
 import com.androidsx.microrss.WIMMCompatibleHelper;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
@@ -80,7 +81,7 @@ public class GReaderPreferences extends PreferenceActivity {
                             }
                             
                             syncIntervalPrefs.willForceSyncGoogleReader(true);
-                            WIMMCompatibleHelper.requestSyncGoogleReader(GReaderPreferences.this);
+                            WIMMCompatibleHelper.requestSync(GReaderPreferences.this, GoogleReaderSyncService.class);
                         }
 
                         return true;
