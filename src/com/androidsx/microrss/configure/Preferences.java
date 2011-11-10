@@ -20,8 +20,6 @@ import com.androidsx.microrss.view.FeedActivity;
 import com.androidsx.microrss.view.SwipeAwareListener;
 
 public class Preferences extends PreferenceActivity {
-    private static final String TAG = "Preferences";
-    
     private SharedPreferences.OnSharedPreferenceChangeListener lastSyncListener;
     
     @Override

@@ -9,7 +9,7 @@ import com.androidsx.microrss.domain.Item;
 import com.androidsx.microrss.domain.ItemList;
 import com.androidsx.microrss.provider.News.Items;
 
-public class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
+class FeedUrlBasedDuplicateDetector implements DuplicateDetector {
 
     private enum Duplicated { TRUE, FALSE, NOT_SURE }
     

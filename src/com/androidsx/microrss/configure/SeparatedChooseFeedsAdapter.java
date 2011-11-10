@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 
 import com.androidsx.microrss.R;
 
-public class SeparatedChooseFeedsAdapter extends BaseAdapter {
+class SeparatedChooseFeedsAdapter extends BaseAdapter {
 
 	public final Map<String, Adapter> sections = new LinkedHashMap<String, Adapter>();
 	public final ArrayAdapter<String> headers;
