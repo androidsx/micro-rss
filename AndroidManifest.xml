@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.androidsx.microrss"
-    android:versionName="0.9" android:versionCode="10">
+    android:versionName="1.0.0" android:versionCode="12">
 
     <uses-sdk android:minSdkVersion="7" />
     
@@ -10,14 +10,21 @@
     <uses-permission android:name="com.wimm.permission.NETWORK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
-    <!-- This is useful to be commented in order to test on the mobile phone
+    <!-- Protect WRITE in the content provider, only us -->
+    <permission android:name="com.androidsx.microrss.permission.WRITE" android:protectionLevel="signature" />
+    
+    <uses-permission android:name="com.androidsx.microrss.permission.WRITE" /> 
+    
+    
+    <!-- This is useful to be commented in order to test on the mobile phone 
         <uses-library android:name="com.wimm.framework" android:required="true"></uses-library>
     -->
 
     <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:description="@string/app_descrip" android:debuggable="true">
 
         <!-- Content provider for the data in the DB -->
-        <provider android:name=".provider.NewsProvider" android:authorities="com.androidsx.microrss.provider.NewsProvider" />
+        <provider android:name=".provider.NewsProvider" android:authorities="com.androidsx.microrss.provider.NewsProvider"
+            android:writePermission="com.androidsx.microrss.permission.WRITE" />
         
         <!-- Service for the periodic synchronization of the data with the internet sources -->
         <service android:name="com.androidsx.microrss.UpdateService" />
