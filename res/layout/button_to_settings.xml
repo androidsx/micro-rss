@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 	Screen that just shows a little text and a button that links to the settings view.
+    
+    As of 21/01/2011, this view is empty. See ticket #309.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
 	android:background="@color/application_background"
 	>
-
+<!-- 
     <TextView android:id="@+id/go_settings_long_message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
@@ -24,5 +26,5 @@
         android:layout_margin="4dip"
         android:layout_below="@+id/go_settings_long_message"
         android:onClick="onGoSettingsClick" />
-
+ -->
 </RelativeLayout>

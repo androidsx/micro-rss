@@ -22,6 +22,7 @@ import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
+import com.wimm.framework.view.ViewTray.OnIndexChangeListener;
 
 /**
  * List of feeds: left-right to change feeds. Scroll up-down to see the titles of the stories of the
@@ -155,6 +156,21 @@ public class FeedActivity extends LauncherActivity {
                     R.drawable.warning, getResources().getColor(R.color.error_message_warning));
             customViewTrayAdapter.setAdapter(errorAdapter);
         }
+        
+        // See ticket #309
+        customViewTrayAdapter.setOnIndexChangeListener(new OnIndexChangeListener() {
+            
+            @Override
+            public void onIndexWillChange(int from, int to) {
+                if (to == 0) {
+                    onGoSettingsClick(null);
+                }
+            }
+            
+            @Override
+            public void onIndexDidChange(int to) {
+            }
+        });
     }
     
     @Override
@@ -181,6 +197,7 @@ public class FeedActivity extends LauncherActivity {
     
     public void onGoSettingsClick(View target) {
         Intent intent = IntentHelper.createIntent(this, null, Preferences.class);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // See ticket #309
         startActivity(intent);
     }
     
