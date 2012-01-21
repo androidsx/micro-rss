@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.androidsx.microrss.wimm.Constants;
 import com.wimm.framework.service.NetworkService;
 
 public class WIMMCompatibleHelper {
     public static final String TAG = "WIMMCompatibleHelper";
-    
-    /** We will use WIMM API for always ask if the network connection is 
-     * alive when true */
-    public static final boolean RUN_WITH_SYNC_MANAGER = true; // to use WIMM or not
     
     public static void requestSync(Context context) {
         requestSync(context, UpdateService.class);
@@ -20,7 +17,7 @@ public class WIMMCompatibleHelper {
     
     @SuppressWarnings("unused") // We know there's dead code, because of RUN_WITH_SYNC_MANAGER
     public static void requestSync(Context context, Class<? extends Service> serviceClass) {
-        if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == true) {
+        if (Constants.RUN_IN_WIMM_DEVICE == true) {
             NetworkService network = new NetworkService(context);
             if ( network.isNetworkAvailable() ) {
                 Log.i(TAG, "Network is available, start the service " + serviceClass.getSimpleName());

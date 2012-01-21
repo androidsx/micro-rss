@@ -20,6 +20,7 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.DefaultFeed;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
+import com.androidsx.microrss.wimm.Constants;
 import com.wimm.framework.app.LauncherActivity;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.ViewTray.OnIndexChangeListener;
@@ -60,11 +61,16 @@ public class FeedActivity extends LauncherActivity {
 
     private CustomAdapterViewTray customViewTrayAdapter;
     private static final String FIRST_TIME_APP_OPENED_PREFS = "FIRST_TIME_APP_OPENED";
+    private static final int REQUEST_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed_wimm_wrapper);
+        if (Constants.RUN_IN_WIMM_DEVICE) {
+            setContentView(R.layout.feed_wimm_wrapper);
+        } else {
+            setContentView(R.layout.feed_wrapper);
+        }
         
         // check first execution, to ask WIMM syncronization
         int isFirstTimeUserOpenApp = getIntValue(this, FIRST_TIME_APP_OPENED_PREFS);
@@ -217,8 +223,7 @@ public class FeedActivity extends LauncherActivity {
         if (currentIndex > 0) {
             customViewTrayAdapter.setIndex(currentIndex - 1);
         } else {
-            startActivity(new Intent(this, Preferences.class));
-            Log.d(TAG, "Can't go left anymore. Go to Settings");
+            onGoSettingsClick(target);
         }
     }
 

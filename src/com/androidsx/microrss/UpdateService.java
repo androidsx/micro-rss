@@ -21,6 +21,7 @@ import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.sync.SyncIntervalPrefs;
 import com.androidsx.microrss.webservice.FeedProcessingException;
 import com.androidsx.microrss.webservice.WebserviceHelper;
+import com.androidsx.microrss.wimm.Constants;
 import com.wimm.framework.service.NetworkService;
 
 /**
@@ -209,7 +210,7 @@ public class UpdateService extends Service implements Runnable {
             } // end of "while there are more updates"
     
             // schedule alarm only for non-wimm devices
-            if (WIMMCompatibleHelper.RUN_WITH_SYNC_MANAGER == false) {
+            if (Constants.RUN_IN_WIMM_DEVICE == false) {
                 scheduleNextSync(areThereHumans);
             }
         

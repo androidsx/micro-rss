@@ -12,6 +12,7 @@ import com.androidsx.microrss.configure.Preferences;
 import com.androidsx.microrss.db.dao.MicroRssDao;
 import com.androidsx.microrss.domain.Feed;
 import com.androidsx.microrss.domain.Item;
+import com.androidsx.microrss.wimm.Constants;
 import com.wimm.framework.view.MotionInterpreter;
 import com.wimm.framework.view.MotionInterpreter.ScrollAxis;
 
@@ -27,7 +28,11 @@ public class StoryActivity extends ScrollAwareLauncherActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.story_wimm_wrapper);
+        if (Constants.RUN_IN_WIMM_DEVICE) {
+            setContentView(R.layout.story_wimm_wrapper);
+        } else {
+            setContentView(R.layout.story_wrapper);
+        }
 
         customViewTrayAdapter = (CustomAdapterViewTray) findViewById(R.id.custom_story_wrapper);
         configureViewTray(customViewTrayAdapter);
