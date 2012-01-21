@@ -12,7 +12,7 @@ public class WIMMCompatibleHelper {
     
     /** We will use WIMM API for always ask if the network connection is 
      * alive when true */
-    public static final boolean RUN_WITH_SYNC_MANAGER = false;
+    public static final boolean RUN_WITH_SYNC_MANAGER = true; // to use WIMM or not
     
     public static void requestSync(Context context) {
         requestSync(context, UpdateService.class);
