@@ -1,0 +1,819 @@
+com.androidsx.commons.helper.ComponentHelper -> com.androidsx.a.a.a:
+    void increaseTouchArea$244b0b2e(android.view.View,android.view.View) -> a
+com.androidsx.commons.helper.ComponentHelper$1 -> com.androidsx.a.a.b:
+    android.view.View val$view -> a
+    int val$pixels -> b
+    void run() -> run
+com.androidsx.commons.helper.IntentHelper -> com.androidsx.a.a.c:
+    android.content.Intent createIntent$104fcfc9(android.content.Context,java.lang.Class) -> a
+com.androidsx.microrss.GoogleReaderSyncService -> com.androidsx.microrss.GoogleReaderSyncService:
+    java.lang.String TAG -> a
+    com.androidsx.microrss.sync.SyncIntervalPrefs syncPrefs -> b
+    com.wimm.framework.service.NetworkService networkService -> c
+    boolean isUsingNetwork -> d
+    android.content.BroadcastReceiver networkTakedownReceiver -> e
+    void onCreate() -> onCreate
+    void onStart(android.content.Intent,int) -> onStart
+    void onDestroy() -> onDestroy
+    android.os.IBinder onBind(android.content.Intent) -> onBind
+    java.lang.String access$0() -> a
+    boolean access$1(com.androidsx.microrss.GoogleReaderSyncService) -> a
+    com.wimm.framework.service.NetworkService access$2(com.androidsx.microrss.GoogleReaderSyncService) -> b
+    void access$3(com.androidsx.microrss.GoogleReaderSyncService,boolean) -> a
+    com.androidsx.microrss.sync.SyncIntervalPrefs access$4(com.androidsx.microrss.GoogleReaderSyncService) -> c
+com.androidsx.microrss.GoogleReaderSyncService$1 -> com.androidsx.microrss.b:
+    com.androidsx.microrss.GoogleReaderSyncService this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.androidsx.microrss.GoogleReaderSyncService$SyncGoogleReaderTask -> com.androidsx.microrss.c:
+    com.androidsx.microrss.GoogleReaderSyncService this$0 -> a
+    void onPreExecute() -> onPreExecute
+    java.lang.String doInBackground$606be067() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.androidsx.microrss.GoogleReaderSyncService$SyncGoogleReaderTask$1 -> com.androidsx.microrss.a:
+    com.androidsx.microrss.GoogleReaderSyncService$SyncGoogleReaderTask this$1 -> a
+    boolean subscription(org.jarx.android.reader.Subscription) -> a
+com.androidsx.microrss.UpdateService -> com.androidsx.microrss.UpdateService:
+    java.lang.Object queueLock -> a
+    boolean threadIsRunning -> b
+    java.util.Queue queuedFeedIds -> c
+    com.wimm.framework.service.NetworkService networkService -> d
+    com.androidsx.microrss.sync.SyncIntervalPrefs syncPrefs -> e
+    android.content.BroadcastReceiver networkTakedownReceiver -> f
+    boolean hasMoreUpdates() -> b
+    int getNextUpdate() -> c
+    void onCreate() -> onCreate
+    void onStart(android.content.Intent,int) -> onStart
+    void onDestroy() -> onDestroy
+    void run() -> run
+    android.os.IBinder onBind(android.content.Intent) -> onBind
+    java.lang.String arr2str(int[]) -> a
+    boolean access$0() -> a
+    com.wimm.framework.service.NetworkService access$1(com.androidsx.microrss.UpdateService) -> a
+com.androidsx.microrss.UpdateService$1 -> com.androidsx.microrss.d:
+    com.androidsx.microrss.UpdateService this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.androidsx.microrss.WIMMCompatibleHelper -> com.androidsx.microrss.e:
+    void requestSync(android.content.Context,java.lang.Class) -> a
+com.androidsx.microrss.cache.CacheImageManager -> com.androidsx.microrss.a.b:
+    android.content.Context context -> a
+    java.io.File retrieveImage(java.lang.String) -> a
+    void deleteImage(java.lang.String) -> b
+    boolean downloadAndSaveInCache(java.lang.String,com.androidsx.microrss.cache.CacheImageManager$Options) -> a
+    java.lang.String getFilenameForUrl(java.lang.String) -> c
+    java.io.InputStream downloadBitmap(java.lang.String) -> d
+    int copyStream(java.io.InputStream,java.io.OutputStream) -> a
+com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage -> com.androidsx.microrss.a.c:
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage PNG -> a
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage JPEG -> b
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage[] ENUM$VALUES -> c
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage[] values() -> values
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage valueOf(java.lang.String) -> valueOf
+com.androidsx.microrss.cache.CacheImageManager$FlushedInputStream -> com.androidsx.microrss.a.f:
+    long skip(long) -> skip
+com.androidsx.microrss.cache.CacheImageManager$Options -> com.androidsx.microrss.a.e:
+    int targetSize -> a
+    boolean scaleImage -> b
+    int minTargetSizeToBeProcessed -> c
+    com.androidsx.microrss.cache.CacheImageManager$CompressFormatImage compressFormat -> d
+com.androidsx.microrss.cache.FileCacheUtil -> com.androidsx.microrss.a.d:
+    java.io.File getExternalStorageDir(android.content.Context,java.lang.String) -> d
+    void createNomediaDotFile$1dfa8dd6(java.io.File) -> a
+    boolean isSdCardWritable() -> a
+    java.io.File addFileToExternalCache(android.content.Context,java.lang.String) -> a
+    java.io.File addFileToCache$33a9a227(java.lang.String,java.io.File) -> a
+    java.io.File getFileFromExternalCache(android.content.Context,java.lang.String) -> b
+    void deleteFileExternalCache(android.content.Context,java.lang.String) -> c
+com.androidsx.microrss.cache.ThumbnailUtil -> com.androidsx.microrss.a.a:
+com.androidsx.microrss.cache.ThumbnailUtil$InvalidImageSizeException -> com.androidsx.microrss.a.g:
+com.androidsx.microrss.configure.ChooseFeedsAbstractActivity -> com.androidsx.microrss.configure.ChooseFeedsAbstractActivity:
+    com.androidsx.microrss.db.dao.MicroRssDao dao -> a
+    android.widget.ListView listView -> b
+    com.androidsx.microrss.cache.CacheImageManager cacheImageManager -> c
+    android.view.View$OnTouchListener swipeListener -> d
+    void onCreate(android.os.Bundle) -> onCreate
+    void onGoBackClick(android.view.View) -> onGoBackClick
+    void onListItemClick(android.widget.ListView,android.view.View,int,long) -> onListItemClick
+    java.util.List getFeeds() -> a
+    android.widget.ListAdapter configureAdapter(java.util.List) -> a
+    boolean isHeader(int) -> a
+    int getAdapterPos(com.androidsx.microrss.domain.Feed) -> a
+    com.androidsx.microrss.domain.Feed getFeed(int) -> b
+com.androidsx.microrss.configure.ChooseFeedsAbstractActivity$1 -> com.androidsx.microrss.configure.f:
+    com.androidsx.microrss.configure.ChooseFeedsAbstractActivity this$0 -> a
+    void onRightToLeftSwipe() -> a
+com.androidsx.microrss.configure.ChooseFeedsAbstractActivity$FeedAdapter -> com.androidsx.microrss.configure.d:
+    java.util.List items -> a
+    com.androidsx.microrss.configure.ChooseFeedsAbstractActivity this$0 -> b
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.androidsx.microrss.configure.ChooseGoogleReaderFeedsActivity -> com.androidsx.microrss.configure.ChooseGoogleReaderFeedsActivity:
+    com.androidsx.microrss.configure.ChooseFeedsAbstractActivity$FeedAdapter adapter -> a
+    java.util.List getFeeds() -> a
+    android.widget.ListAdapter configureAdapter(java.util.List) -> a
+    boolean isHeader(int) -> a
+    int getAdapterPos(com.androidsx.microrss.domain.Feed) -> a
+    com.androidsx.microrss.domain.Feed getFeed(int) -> b
+com.androidsx.microrss.configure.ChooseSampleFeedsActivity -> com.androidsx.microrss.configure.ChooseSampleFeedsActivity:
+    com.androidsx.microrss.configure.SeparatedChooseFeedsAdapter adapter -> a
+    java.util.Map mapCategoriesWithFeeds -> b
+    java.util.List getFeeds() -> a
+    android.widget.ListAdapter configureAdapter(java.util.List) -> a
+    boolean isHeader(int) -> a
+    int getAdapterPos(com.androidsx.microrss.domain.Feed) -> a
+    com.androidsx.microrss.domain.Feed getFeed(int) -> b
+com.androidsx.microrss.configure.GReaderPreferences -> com.androidsx.microrss.configure.GReaderPreferences:
+    boolean dialogHasBeenCancelled -> a
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener lastSyncListener -> b
+    android.view.View$OnTouchListener swipeListener -> c
+    void onCreate(android.os.Bundle) -> onCreate
+    void enableSyncFeedsWhenCredentialsOK() -> a
+    void onGoBackClick(android.view.View) -> onGoBackClick
+    java.lang.String getLastSyncMessage() -> b
+    boolean access$0(com.androidsx.microrss.configure.GReaderPreferences) -> a
+    void access$1(com.androidsx.microrss.configure.GReaderPreferences,boolean) -> a
+    void access$2(com.androidsx.microrss.configure.GReaderPreferences) -> b
+    java.lang.String access$3(com.androidsx.microrss.configure.GReaderPreferences) -> c
+com.androidsx.microrss.configure.GReaderPreferences$1 -> com.androidsx.microrss.configure.o:
+    com.androidsx.microrss.configure.GReaderPreferences this$0 -> a
+    void onRightToLeftSwipe() -> a
+com.androidsx.microrss.configure.GReaderPreferences$2 -> com.androidsx.microrss.configure.n:
+    com.androidsx.microrss.configure.GReaderPreferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.GReaderPreferences$3 -> com.androidsx.microrss.configure.q:
+    com.androidsx.microrss.configure.GReaderPreferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.GReaderPreferences$3$1 -> com.androidsx.microrss.configure.t:
+    com.androidsx.microrss.configure.GReaderPreferences$3 this$1 -> a
+    android.content.SharedPreferences val$sharedPrefs -> b
+    com.wimm.framework.app.TextInputDialog val$textInput -> c
+    void onDismiss(android.content.DialogInterface) -> onDismiss
+com.androidsx.microrss.configure.GReaderPreferences$3$2 -> com.androidsx.microrss.configure.s:
+    com.androidsx.microrss.configure.GReaderPreferences$3 this$1 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.androidsx.microrss.configure.GReaderPreferences$4 -> com.androidsx.microrss.configure.p:
+    com.androidsx.microrss.configure.GReaderPreferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.GReaderPreferences$4$1 -> com.androidsx.microrss.configure.a:
+    com.androidsx.microrss.configure.GReaderPreferences$4 this$1 -> a
+    com.wimm.framework.app.TextInputDialog val$textInput -> b
+    void onDismiss(android.content.DialogInterface) -> onDismiss
+com.androidsx.microrss.configure.GReaderPreferences$4$2 -> com.androidsx.microrss.configure.b:
+    com.androidsx.microrss.configure.GReaderPreferences$4 this$1 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.androidsx.microrss.configure.GReaderPreferences$5 -> com.androidsx.microrss.configure.r:
+    com.androidsx.microrss.configure.GReaderPreferences this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.androidsx.microrss.configure.GReaderPreferences$5$1 -> com.androidsx.microrss.configure.c:
+    com.androidsx.microrss.configure.GReaderPreferences$5 this$1 -> a
+    void run() -> run
+com.androidsx.microrss.configure.Preferences -> com.androidsx.microrss.configure.Preferences:
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener lastSyncListener -> a
+    android.view.View$OnTouchListener swipeListener -> b
+    android.content.Context context -> c
+    int DP_TO_COMMIT -> d
+    float OFF_AXIS_TOLERANCE_FACTOR -> e
+    int mOffset -> f
+    android.view.GestureDetector mGestureDetector -> g
+    boolean mCanInterceptEvent -> h
+    boolean mIsInterceptingEvents -> i
+    float mPixelsToCommit -> j
+    float mOffAxisPixelTolerance -> k
+    com.wimm.framework.view.EmptyAnimation mAnimation -> l
+    boolean mAnimateOffScreen -> m
+    android.graphics.drawable.Drawable mTopShadow -> n
+    boolean mIsWimmApp -> o
+    android.view.animation.Animation$AnimationListener mAnimationListener -> p
+    void onCreate(android.os.Bundle) -> onCreate
+    void onGoBackClick(android.view.View) -> onGoBackClick
+    java.lang.String getLastSyncMessage() -> a
+    void init(android.content.Context) -> a
+    boolean dispatchTouchEvent(android.view.MotionEvent) -> dispatchTouchEvent
+    void checkForIntercept(android.view.MotionEvent,android.view.MotionEvent) -> a
+    boolean onDown(android.view.MotionEvent) -> onDown
+    boolean onScroll(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onScroll
+    boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
+    void onLongPress(android.view.MotionEvent) -> onLongPress
+    void onShowPress(android.view.MotionEvent) -> onShowPress
+    boolean onSingleTapUp(android.view.MotionEvent) -> onSingleTapUp
+    void animate(boolean) -> a
+    void setActivityResult$13462e() -> b
+    void access$0$3523710a(com.androidsx.microrss.configure.Preferences) -> a
+    boolean access$1(com.androidsx.microrss.configure.Preferences) -> b
+    void access$3(com.androidsx.microrss.configure.Preferences) -> c
+    int access$4(com.androidsx.microrss.configure.Preferences) -> d
+    void access$5$3523710a(com.androidsx.microrss.configure.Preferences) -> e
+    void access$6(com.androidsx.microrss.configure.Preferences) -> f
+    java.lang.String access$7(com.androidsx.microrss.configure.Preferences) -> g
+com.androidsx.microrss.configure.Preferences$1 -> com.androidsx.microrss.configure.h:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    void onRightToLeftSwipe() -> a
+com.androidsx.microrss.configure.Preferences$2 -> com.androidsx.microrss.configure.g:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    com.androidsx.microrss.configure.Preferences this$0$ -> b
+    void onAnimationEnd(android.view.animation.Animation) -> onAnimationEnd
+    void onAnimationRepeat(android.view.animation.Animation) -> onAnimationRepeat
+    void onAnimationStart(android.view.animation.Animation) -> onAnimationStart
+com.androidsx.microrss.configure.Preferences$3 -> com.androidsx.microrss.configure.j:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.Preferences$4 -> com.androidsx.microrss.configure.i:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.Preferences$5 -> com.androidsx.microrss.configure.l:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.androidsx.microrss.configure.Preferences$6 -> com.androidsx.microrss.configure.k:
+    com.androidsx.microrss.configure.Preferences this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.androidsx.microrss.configure.Preferences$6$1 -> com.androidsx.microrss.configure.m:
+    com.androidsx.microrss.configure.Preferences$6 this$1 -> a
+    void run() -> run
+com.androidsx.microrss.configure.SeparatedChooseFeedsAdapter -> com.androidsx.microrss.configure.e:
+    java.util.Map sections -> a
+    android.widget.ArrayAdapter headers -> b
+    java.lang.Object getItem(int) -> getItem
+    int getCount() -> getCount
+    int getViewTypeCount() -> getViewTypeCount
+    int getItemViewType(int) -> getItemViewType
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    long getItemId(int) -> getItemId
+com.androidsx.microrss.db.RssItemsDao -> com.androidsx.microrss.d.c:
+    com.androidsx.microrss.domain.ItemList getItemList(android.content.ContentResolver,int) -> a
+com.androidsx.microrss.db.SqLiteRssItemsDao -> com.androidsx.microrss.d.a:
+    java.lang.String TAG -> a
+    java.lang.String[] PROJECTION_FEEDS -> b
+    com.androidsx.microrss.domain.ItemList getItemList(android.content.ContentResolver,int) -> a
+    void insertItems(android.content.ContentResolver,int,com.androidsx.microrss.domain.ItemList) -> a
+    int deleteOldestItems(android.content.ContentResolver,int,int,com.androidsx.microrss.cache.CacheImageManager) -> a
+    java.lang.String extractFeedTitle(android.content.ContentResolver,android.net.Uri) -> a
+    com.androidsx.microrss.domain.ItemList readSortedItemsFromDb(android.net.Uri,android.content.ContentResolver,java.lang.String) -> a
+    java.util.List readSortedItemIdsFromDb(android.net.Uri,android.content.ContentResolver) -> a
+    android.database.Cursor queryForSortedItems(android.content.ContentResolver,android.net.Uri) -> b
+    int getMaxIndex(android.net.Uri,android.content.ContentResolver) -> b
+    int deleteItemsById(android.content.ContentResolver,android.net.Uri,java.util.List) -> a
+com.androidsx.microrss.db.SqLiteRssItemsDao$ItemThumbnailWrapper -> com.androidsx.microrss.d.b:
+    int id -> a
+    java.lang.String url -> b
+    com.androidsx.microrss.db.SqLiteRssItemsDao this$0 -> c
+    int getId() -> a
+    java.lang.String getThumbnail() -> b
+com.androidsx.microrss.db.dao.MicroRssDao -> com.androidsx.microrss.d.a.a:
+    android.content.ContentResolver contentResolver -> a
+    java.lang.String findCategoryById(int) -> c
+    java.lang.Integer findCategoryByName(java.lang.String) -> a
+    void persistFeedCheckingUniqueKey$128f0a2f(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> a
+    void updateFeedActive(com.androidsx.microrss.domain.Feed,boolean,com.androidsx.microrss.cache.CacheImageManager) -> a
+    int[] findActiveFeedIds() -> a
+    java.util.List findActiveFeeds() -> b
+    java.util.List findGoogleReaderFeeds() -> c
+    java.util.List findSampleFeeds() -> d
+    java.util.List findFeeds(java.lang.String) -> b
+    com.androidsx.microrss.domain.Feed findFeed(int) -> a
+    java.util.List findStories(int) -> b
+    void deleteAllItems(com.androidsx.microrss.domain.Feed,com.androidsx.microrss.cache.CacheImageManager) -> a
+    com.androidsx.microrss.domain.Feed feedFromCursor(android.database.Cursor) -> a
+    int[] toIntArray(java.util.List) -> a
+com.androidsx.microrss.domain.DefaultFeed -> com.androidsx.microrss.b.c:
+    int id -> a
+    java.util.Date lastModificationDate -> b
+    java.lang.String title -> c
+    java.lang.String url -> d
+    boolean active -> e
+    java.lang.String category -> f
+    int getId() -> a
+    java.util.Date getLastModificationDate() -> b
+    java.lang.String getTitle() -> c
+    java.lang.String getURL() -> d
+    boolean isActive() -> e
+    java.lang.String getCategory() -> f
+    java.lang.String toString() -> toString
+com.androidsx.microrss.domain.DefaultItem -> com.androidsx.microrss.b.e:
+    int id -> a
+    java.lang.String title -> b
+    java.lang.String description -> c
+    java.lang.String URL -> d
+    java.util.Date pubDate -> e
+    java.lang.String thumbnail -> f
+    java.lang.String getTitle() -> a
+    java.lang.String getContent() -> b
+    java.lang.String getURL() -> c
+    java.util.Date getPubDate() -> d
+    java.lang.String getThumbnail() -> e
+    int getId() -> f
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+com.androidsx.microrss.domain.DefaultItemList -> com.androidsx.microrss.b.a:
+    java.util.List items -> a
+    java.lang.String title -> b
+    void addItem(com.androidsx.microrss.domain.Item) -> a
+    com.androidsx.microrss.domain.Item getItemAt(int) -> a
+    int getNumberOfItems() -> a
+    void setTitle(java.lang.String) -> a
+    java.lang.String toString() -> toString
+com.androidsx.microrss.domain.Feed -> com.androidsx.microrss.b.h:
+    int getId() -> a
+    java.lang.String getTitle() -> c
+    java.lang.String getURL() -> d
+    boolean isActive() -> e
+    java.util.Date getLastModificationDate() -> b
+    java.lang.String getCategory() -> f
+com.androidsx.microrss.domain.HashItemHelper -> com.androidsx.microrss.b.b:
+    int createHash(java.lang.String,java.lang.String,java.lang.String) -> a
+com.androidsx.microrss.domain.Item -> com.androidsx.microrss.b.g:
+    int getId() -> f
+    java.lang.String getTitle() -> a
+    java.lang.String getContent() -> b
+    java.lang.String getURL() -> c
+    java.util.Date getPubDate() -> d
+    java.lang.String getThumbnail() -> e
+com.androidsx.microrss.domain.ItemList -> com.androidsx.microrss.b.d:
+    com.androidsx.microrss.domain.Item getItemAt(int) -> a
+    int getNumberOfItems() -> a
+com.androidsx.microrss.domain.MutableItem -> com.androidsx.microrss.b.f:
+    int id -> a
+    java.lang.String content -> b
+    java.util.Date pubDate -> c
+    java.lang.String title -> d
+    java.lang.String url -> e
+    java.lang.String thumbnail -> f
+    int getId() -> f
+    java.lang.String getContent() -> b
+    java.util.Date getPubDate() -> d
+    java.lang.String getTitle() -> a
+    java.lang.String getURL() -> c
+    java.lang.String getThumbnail() -> e
+    void setThumbnail(java.lang.String) -> a
+    void setUrl(java.lang.String) -> b
+    void setContent(java.lang.String) -> c
+    void setPubDate(java.util.Date) -> a
+    void setTitle(java.lang.String) -> d
+    java.lang.String toString() -> toString
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+com.androidsx.microrss.provider.DatabaseHelper -> com.androidsx.microrss.provider.a:
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+com.androidsx.microrss.provider.News -> com.androidsx.microrss.provider.c:
+com.androidsx.microrss.provider.News$Categories -> com.androidsx.microrss.provider.d:
+    android.net.Uri CONTENT_URI -> a
+com.androidsx.microrss.provider.News$Feeds -> com.androidsx.microrss.provider.e:
+    android.net.Uri CONTENT_URI -> a
+com.androidsx.microrss.provider.News$Items -> com.androidsx.microrss.provider.b:
+    android.net.Uri CONTENT_URI -> a
+com.androidsx.microrss.provider.NewsProvider -> com.androidsx.microrss.provider.NewsProvider:
+    java.lang.String TAG -> a
+    com.androidsx.microrss.provider.DatabaseHelper databaseHelper -> b
+    android.content.UriMatcher uriMatcher -> c
+    boolean onCreate() -> onCreate
+    int delete(android.net.Uri,java.lang.String,java.lang.String[]) -> delete
+    android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
+    android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
+    int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
+    java.lang.String getType(android.net.Uri) -> getType
+    android.content.UriMatcher getUriMatcher() -> a
+    java.lang.String arrayToString(java.lang.Object[]) -> a
+com.androidsx.microrss.sync.NetworkAvailableReceiver -> com.androidsx.microrss.sync.NetworkAvailableReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.androidsx.microrss.sync.SyncIntervalPrefs -> com.androidsx.microrss.sync.a:
+    android.content.SharedPreferences mPrefs -> a
+    boolean isSyncing() -> a
+    boolean isSyncingGoogleReader() -> b
+    long getLastSyncAttempt() -> c
+    long getLastSuccessfulSyncGoogleReader() -> d
+    boolean shouldSync() -> e
+    boolean shouldSyncGoogleReader() -> f
+    void willBeginSync() -> g
+    void willBeginSyncGoogleReader() -> h
+    void willForceSyncGoogleReader$1385ff() -> i
+    void didCompleteSync(boolean) -> a
+    void didCompleteSyncGoogleReader(boolean,java.lang.String) -> a
+    java.lang.String getErrorMessageGoogleReader() -> j
+com.androidsx.microrss.view.AnyRSSHelper -> com.androidsx.microrss.view.e:
+    java.util.HashMap htmlEntities -> a
+    java.lang.String toRelativeDateString(java.util.Date) -> a
+    java.lang.String unescapeHTML(java.lang.String) -> c
+    java.lang.String cleanHTML(java.lang.String) -> a
+    java.lang.String retrieveFaviconUrl(java.lang.String) -> b
+    android.graphics.Bitmap getBitmapFromCache(android.content.Context,java.lang.String,int) -> a
+com.androidsx.microrss.view.CustomAdapterViewTray -> com.androidsx.microrss.view.CustomAdapterViewTray:
+    com.androidsx.microrss.view.CustomAdapterViewTray$OnDragEndListener dragEndListener -> a
+    void onDragEnd(android.view.MotionEvent,com.wimm.framework.view.MotionInterpreter$ScrollAxis,float) -> onDragEnd
+    void setOnDragEndListener(com.androidsx.microrss.view.CustomAdapterViewTray$OnDragEndListener) -> a
+com.androidsx.microrss.view.CustomAdapterViewTray$OnDragEndListener -> com.androidsx.microrss.view.a:
+    void onDragEnd$7d2c46c1(com.wimm.framework.view.MotionInterpreter$ScrollAxis) -> a
+com.androidsx.microrss.view.DragAwareScrollView -> com.androidsx.microrss.view.DragAwareScrollView:
+    boolean dragCanExit -> a
+    void onScrollChanged(int,int,int,int) -> onScrollChanged
+    boolean dragCanExit() -> a
+com.androidsx.microrss.view.Draggable -> com.androidsx.microrss.view.j:
+    boolean dragCanExit() -> a
+com.androidsx.microrss.view.ErrorMessageAdapter -> com.androidsx.microrss.view.n:
+    int messageRes -> a
+    int messageDetailedRes -> b
+    int imageDrawableRes -> c
+    android.app.Activity contextActivity -> d
+    int textColorRes -> e
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    boolean dragCanExit() -> a
+com.androidsx.microrss.view.ErrorMessageAdapter$ViewHolder -> com.androidsx.microrss.view.g:
+    android.widget.ImageView errorImage -> a
+    android.widget.TextView errorMessage -> b
+    android.widget.TextView errorMessageDetailed -> c
+com.androidsx.microrss.view.ErrorScreenAdapter -> com.androidsx.microrss.view.c:
+    android.view.LayoutInflater inflater -> a
+    int messageRes -> b
+    int messageDetailedRes -> c
+    int imageDrawableRes -> d
+    android.app.Activity contextActivity -> e
+    int textColorRes -> f
+    java.lang.String leftEnabledArrow -> g
+    java.lang.String leftDisabledArrow -> h
+    java.lang.String rightEnabledArrow -> i
+    java.lang.String rightDisabledArrow -> j
+    boolean isSyncing -> k
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    boolean dragCanExit() -> a
+com.androidsx.microrss.view.ErrorScreenAdapter$ViewHolder -> com.androidsx.microrss.view.m:
+    android.widget.ImageView feedImage -> a
+    android.widget.LinearLayout storyListWrapper -> b
+    android.widget.ImageView errorImage -> c
+    android.widget.TextView errorMessage -> d
+    android.widget.TextView errorMessageDetailed -> e
+    android.widget.TextView feedTitle -> f
+    android.widget.TextView leftArrow -> g
+    android.widget.TextView rightArrow -> h
+com.androidsx.microrss.view.FeedActivity -> com.androidsx.microrss.view.FeedActivity:
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener firstSyncListener -> a
+    com.androidsx.microrss.view.CustomAdapterViewTray customViewTrayAdapter -> b
+    void onCreate(android.os.Bundle) -> onCreate
+    void onNewIntent(android.content.Intent) -> onNewIntent
+    void buildView() -> a
+    boolean dragCanExit() -> dragCanExit
+    void configureViewTray(com.androidsx.microrss.view.CustomAdapterViewTray) -> a
+    void onFeedClick(android.view.View) -> onFeedClick
+    void onGoSettingsClick(android.view.View) -> onGoSettingsClick
+    void onClickNavigationUp(android.view.View) -> onClickNavigationUp
+    void onClickNavigationLeft(android.view.View) -> onClickNavigationLeft
+    void onClickNavigationRight(android.view.View) -> onClickNavigationRight
+    void onClickNavigationDown(android.view.View) -> onClickNavigationDown
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    void access$0(com.androidsx.microrss.view.FeedActivity,com.androidsx.microrss.view.CustomAdapterViewTray) -> a
+    void access$1(com.androidsx.microrss.view.FeedActivity) -> a
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener access$2(com.androidsx.microrss.view.FeedActivity) -> b
+com.androidsx.microrss.view.FeedActivity$1 -> com.androidsx.microrss.view.i:
+    com.androidsx.microrss.view.FeedActivity this$0 -> a
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+com.androidsx.microrss.view.FeedActivity$1$1 -> com.androidsx.microrss.view.o:
+    com.androidsx.microrss.view.FeedActivity$1 this$1 -> a
+    void run() -> run
+com.androidsx.microrss.view.FeedActivity$2 -> com.androidsx.microrss.view.h:
+    com.androidsx.microrss.view.FeedActivity this$0 -> a
+    void onIndexWillChange(int,int) -> onIndexWillChange
+    void onIndexDidChange(int) -> onIndexDidChange
+com.androidsx.microrss.view.FeedAdapter -> com.androidsx.microrss.view.f:
+    android.app.Activity contextActivity -> a
+    com.androidsx.microrss.domain.Feed[] feeds -> b
+    com.androidsx.microrss.db.dao.MicroRssDao dao -> c
+    android.view.LayoutInflater inflater -> d
+    java.lang.String leftEnabledArrow -> e
+    java.lang.String leftDisabledArrow -> f
+    java.lang.String rightEnabledArrow -> g
+    java.lang.String rightDisabledArrow -> h
+    int arrowsNormalColor -> i
+    int arrowsSettingsColor -> j
+    int errorMessageColor -> k
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    int getItemPosition$255f288(int) -> a
+    android.app.Activity access$0(com.androidsx.microrss.view.FeedAdapter) -> a
+com.androidsx.microrss.view.FeedAdapter$1 -> com.androidsx.microrss.view.l:
+    com.androidsx.microrss.view.FeedAdapter this$0 -> a
+    int val$feedId -> b
+    int val$storyId -> c
+    void onClick(android.view.View) -> onClick
+com.androidsx.microrss.view.FeedAdapter$FeedViewHolder -> com.androidsx.microrss.view.p:
+    android.widget.ImageView feedImage -> a
+    android.widget.TextView feedTitle -> b
+    android.widget.TextView feedCount -> c
+    android.widget.LinearLayout storyListWrapper -> d
+    android.widget.TextView leftArrow -> e
+    android.widget.TextView rightArrow -> f
+com.androidsx.microrss.view.FeedNavigationExtras -> com.androidsx.microrss.view.u:
+com.androidsx.microrss.view.FeedScrollableView -> com.androidsx.microrss.view.FeedScrollableView:
+com.androidsx.microrss.view.ScrollAwareLauncherActivity -> com.androidsx.microrss.view.ScrollAwareLauncherActivity:
+    com.androidsx.microrss.view.Draggable draggable -> a
+    void setDragable(com.androidsx.microrss.view.Draggable) -> a
+    boolean dragCanExit() -> dragCanExit
+com.androidsx.microrss.view.StoryActivity -> com.androidsx.microrss.view.StoryActivity:
+    com.androidsx.microrss.view.CustomAdapterViewTray customViewTrayAdapter -> a
+    int feedId -> b
+    com.androidsx.microrss.view.CustomAdapterViewTray$OnDragEndListener dragEndListener -> c
+    void onCreate(android.os.Bundle) -> onCreate
+    void onStoryClick(android.view.View) -> onStoryClick
+    void onGoFeedClick(android.view.View) -> onGoFeedClick
+    void onGoSettingsClick(android.view.View) -> onGoSettingsClick
+    void onClickNavigationUp(android.view.View) -> onClickNavigationUp
+    void onClickNavigationLeft(android.view.View) -> onClickNavigationLeft
+    void onClickNavigationRight(android.view.View) -> onClickNavigationRight
+    void onClickNavigationDown(android.view.View) -> onClickNavigationDown
+    com.androidsx.microrss.view.CustomAdapterViewTray access$0(com.androidsx.microrss.view.StoryActivity) -> a
+com.androidsx.microrss.view.StoryActivity$1 -> com.androidsx.microrss.view.r:
+    com.androidsx.microrss.view.StoryActivity this$0 -> a
+    void onDragEnd$7d2c46c1(com.wimm.framework.view.MotionInterpreter$ScrollAxis) -> a
+com.androidsx.microrss.view.StoryAdapter -> com.androidsx.microrss.view.t:
+    android.app.Activity contextActivity -> a
+    com.androidsx.microrss.domain.Item[] stories -> b
+    com.androidsx.microrss.domain.Feed feed -> c
+    int currentPosition -> d
+    int colorStoryTitleWithBackground -> e
+    int colorFeedTitleWithBackground -> f
+    int colorStoryTitleWithoutBackground -> g
+    int colorFeedTitleWithoutBackground -> h
+    android.view.View$OnClickListener onClickHeaderListener -> i
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+    int getItemPosition$255f288(int) -> a
+    boolean dragCanExit() -> a
+    android.app.Activity access$0(com.androidsx.microrss.view.StoryAdapter) -> a
+com.androidsx.microrss.view.StoryAdapter$1 -> com.androidsx.microrss.view.b:
+    com.androidsx.microrss.view.StoryAdapter this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.androidsx.microrss.view.StoryAdapter$ViewHolder -> com.androidsx.microrss.view.s:
+    android.widget.ImageView storyImage -> a
+    android.widget.TextView storyTitle -> b
+    android.widget.TextView storyDescription -> c
+    android.widget.TextView storyTimestamp -> d
+    android.widget.TextView storyCount -> e
+    android.widget.TextView storyHeader -> f
+    android.widget.TextView feedTitle -> g
+    android.view.ViewGroup storyHeaderWrapper -> h
+    android.view.ViewGroup storyTitleWrapper -> i
+com.androidsx.microrss.view.StoryNavigationExtras -> com.androidsx.microrss.view.k:
+com.androidsx.microrss.view.StoryView -> com.androidsx.microrss.view.StoryView:
+    boolean pendingAnimation -> a
+    void onAttachedToWindow() -> onAttachedToWindow
+    void onDraw(android.graphics.Canvas) -> onDraw
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+    boolean onInterceptTouchEvent(android.view.MotionEvent) -> onInterceptTouchEvent
+com.androidsx.microrss.view.SwipeAwareListener -> com.androidsx.microrss.view.d:
+    android.view.GestureDetector gestureDetector -> a
+    boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+    void onRightToLeftSwipe() -> a
+com.androidsx.microrss.view.SwipeAwareListener$SwipeDetector -> com.androidsx.microrss.view.q:
+    com.androidsx.microrss.view.SwipeAwareListener this$0 -> a
+    boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
+    boolean onDown(android.view.MotionEvent) -> onDown
+com.androidsx.microrss.webservice.DateParser -> com.androidsx.microrss.c.e:
+    java.text.SimpleDateFormat[] rfc822DateFormats -> a
+    java.util.Date parseDateInRfc822(java.lang.String) -> a
+com.androidsx.microrss.webservice.DefaultRssSource -> com.androidsx.microrss.c.g:
+    org.xmlpull.v1.XmlPullParserFactory sFactory -> a
+    com.androidsx.microrss.cache.CacheImageManager cacheImageManager -> b
+    java.util.List getRssItems$116533e7(java.lang.String,long) -> a
+    java.util.List getRssItemsInternal$116533e7(java.lang.String,long) -> b
+    java.io.ByteArrayOutputStream inputStreamAsByteArray(java.io.InputStream) -> a
+    java.util.List parseRSSResponse(java.io.InputStream,int,long) -> a
+    java.util.List parseATOMResponse(java.io.InputStream,int,long) -> b
+    java.lang.String parseThumbnailUrl(org.xmlpull.v1.XmlPullParser,java.lang.String) -> a
+    java.util.List parseResponse(java.io.InputStream,int,java.lang.String,long) -> a
+com.androidsx.microrss.webservice.DuplicateDetector -> com.androidsx.microrss.c.f:
+    boolean isDuplicated(com.androidsx.microrss.domain.Item,com.androidsx.microrss.domain.ItemList) -> a
+com.androidsx.microrss.webservice.FeedProcessingException -> com.androidsx.microrss.c.b:
+    com.androidsx.microrss.webservice.UpdateTaskStatus status -> a
+com.androidsx.microrss.webservice.HashItemBasedDuplicateDetector -> com.androidsx.microrss.c.d:
+    boolean isDuplicated(com.androidsx.microrss.domain.Item,com.androidsx.microrss.domain.ItemList) -> a
+com.androidsx.microrss.webservice.UpdateTaskStatus -> com.androidsx.microrss.c.c:
+    com.androidsx.microrss.webservice.UpdateTaskStatus DONT_KNOW -> a
+    com.androidsx.microrss.webservice.UpdateTaskStatus OK -> c
+    com.androidsx.microrss.webservice.UpdateTaskStatus FEED_PROCESSING_EXCEPTION -> b
+    com.androidsx.microrss.webservice.UpdateTaskStatus FEED_PROCESSING_EXCEPTION_NO_EMAIL -> d
+    com.androidsx.microrss.webservice.UpdateTaskStatus UNKNOWN_ERROR -> e
+    java.lang.String msg -> f
+    com.androidsx.microrss.webservice.UpdateTaskStatus[] ENUM$VALUES -> g
+    java.lang.String toString() -> toString
+    com.androidsx.microrss.webservice.UpdateTaskStatus[] values() -> values
+    com.androidsx.microrss.webservice.UpdateTaskStatus valueOf(java.lang.String) -> valueOf
+com.androidsx.microrss.webservice.WebserviceHelper -> com.androidsx.microrss.c.a:
+    java.lang.String[] PROJECTION_APPFEED -> a
+    java.lang.String sUserAgent -> b
+    void prepareUserAgent(android.content.Context) -> a
+    java.io.InputStream queryApi(java.lang.String) -> a
+    void updateStoriesForFeed$2747d830(android.content.Context,int) -> a
+    void retrieveFaviconFromFeed(android.content.Context,int) -> b
+    void insertNewItemsIntoDb$1c63b02d(android.content.Context,android.content.ContentResolver,int,java.lang.String,long,com.androidsx.microrss.db.RssItemsDao) -> a
+    android.database.Cursor extractFeedInfo(int,android.content.ContentResolver) -> a
+com.androidsx.microrss.wimm.FuckIt -> com.androidsx.microrss.e.a:
+    android.content.Context context -> a
+org.jarx.android.reader.GoogleReaderClient -> org.jarx.android.reader.j:
+    java.lang.String loginId -> c
+    java.lang.String password -> d
+    java.lang.String auth -> e
+    org.apache.http.message.BasicHeader authHeader -> f
+    java.lang.String token -> g
+    boolean login(java.lang.String,java.lang.String) -> a
+    java.lang.String initAuth() -> a
+    org.apache.http.client.methods.HttpGet filterGet(org.apache.http.client.methods.HttpGet) -> a
+    org.apache.http.client.methods.HttpPost filterPost(org.apache.http.client.methods.HttpPost) -> a
+    void handleSubList(org.jarx.android.reader.ReaderClient$SubListHandler,long) -> a
+org.jarx.android.reader.GoogleReaderClient$JsonSubListHandler -> org.jarx.android.reader.o:
+    org.jarx.android.reader.ReaderClient$SubListHandler handler -> a
+    org.jarx.android.reader.Subscription sub -> b
+    boolean startObject() -> d
+    boolean endObject() -> e
+    boolean primitive(java.lang.Object) -> a
+org.jarx.android.reader.Item -> org.jarx.android.reader.b:
+    android.net.Uri CONTENT_URI -> a
+    java.lang.String[] DEFAULT_SELECT -> b
+    java.lang.String[] PREFIX_SELECT -> c
+    java.lang.String[] PREFIX_SELECT_NO_CONTENT -> e
+    java.lang.String[] SELECT_ID -> f
+    java.lang.String[] SELECT_COUNT -> g
+    java.lang.String[] SELECT_MAX_ID -> h
+    java.lang.String[] SELECT_MIN_ID -> i
+    java.lang.String[][] INDEX_COLUMNS -> d
+    long id -> j
+    long subId -> k
+    java.lang.String uid -> l
+    java.lang.String title -> m
+    java.lang.String content -> n
+    java.lang.String contentType -> o
+    java.lang.String author -> p
+    java.lang.String link -> q
+    long publishedTime -> r
+    long updatedTime -> s
+    boolean read -> t
+    java.util.List categories -> u
+    long readTime -> v
+    long syncTime -> w
+    java.lang.String[] sqlForUpgrade$12382b24(int) -> a
+    java.lang.String getDefaultOrderBy(android.content.Context) -> a
+    java.lang.String toString() -> toString
+org.jarx.android.reader.Prefs -> org.jarx.android.reader.k:
+    int getInt$607b6e67(android.content.Context,java.lang.String) -> a
+org.jarx.android.reader.ReaderClient -> org.jarx.android.reader.p:
+    android.content.Context context -> a
+    org.apache.http.impl.client.DefaultHttpClient client -> b
+    void cleanupOldVersionTemp() -> a
+    org.apache.http.client.methods.HttpGet filterGet(org.apache.http.client.methods.HttpGet) -> a
+    java.io.InputStream doGetInputStream(java.lang.String) -> a
+    org.apache.http.client.methods.HttpPost filterPost(org.apache.http.client.methods.HttpPost) -> a
+    java.io.InputStream doPostInputStream(java.lang.String,java.util.List) -> a
+org.jarx.android.reader.ReaderClient$1 -> org.jarx.android.reader.d:
+    org.jarx.android.reader.ReaderClient this$0 -> a
+    boolean accept(java.io.File,java.lang.String) -> accept
+org.jarx.android.reader.ReaderClient$2 -> org.jarx.android.reader.e:
+    org.jarx.android.reader.ReaderClient this$0 -> a
+    java.io.File val$temp -> b
+    void close() -> close
+org.jarx.android.reader.ReaderClient$3 -> org.jarx.android.reader.c:
+    org.jarx.android.reader.ReaderClient this$0 -> a
+    void close() -> close
+org.jarx.android.reader.ReaderClient$JsonHandlerAdapter -> org.jarx.android.reader.l:
+    java.util.Stack keys -> a
+    java.lang.String getCurrentKey() -> a
+    void startJSON() -> b
+    void endJSON() -> c
+    boolean startObject() -> d
+    boolean endObject() -> e
+    boolean startObjectEntry(java.lang.String) -> a
+    boolean endObjectEntry() -> f
+    boolean primitive(java.lang.Object) -> a
+org.jarx.android.reader.ReaderClient$SubListHandler -> org.jarx.android.reader.f:
+    boolean subscription(org.jarx.android.reader.Subscription) -> a
+org.jarx.android.reader.ReaderException -> org.jarx.android.reader.g:
+org.jarx.android.reader.ReaderProvider -> org.jarx.android.reader.ReaderProvider:
+    android.net.Uri URI_TXN_BEGIN -> a
+    android.net.Uri URI_TXN_SUCCESS -> b
+    android.net.Uri URI_TXN_END -> c
+    android.net.Uri URI_UPDATE_UNREADS -> d
+    java.lang.String[] SQL_UPDATE_UNREADS -> e
+    android.content.UriMatcher uriMatcher -> f
+    org.jarx.android.reader.ReaderProvider$ReaderOpenHelper openHelper -> g
+    java.lang.String sqlCreateIndex(java.lang.String,java.lang.String[]) -> a
+    java.lang.String sqlIdWhere(java.lang.String,java.lang.String) -> a
+    boolean onCreate() -> onCreate
+    java.lang.String getType(android.net.Uri) -> getType
+    android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
+    android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
+    int delete(android.net.Uri,java.lang.String,java.lang.String[]) -> delete
+    int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
+    int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[],boolean) -> a
+org.jarx.android.reader.ReaderProvider$ReaderOpenHelper -> org.jarx.android.reader.a:
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+org.jarx.android.reader.Subscription -> org.jarx.android.reader.Subscription:
+    android.net.Uri CONTENT_URI -> a
+    java.lang.String[] DEFAULT_SELECT -> b
+    java.lang.String[] PREFIX_SELECT -> c
+    java.lang.String[] SELECT_ID -> e
+    java.lang.String[] SELECT_ICON -> f
+    java.lang.String[] SELECT_COUNT -> g
+    java.lang.String[] SELECT_SUM_UNREAD_COUNT -> h
+    java.lang.String[][] INDEX_COLUMNS -> d
+    long id -> i
+    java.lang.String uid -> j
+    java.lang.String sortid -> k
+    java.lang.String title -> l
+    java.lang.String htmlUrl -> m
+    java.util.List categories -> n
+    int unreadCount -> o
+    long newestItemTime -> p
+    long readItemId -> q
+    long syncTime -> r
+    long itemSyncTime -> s
+    java.lang.String[] sqlForUpgrade$12382b24(int) -> a
+    int describeContents() -> describeContents
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+    java.lang.String getUid() -> a
+    void setUid(java.lang.String) -> a
+    void setSortid(java.lang.String) -> b
+    java.lang.String getTitle() -> b
+    void setTitle(java.lang.String) -> c
+    void setHtmlUrl(java.lang.String) -> d
+    void addCategory(java.lang.String) -> e
+    boolean equals(java.lang.Object) -> equals
+    java.lang.String toString() -> toString
+org.jarx.android.reader.Tag -> org.jarx.android.reader.n:
+    android.net.Uri CONTENT_URI -> a
+    java.lang.String[] DEFAULT_SELECT -> c
+    java.lang.String[] SELECT_ID -> d
+    java.lang.String[][] INDEX_COLUMNS -> b
+    java.lang.String[] sqlForUpgrade$12382b24() -> a
+org.jarx.android.reader.Tag2Item -> org.jarx.android.reader.m:
+    android.net.Uri CONTENT_URI -> a
+    java.lang.String[] SELECT_ID -> c
+    java.lang.String[][] INDEX_COLUMNS -> b
+    java.lang.String[] sqlForUpgrade$12382b24() -> a
+org.jarx.android.reader.Tag2Sub -> org.jarx.android.reader.i:
+    android.net.Uri CONTENT_URI -> a
+    java.lang.String[][] INDEX_COLUMNS -> b
+    java.lang.String[] sqlForUpgrade$12382b24() -> a
+org.jarx.android.reader.Utils -> org.jarx.android.reader.h:
+    byte[] logErrorLock -> a
+    java.lang.String asString(java.lang.Object) -> a
+    java.lang.String asString$6d759e65(java.lang.Object) -> b
+    java.lang.String getVersionName(android.content.Context) -> a
+    void logError(android.content.Context,java.lang.Throwable) -> a
+    org.apache.http.impl.client.DefaultHttpClient createHttpClient() -> a
+org.json.simple.parser.ContentHandler -> org.a.a.a.d:
+    void startJSON() -> b
+    void endJSON() -> c
+    boolean startObject() -> d
+    boolean endObject() -> e
+    boolean startObjectEntry(java.lang.String) -> a
+    boolean endObjectEntry() -> f
+    boolean primitive(java.lang.Object) -> a
+org.json.simple.parser.JSONParser -> org.a.a.a.e:
+    java.util.LinkedList handlerStatusStack -> a
+    org.json.simple.parser.Yylex lexer -> b
+    org.json.simple.parser.Yytoken token -> c
+    int status -> d
+    int peekStatus(java.util.LinkedList) -> a
+    void nextToken() -> a
+    void parse$4b382bd8(java.io.Reader,org.json.simple.parser.ContentHandler) -> a
+org.json.simple.parser.ParseException -> org.a.a.a.b:
+    int errorType -> a
+    java.lang.Object unexpectedObject -> b
+    int position -> c
+    java.lang.String toString() -> toString
+org.json.simple.parser.Yylex -> org.a.a.a.a:
+    int[] ZZ_LEXSTATE -> a
+    char[] ZZ_CMAP -> b
+    int[] ZZ_ACTION -> c
+    int[] ZZ_ROWMAP -> d
+    int[] ZZ_TRANS -> e
+    java.lang.String[] ZZ_ERROR_MSG -> f
+    int[] ZZ_ATTRIBUTE -> g
+    java.io.Reader zzReader -> h
+    int zzState -> i
+    int zzLexicalState -> j
+    char[] zzBuffer -> k
+    int zzMarkedPos -> l
+    int zzCurrentPos -> m
+    int zzStartRead -> n
+    int zzEndRead -> o
+    int yyline -> p
+    int yychar -> q
+    int yycolumn -> r
+    boolean zzAtBOL -> s
+    boolean zzAtEOF -> t
+    java.lang.StringBuffer sb -> u
+    int getPosition() -> a
+    void yyreset(java.io.Reader) -> a
+    java.lang.String yytext() -> c
+    org.json.simple.parser.Yytoken yylex() -> b
+org.json.simple.parser.Yytoken -> org.a.a.a.c:
+    int type -> a
+    java.lang.Object value -> b
+    java.lang.String toString() -> toString

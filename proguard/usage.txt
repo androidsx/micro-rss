@@ -1,0 +1,574 @@
+com.androidsx.commons.helper.ComponentHelper:
+    private static final java.lang.String TAG
+com.androidsx.microrss.Manifest
+com.androidsx.microrss.Manifest$permission
+com.androidsx.microrss.R
+com.androidsx.microrss.R$anim
+com.androidsx.microrss.R$array
+com.androidsx.microrss.R$attr
+com.androidsx.microrss.R$color
+com.androidsx.microrss.R$dimen
+com.androidsx.microrss.R$drawable
+com.androidsx.microrss.R$id
+com.androidsx.microrss.R$layout
+com.androidsx.microrss.R$string
+com.androidsx.microrss.R$style
+com.androidsx.microrss.R$xml
+com.androidsx.microrss.UpdateService:
+    protected static final java.lang.String TAG
+    private static final int MAX_STORIES_PER_REQUEST
+    private static final int MAX_STORIES_IN_DATABASE
+    public static final long DEFAULT_UPDATE_INTERVAL_MILLIS
+    public static final java.lang.String ACTION_UPDATE_ALL
+    227:240:private void scheduleNextSync(boolean)
+    244:248:private long getUpdateIntervalMillis()
+    252:266:private long timeForNextUpdateAlarm(long)
+    274:274:private static long computeUpdateThrottle(long)
+com.androidsx.microrss.UpdateService$1:
+    private static final java.lang.String TAG
+com.androidsx.microrss.WIMMCompatibleHelper:
+    public static final java.lang.String TAG
+com.androidsx.microrss.cache.CacheImageManager:
+    private static final java.lang.String TAG
+    65:66:public void cleanCache()
+com.androidsx.microrss.cache.FileCacheUtil:
+    private static final java.lang.String NOMEDIA_FILENAME
+    private static final long CACHE_FILE_EXPIRATION
+    private static final java.lang.String TAG
+    145:165:public static void cleanExternalCache(android.content.Context)
+com.androidsx.microrss.cache.ThumbnailUtil:
+    private static final java.lang.String TAG
+    private static final int OPTIONS_NONE
+    private static final int OPTIONS_SCALE_UP
+    public static final int OPTIONS_RECYCLE_INPUT
+    public static final int TARGET_SIZE_MINI_THUMBNAIL
+    public static final int TARGET_SIZE_FAVICON_THUMBNAIL
+    public static final int MIN_SOURCE_SIZE_TO_BE_PROCESSED_MINI_THUMBNAIL
+    74:74:public static android.graphics.Bitmap decodeFile(java.io.File,int)
+    153:153:public static android.graphics.Bitmap extractThumbnail(android.graphics.Bitmap,int,int)
+com.androidsx.microrss.cache.ThumbnailUtil$InvalidImageSizeException:
+    private static final long serialVersionUID
+com.androidsx.microrss.configure.ChooseFeedsAbstractActivity:
+    private static final java.lang.String TAG
+    79:84:protected static java.lang.String[] feedToStringArray(java.util.List)
+com.androidsx.microrss.configure.ChooseFeedsAbstractActivity$1:
+    99:99:public void onTopToBottomSwipe()
+    116:116:public void onBottomToTopSwipe()
+com.androidsx.microrss.configure.GReaderPreferences:
+    private static final java.lang.String TAG
+com.androidsx.microrss.configure.GReaderPreferences$1:
+    211:211:public void onTopToBottomSwipe()
+    228:228:public void onBottomToTopSwipe()
+com.androidsx.microrss.configure.Preferences:
+    public static final int ACTIVITY_RESULT_EXIT
+    private static final int ANIMATION_DURATION
+com.androidsx.microrss.configure.Preferences$1:
+    149:155:public void onTopToBottomSwipe()
+    175:175:public void onBottomToTopSwipe()
+com.androidsx.microrss.configure.SeparatedChooseFeedsAdapter:
+    public static final int TYPE_SECTION_HEADER
+    83:83:public boolean areAllItemsSelectable()
+com.androidsx.microrss.configure.feedlist.FeedListManager
+com.androidsx.microrss.configure.feedlist.SpinnerFeedItemInfo
+com.androidsx.microrss.db.RssItemsDao:
+    public abstract void insertItems(android.content.ContentResolver,int,com.androidsx.microrss.domain.ItemList)
+    public abstract int deleteOldestItems(android.content.ContentResolver,int,int,com.androidsx.microrss.cache.CacheImageManager)
+com.androidsx.microrss.db.SqLiteRssItemsDao:
+    private static final int COL_CONTENT
+    private static final int COL_ITEM_URL
+    private static final int COL_DATE
+    private static final int COL_POSITION
+    private static final int COL_ITEM_TITLE
+    private static final int COL_ITEM_THUMBNAIL
+    private static final int COL_ID
+com.androidsx.microrss.db.dao.MicroRssDao:
+    79:80:public void persistFeed(android.content.Context,java.lang.String,java.lang.String,java.lang.String,boolean,boolean)
+    142:160:public int[] findAllFeedIds()
+    186:186:public java.util.List findFeeds()
+    274:293:public int[] findStoryIds(int)
+    299:314:public com.androidsx.microrss.domain.Item findStory(int)
+com.androidsx.microrss.domain.DefaultFeed:
+    private static final long serialVersionUID
+com.androidsx.microrss.domain.DefaultItem:
+    private static final long serialVersionUID
+com.androidsx.microrss.domain.DefaultItemList:
+    private static final long serialVersionUID
+    40:40:public java.lang.String getTitle()
+com.androidsx.microrss.domain.Feed:
+    public static final int SETTINGS_ID
+com.androidsx.microrss.domain.ItemList:
+    public abstract java.lang.String getTitle()
+com.androidsx.microrss.domain.MutableItem:
+    private static final long serialVersionUID
+    81:82:public void setId(int)
+com.androidsx.microrss.provider.DatabaseHelper:
+    private static final java.lang.String TAG
+    private static final java.lang.String DATABASE_NAME
+    private static final int DATABASE_VERSION
+com.androidsx.microrss.provider.News:
+    public static final java.lang.String AUTHORITY
+    public static final java.lang.String TABLE_CATEGORIES
+    public static final java.lang.String TABLE_FEEDS
+    public static final java.lang.String TABLE_ITEMS
+com.androidsx.microrss.provider.News$Categories:
+    public static final java.lang.String NAME
+com.androidsx.microrss.provider.News$Feeds:
+    public static final java.lang.String CATEGORY_ID
+    public static final java.lang.String FEED_URL
+    public static final java.lang.String LAST_UPDATE
+    public static final java.lang.String TITLE
+    public static final java.lang.String ACTIVE
+    public static final java.lang.String G_READER
+com.androidsx.microrss.provider.News$Items:
+    public static final java.lang.String FEED_ID
+    public static final java.lang.String ITEM_URL
+    public static final java.lang.String TITLE
+    public static final java.lang.String CONTENT
+    public static final java.lang.String POSITION
+    public static final java.lang.String DATE
+    public static final java.lang.String THUMBNAIL_URL
+com.androidsx.microrss.provider.NewsProvider:
+    private static final java.lang.String SINGLE_CATEGORY
+    private static final java.lang.String SINGLE_FEED
+    private static final java.lang.String SINGLE_ITEM
+    private static final int ALL_CATEGORIES
+    private static final int A_CATEGORY_BY_ID
+    private static final int ALL_FEEDS
+    private static final int A_FEED_BY_ID
+    private static final int ALL_ITEMS_FOR_A_FEED_BY_ID
+    private static final int ALL_ITEMS
+    private static final int A_ITEMS_BY_ID
+com.androidsx.microrss.sync.NetworkAvailableReceiver:
+    private static final java.lang.String TAG
+com.androidsx.microrss.sync.SyncIntervalPrefs:
+    public static final java.lang.String SYNC_STATUS
+    public static final java.lang.String LAST_SYNC_ATTEMPT
+    public static final java.lang.String LAST_SUCCESSFUL_SYNC
+    private static final java.lang.String FORCE_SYNC
+    public static final java.lang.String SYNC_STATUS_GREADER
+    private static final java.lang.String LAST_SYNC_ATTEMPT_GREADER
+    public static final java.lang.String LAST_SUCCESSFUL_SYNC_GREADER
+    private static final java.lang.String FORCE_SYNC_GREADER
+    private static final java.lang.String ERROR_MESSAGE_GREADER
+    private static final long MIN_SYNC_INTERVAL
+    34:34:public android.content.SharedPreferences getSharedPreferences()
+    50:50:public long getLastSyncAttemptGoogleReader()
+    54:54:public long getLastSuccessfulSync()
+    109:112:public void willForceSync(boolean)
+com.androidsx.microrss.view.AnyRSSHelper:
+    private static final java.lang.String TAG
+    private static final long SECOND
+    private static final long MINUTE
+    private static final long HOUR
+    private static final long DAY
+    private static final long MONTH
+    44:49:public static boolean isIntentAvailable(android.content.Context,java.lang.String)
+    445:445:public static java.lang.String timeFromLastUpdate(long)
+com.androidsx.microrss.view.ErrorScreenAdapter:
+    private static final int NUMBER_OF_ELEMENTS
+    private static final int POSITION_SETTINGS
+com.androidsx.microrss.view.FeedActivity:
+    private static final java.lang.String TAG
+    private static final java.lang.String PREFS_NAME
+    private static final java.lang.String FIRST_TIME_APP_OPENED_PREFS
+    private static final int REQUEST_CODE
+com.androidsx.microrss.view.NavigationExtras
+com.androidsx.microrss.view.StoryActivity:
+    private static final int HEADER_HEIGHT
+    private static final java.lang.String TAG
+com.androidsx.microrss.view.StoryTitleAdapter
+com.androidsx.microrss.view.StoryTitleAdapter$StoryViewHolder
+com.androidsx.microrss.view.SwipeAwareListener:
+    private static final int SWIPE_MIN_DISTANCE
+    private static final int SWIPE_MAX_OFF_PATH
+    private static final int SWIPE_THRESHOLD_VELOCITY
+    android.view.View$OnTouchListener gestureListener
+    public abstract void onTopToBottomSwipe()
+    public abstract void onBottomToTopSwipe()
+com.androidsx.microrss.webservice.DefaultRssSource:
+    private static final java.lang.String TAG
+    private static final java.lang.String RSS_TAG_ITEM
+    private static final java.lang.String RSS_TAG_TITLE
+    private static final java.lang.String RSS_TAG_DESCRIPTION
+    private static final java.lang.String RSS_TAG_PUB_DATE
+    private static final java.lang.String RSS_TAG_LINK
+    private static final java.lang.String ATOM_TAG_ITEM
+    private static final java.lang.String ATOM_TAG_TITLE
+    private static final java.lang.String ATOM_TAG_DESCRIPTION
+    private static final java.lang.String ATOM_TAG_PUB_DATE
+    private static final java.lang.String ATOM_TAG_LINK
+    private static final java.lang.String ATOM_TAG_SUMMARY
+    private static final java.lang.String ATOM_RSS_TAG_LAST_BUILD_DATE
+    public static final java.lang.String MEDIA_NAMESPACE
+    private static final java.lang.String THUMB_TAG_1
+    private static final java.lang.String THUMB_TAG_2
+    private static final java.lang.String THUMB_TAG_2_TYPE
+    private static final java.lang.String THUMB_TAG_2_TYPE_SHOULD_CONTAIN
+    private static final java.lang.String THUMB_TAG_URL
+    private static final int DEFAULT_ID_WHEN_EMPTY
+    private static final java.lang.String DEFAULT_DESCRIPTION_WHEN_EMPTY
+    private static final java.lang.String DEFAULT_TITLE_WHEN_EMPTY
+com.androidsx.microrss.webservice.FeedProcessingException:
+    private static final long serialVersionUID
+    26:26:public com.androidsx.microrss.webservice.UpdateTaskStatus getStatus()
+com.androidsx.microrss.webservice.FeedUrlBasedDuplicateDetector
+com.androidsx.microrss.webservice.FeedUrlBasedDuplicateDetector$Duplicated
+com.androidsx.microrss.webservice.MockRssSource
+com.androidsx.microrss.webservice.RssSource
+com.androidsx.microrss.webservice.UpdateTaskStatus:
+    48:49:public void setMsg(java.lang.String)
+    52:52:public java.lang.String getMsg()
+com.androidsx.microrss.webservice.WebserviceHelper:
+    private static final java.lang.String TAG
+    private static final java.lang.String USER_AGENT_TEMPLATE
+    private static final int COL_RSS_URL
+    private static final int COL_RSS_LAST_UPDATE
+    private static final int WEBSERVICE_TIMEOUT_CONNECTION
+    private static final int WEBSERVICE_TIMEOUT_SO
+com.androidsx.microrss.wimm.Constants
+org.jarx.android.reader.GoogleReaderClient:
+    public static final java.lang.String STATE_READING_LIST
+    public static final java.lang.String STATE_READ
+    public static final java.lang.String URL_LOGIN
+    public static final java.lang.String URL_BASE_
+    public static final java.lang.String URL_API_
+    public static final java.lang.String URL_API_TOKEN
+    public static final java.lang.String URL_API_SUB_LIST
+    public static final java.lang.String URL_API_TAG_LIST
+    public static final java.lang.String URL_API_UNREAD_COUNT
+    public static final java.lang.String URL_API_STREAM_CONTENTS
+    public static final java.lang.String URL_API_EDIT_TAG
+    public static final java.lang.String URL_API_MARK_ALL_AS_READ
+    private static final java.lang.String TAG
+    private static final long TOKEN_TIME
+    private long tokenExpiredTime
+    73:75:public boolean login()
+    125:146:private java.lang.String initToken()
+    175:175:public java.lang.String getLoginId()
+    181:198:public byte[] getFavicon(org.jarx.android.reader.Subscription)
+    218:227:public void handleTagList(org.jarx.android.reader.ReaderClient$TagListHandler,long)
+    232:241:public void handleUnreadCount(org.jarx.android.reader.ReaderClient$UnreadCountHandler,long)
+    246:255:public void handleItemList(org.jarx.android.reader.ReaderClient$ItemListHandler,long)
+    260:260:public boolean markAsRead(java.lang.String)
+    266:288:public boolean markAllAsRead(java.lang.String,java.lang.String,long)
+    294:317:public boolean editItemTag(java.lang.String,java.lang.String,boolean)
+    335:341:public java.io.Reader readTagList(long)
+    347:354:public java.io.Reader readUnreadCount(long)
+    360:388:public java.io.Reader readStreamContents(long,org.jarx.android.reader.ReaderClient$ItemListHandler)
+org.jarx.android.reader.GoogleReaderClient$JsonItemListHandler
+org.jarx.android.reader.GoogleReaderClient$JsonTagListHandler
+org.jarx.android.reader.GoogleReaderClient$JsonUnreadCountHandler
+org.jarx.android.reader.Item:
+    public static final java.lang.String TABLE_NAME
+    public static final java.lang.String _SUB_ID
+    public static final java.lang.String _UID
+    public static final java.lang.String _TITLE
+    public static final java.lang.String _CONTENT
+    public static final java.lang.String _CONTENT_TYPE
+    public static final java.lang.String _AUTHOR
+    public static final java.lang.String _LINK
+    public static final java.lang.String _PUBLISHED_TIME
+    public static final java.lang.String _UPDATED_TIME
+    public static final java.lang.String _READ
+    public static final java.lang.String _READ_TIME
+    public static final java.lang.String _SYNC_TIME
+    public static final int ORDER_BY_NEWER
+    public static final int ORDER_BY_OLDER
+    public static final java.lang.String SQL_CREATE_TABLE
+    132:132:public long getId()
+    136:137:public void setId(long)
+    140:140:public long getSubId()
+    144:145:public void setSubId(long)
+    148:148:public java.lang.String getUid()
+    152:153:public void setUid(java.lang.String)
+    156:156:public java.lang.String getTitle()
+    160:161:public void setTitle(java.lang.String)
+    164:164:public java.lang.String getContent()
+    168:169:public void setContent(java.lang.String)
+    172:172:public java.lang.String getContentType()
+    176:177:public void setContentType(java.lang.String)
+    180:180:public java.lang.String getAuthor()
+    184:185:public void setAuthor(java.lang.String)
+    188:188:public java.lang.String getLink()
+    192:193:public void setLink(java.lang.String)
+    196:196:public long getPublishedTime()
+    200:201:public void setPublishedTime(long)
+    204:204:public long getUpdateedTime()
+    208:209:public void setUpdatedTime(long)
+    212:212:public boolean isRead()
+    216:217:public void setRead(boolean)
+    220:220:public long getReadTime()
+    224:225:public void setReadTime(long)
+    228:228:public long getSyncTime()
+    232:233:public void setSyncTime(long)
+    236:236:public java.util.List getCategories()
+    240:241:public void setCategories(java.util.List)
+    244:248:public void addCategory(java.lang.String)
+    251:269:public android.content.ContentValues toContentValues()
+    273:290:public org.jarx.android.reader.Item clear()
+org.jarx.android.reader.Item$FilterCursor
+org.jarx.android.reader.Prefs:
+    public static final java.lang.String KEY_GOOGLE_ID
+    public static final java.lang.String KEY_GOOGLE_PASSWD
+    public static final java.lang.String KEY_SYNC_INTERVAL_HOURS
+    public static final java.lang.String KEY_SYNC_UNREAD_ONLY
+    public static final java.lang.String KEY_SYNC_NOTIFIABLE
+    public static final java.lang.String KEY_SYNC_ITEM_LIMIT
+    public static final java.lang.String KEY_VIEW_UNREAD_ONLY
+    public static final java.lang.String KEY_ITEM_SORT_TYPE
+    public static final java.lang.String KEY_DISABLE_ITEM_LINKS
+    public static final java.lang.String KEY_SHOW_ITEM_CONTROLLS
+    public static final java.lang.String KEY_ITEM_BODY_FONT_SIZE
+    public static final java.lang.String KEY_OMIT_ITEM_LIST
+    public static final java.lang.String KEY_LAST_SYNC_TIME
+    public static final java.lang.String KEY_CACHE_KEEP_TAGGED
+    public static final java.lang.String KEY_CACHE_AUTO_CLEANUP_DAYS
+    public static final java.lang.String KEY_UNREAD_COUNT
+    public static final java.lang.String KEY_ENABLE_ERR_REPORTING
+    32:32:public static java.lang.String getString(android.content.Context,java.lang.String)
+    45:47:public static long getLong(android.content.Context,java.lang.String,long)
+    56:60:public static void putString(android.content.Context,java.lang.String,java.lang.String)
+    63:67:public static void putLong(android.content.Context,java.lang.String,long)
+    70:74:public static void putInt(android.content.Context,java.lang.String,int)
+    77:81:public static void putBoolean(android.content.Context,java.lang.String,boolean)
+    84:84:public static java.lang.String getGoogleId(android.content.Context)
+    88:88:public static java.lang.String getGooglePasswd(android.content.Context)
+    93:98:public static void setGoogleIdPasswd(android.content.Context,java.lang.String,java.lang.String)
+    101:106:public static long getSyncInterval(android.content.Context)
+    110:110:public static boolean isSyncUnreadOnly(android.content.Context)
+    114:114:public static boolean isSyncNotifiable(android.content.Context)
+    118:118:public static int getSyncItemLimit(android.content.Context)
+    122:122:public static boolean isViewUnreadOnly(android.content.Context)
+    130:131:public static void setItemSortType(android.content.Context,int)
+    134:134:public static boolean isDisableItemLinks(android.content.Context)
+    138:138:public static boolean isShowItemControlls(android.content.Context)
+    142:146:public static int getItemBodyFontSize(android.content.Context)
+    151:152:public static void setItemBodyFontSize(android.content.Context,int)
+    155:155:public static boolean isOmitItemList(android.content.Context)
+    159:159:public static long getLastSyncTime(android.content.Context)
+    163:164:public static void setLastSyncTime(android.content.Context,long)
+    167:167:public static boolean isCacheKeepTagged(android.content.Context)
+    171:171:public static int getCacheAutoCleanupDays(android.content.Context)
+    175:175:public static int getUnreadCount(android.content.Context)
+    179:180:public static void setUnreadCount(android.content.Context,int)
+    187:188:public static void setEnableErrReporting(android.content.Context,boolean)
+org.jarx.android.reader.ReaderClient:
+    private static final java.lang.String TAG
+    public abstract boolean login()
+    public abstract boolean login(java.lang.String,java.lang.String)
+    public abstract void logout()
+    public abstract boolean isLogined()
+    public abstract java.lang.String getLoginId()
+    public abstract byte[] getFavicon(org.jarx.android.reader.Subscription)
+    public abstract void handleSubList(org.jarx.android.reader.ReaderClient$SubListHandler,long)
+    public abstract void handleTagList(org.jarx.android.reader.ReaderClient$TagListHandler,long)
+    public abstract void handleUnreadCount(org.jarx.android.reader.ReaderClient$UnreadCountHandler,long)
+    public abstract void handleItemList(org.jarx.android.reader.ReaderClient$ItemListHandler,long)
+    public abstract boolean markAsRead(java.lang.String)
+    public abstract boolean markAllAsRead(java.lang.String,java.lang.String,long)
+    public abstract boolean editItemTag(java.lang.String,java.lang.String,boolean)
+org.jarx.android.reader.ReaderClient$ItemListHandler
+org.jarx.android.reader.ReaderClient$JsonHandlerAdapter:
+    private java.lang.Throwable error
+    231:232:protected void setError(java.lang.Throwable)
+    235:235:public java.lang.Throwable getError()
+org.jarx.android.reader.ReaderClient$TagListHandler
+org.jarx.android.reader.ReaderClient$UnreadCountHandler
+org.jarx.android.reader.ReaderProvider:
+    public static final java.lang.String AUTHORITY
+    public static final java.lang.String BEGIN_TXN_URI_NAME
+    public static final java.lang.String SUCCESS_TXN_URI_NAME
+    public static final java.lang.String END_TXN_URI_NAME
+    public static final java.lang.String SUB_CONTENT_URI_NAME
+    public static final java.lang.String TAG_CONTENT_URI_NAME
+    public static final java.lang.String TAG2SUB_CONTENT_URI_NAME
+    public static final java.lang.String ITEM_CONTENT_URI_NAME
+    public static final java.lang.String TAG2ITEM_CONTENT_URI_NAME
+    public static final java.lang.String UPDATE_UNREADS_CONTENT_URI_NAME
+    private static final java.lang.String TAG
+    private static final java.lang.String DATABASE_NAME
+    private static final int DATABASE_VERSION
+    private static final java.lang.String CONTENT_TYPE_ITEM
+    private static final java.lang.String CONTENT_TYPE_DIR
+    private static final int UM_BEGIN_TXN
+    private static final int UM_SUCCESS_TXN
+    private static final int UM_END_TXN
+    private static final int UM_SUB_ID
+    private static final int UM_SUBS
+    private static final int UM_TAG_ID
+    private static final int UM_TAGS
+    private static final int UM_TAG2SUB_ID
+    private static final int UM_TAG2SUBS
+    private static final int UM_ITEM_ID
+    private static final int UM_ITEMS
+    private static final int UM_TAG2ITEM_ID
+    private static final int UM_TAG2ITEMS
+    private static final int UM_UPDATE_UNREADS
+org.jarx.android.reader.Subscription:
+    public static final java.lang.String TABLE_NAME
+    public static final java.lang.String _UID
+    public static final java.lang.String _SORTID
+    public static final java.lang.String _TITLE
+    public static final java.lang.String _HTML_URL
+    public static final java.lang.String _ICON
+    public static final java.lang.String _UNREAD_COUNT
+    public static final java.lang.String _NEWEST_ITEM_TIME
+    public static final java.lang.String _READ_ITEM_ID
+    public static final java.lang.String _SYNC_TIME
+    public static final java.lang.String _ITEM_SYNC_TIME
+    public static final java.lang.String SQL_CREATE_TABLE
+    104:124:public Subscription(android.os.Parcel)
+    155:156:public void setId(long)
+    167:167:public java.lang.String getSortid()
+    183:183:public java.lang.String getHtmlUrl()
+    191:191:public int getUnreadCount()
+    195:196:public void setUnreadCount(int)
+    199:199:public long getNewestItemTime()
+    203:204:public void setNewestItemTime(long)
+    207:207:public long getReadItemId()
+    211:212:public void setReadItemId(long)
+    215:215:public long getSyncTime()
+    219:220:public void setSyncTime(long)
+    223:223:public long getItemSyncTime()
+    227:228:public void setItemSyncTime(long)
+    231:246:public android.graphics.Bitmap getIcon(android.content.Context)
+    250:250:public java.util.List getCategories()
+    254:255:public void setCategories(java.util.List)
+    265:280:public android.content.ContentValues toContentValues()
+    284:284:public android.net.Uri getContentUri()
+    288:302:public org.jarx.android.reader.Subscription clear()
+org.jarx.android.reader.Subscription$FilterCursor
+org.jarx.android.reader.Tag:
+    public static final java.lang.String TABLE_NAME
+    public static final int TYPE_UNKNOWN
+    public static final int TYPE_TAG_STARRED
+    public static final int TYPE_TAG_LABEL
+    public static final int TYPE_FOLDER
+    public static final java.lang.String _UID
+    public static final java.lang.String _TYPE
+    public static final java.lang.String _SORTID
+    public static final java.lang.String _LABEL
+    public static final java.lang.String _UNREAD_COUNT
+    public static final java.lang.String _SYNC_TIME
+    public static final java.lang.String SQL_CREATE_TABLE
+    private long id
+    private java.lang.String uid
+    private int type
+    private java.lang.String sortid
+    private java.lang.String label
+    private int unreadCount
+    private long syncTime
+    67:67:public long getId()
+    71:72:public void setId(long)
+    75:75:public java.lang.String getUid()
+    79:80:public void setUid(java.lang.String)
+    83:83:public int getType()
+    87:88:public void setType(int)
+    91:91:public java.lang.String getSortid()
+    95:96:public void setSortid(java.lang.String)
+    99:99:public java.lang.String getLabel()
+    103:104:public void setLabel(java.lang.String)
+    107:107:public int getUnreadCount()
+    111:112:public void setUnreadCount(int)
+    115:115:public long getSyncTime()
+    119:120:public void setSyncTime(long)
+    123:137:public android.content.ContentValues toContentValues()
+org.jarx.android.reader.Tag$FilterCursor
+org.jarx.android.reader.Tag2Item:
+    public static final java.lang.String TABLE_NAME
+    public static final java.lang.String _TAG_UID
+    public static final java.lang.String _ITEM_ID
+    public static final java.lang.String _ACTION
+    public static final java.lang.String _SYNC_TIME
+    public static final int ACTION_NONE
+    public static final int ACTION_ADD
+    public static final int ACTION_REMOVE
+    public static final java.lang.String SQL_CREATE_TABLE
+org.jarx.android.reader.Tag2Sub:
+    public static final java.lang.String TABLE_NAME
+    public static final java.lang.String _TAG_UID
+    public static final java.lang.String _SUB_ID
+    public static final java.lang.String _SYNC_TIME
+    public static final java.lang.String SQL_CREATE_TABLE
+org.jarx.android.reader.Utils:
+    private static final java.lang.String TAG
+    private static final java.lang.String ERR_REPORT_URL
+    45:45:public static int asInt(java.lang.Object)
+    49:55:public static int asInt(java.lang.Object,int)
+    60:60:public static long asLong(java.lang.Object)
+    64:70:public static long asLong(java.lang.Object,long)
+    90:93:public static java.lang.String stripWhitespaces(java.lang.String)
+    97:113:public static java.lang.String htmlAsPlainText(java.lang.String)
+    117:124:public static java.lang.String htmlEscape(java.lang.String)
+    128:138:public static java.lang.String formatTimeAgo(long)
+    152:152:public static java.io.File getErrorReportFile(android.content.Context)
+    160:178:public static void logError(android.content.Context,java.lang.String)
+    220:223:public static void handleUncatchException(android.content.Context)
+    263:275:public static java.lang.String readFile(java.io.File)
+    279:292:public static boolean sendErrorReport(java.io.File)
+    189:189:static void access$0(java.io.File,java.lang.String,java.lang.Throwable)
+org.jarx.android.reader.Utils$ErrorReportHandler
+org.jarx.android.reader.package-info
+org.json.simple.ItemList
+org.json.simple.JSONArray
+org.json.simple.JSONAware
+org.json.simple.JSONObject
+org.json.simple.JSONStreamAware
+org.json.simple.JSONValue
+org.json.simple.parser.ContainerFactory
+org.json.simple.parser.JSONParser:
+    public static final int S_INIT
+    public static final int S_IN_FINISHED_VALUE
+    public static final int S_IN_OBJECT
+    public static final int S_IN_ARRAY
+    public static final int S_PASSED_PAIR_KEY
+    public static final int S_IN_PAIR_VALUE
+    public static final int S_END
+    public static final int S_IN_ERROR
+    public java.lang.Object parse(java.lang.String)
+    public java.lang.Object parse(java.lang.String,org.json.simple.parser.ContainerFactory)
+    public java.lang.Object parse(java.io.Reader)
+    public java.lang.Object parse(java.io.Reader,org.json.simple.parser.ContainerFactory)
+    private java.util.Map createObjectContainer(org.json.simple.parser.ContainerFactory)
+    private java.util.List createArrayContainer(org.json.simple.parser.ContainerFactory)
+    public void parse(java.lang.String,org.json.simple.parser.ContentHandler)
+    public void parse(java.lang.String,org.json.simple.parser.ContentHandler,boolean)
+org.json.simple.parser.ParseException:
+    private static final long serialVersionUID
+    public static final int ERROR_UNEXPECTED_CHAR
+    public static final int ERROR_UNEXPECTED_TOKEN
+    public static final int ERROR_UNEXPECTED_EXCEPTION
+    public ParseException(int)
+    public ParseException(int,java.lang.Object)
+    public int getErrorType()
+    public void setErrorType(int)
+    public int getPosition()
+    public void setPosition(int)
+    public java.lang.Object getUnexpectedObject()
+    public void setUnexpectedObject(java.lang.Object)
+org.json.simple.parser.Yylex:
+    public static final int YYEOF
+    private static final int ZZ_BUFFERSIZE
+    public static final int YYINITIAL
+    public static final int STRING_BEGIN
+    private static final java.lang.String ZZ_CMAP_PACKED
+    private static final java.lang.String ZZ_ACTION_PACKED_0
+    private static final java.lang.String ZZ_ROWMAP_PACKED_0
+    private static final int ZZ_UNKNOWN_ERROR
+    private static final int ZZ_NO_MATCH
+    private static final int ZZ_PUSHBACK_2BIG
+    private static final java.lang.String ZZ_ATTRIBUTE_PACKED_0
+    Yylex(java.io.InputStream)
+    public final void yyclose()
+    public final int yystate()
+    public final int yylength()
+    public void yypushback(int)
+org.json.simple.parser.Yytoken:
+    public static final int TYPE_VALUE
+    public static final int TYPE_LEFT_BRACE
+    public static final int TYPE_RIGHT_BRACE
+    public static final int TYPE_LEFT_SQUARE
+    public static final int TYPE_RIGHT_SQUARE
+    public static final int TYPE_COMMA
+    public static final int TYPE_COLON
+    public static final int TYPE_EOF
