@@ -3,6 +3,7 @@ package com.androidsx.microrss.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -204,7 +205,7 @@ public class FeedActivity extends LauncherActivity {
     public void onGoSettingsClick(View target) {
         Intent intent = IntentHelper.createIntent(this, null, Preferences.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // See ticket #309
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
     
     private List<Feed> insertEmptyFeedForSettings(List<Feed> before) {
@@ -253,5 +254,22 @@ public class FeedActivity extends LauncherActivity {
     private static int getIntValue(Context context, String key) {
         SharedPreferences config = context.getSharedPreferences(PREFS_NAME, 0);
         return config.getInt(key, 0);
+    }
+    
+    /** Currently not used in a proper way from Preferences. See #306. */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+        case REQUEST_CODE:
+            if (resultCode == Preferences.ACTIVITY_RESULT_EXIT) {
+                Log.e(TAG, "Coming from Preferences. The user performed a drag-to-exit move.");
+                doFinish();
+            } else if (resultCode == Activity.RESULT_OK) {
+                Log.e(TAG, "Coming from Preferences. The user swiped right");
+            }
+            break;
+        }
     }
 }
